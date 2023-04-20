@@ -1,0 +1,155 @@
+.bg-osu-orange {
+    background-color: #DC4405 !important;
+}
+
+.bg-osu-black {
+    background-color: #000000 !important;
+}
+
+.bg-osu-white {
+    background-color: #FFFFFF !important;
+}
+
+.bg-transparent {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.bg-gradiant {
+    background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+}
+
+
+
+/* ################################################################# */
+/*                             Nav Bar
+/* ################################################################# */
+
+.nav {
+    font-size: 2.5em;
+    background-color: #000000;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.nav a, a:link, a:visited a:hover a:focus a:active link:hover{
+    text-decoration: none;
+    color: white;
+}
+.nav a:hover {
+    color: white;
+}
+
+.nav button {
+    background: linear-gradient(-45deg, #DC4405, #fd9162, #DC4405);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+    color: #000000;
+    height: max-content;
+    width: max-content;
+}
+
+nav .dropdown-toggle { 
+    height: 4em;
+    width: 4em;
+}
+
+nav .dropdown-toggle:after { 
+    content: none;
+}
+
+nav .dropdown-menu {
+    background: linear-gradient(-45deg, #DC4405, #fd9162, #DC4405);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+}
+
+nav .dropdown-header {
+    color: #FFFFFF;
+}
+
+nav .dropdown-item {
+    color: #000000 !important;
+}
+
+
+
+/* ################################################################# */
+/*                             Footer
+/* ################################################################# */
+
+.footer {
+    background-color: #000000;
+    align-content: center;
+    color: #FFFFFF;
+    height: 20vh;
+    flex-grow: 1;
+}
+
+.icon {
+    color: #DC4405;
+    font-size: 300%;
+}
+
+.icon a, link, a:link, a:visited a:focus a:active{
+    text-decoration: none;
+    color: #DC4405;
+}
+
+.icon a:hover{
+    color: #ffffff;
+}
+
+
+
+/* ################################################################# */
+/*                             Body
+/* ################################################################# */
+
+/* body {
+    background-color: #000000;
+    color: #FFFFFF;
+} */
+
+body {
+    background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+    height: 100vh;
+  }
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  } 
+
+.image-banner {
+    width: 100%;
+}
+
+.alumni-banner {
+    max-width: 1500px;
+    display: block;
+    margin: auto;
+}
+
+.alum-info {
+    color:#FFFFFF;
+    font-size: 2em;
+}
+
+.row{
+    width: 100%;
+}
+
+.pre-wrap {
+    white-space: pre-wrap;
+}
