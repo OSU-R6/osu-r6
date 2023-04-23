@@ -1,14 +1,11 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Banner from '../components/Banner'
 
 function Coaching() {
     return(
         <>
-        <div class="py-2">
-            <Row className="bg-osu-black mx-0 justify-text-center">
-                <Col md={{ span: 12, offset: 0 }} sm={{ span: 12, offset: 0 }}>{<img src="images/Coaching_Thin.png" className="bg-gradiant alumni-banner center-block"/>}</Col>
-            </Row>
-        </div>
+            <Banner image="coaching"/>
             <Row className="alum-info bg-osu-black p-5 mx-0">
                 <Col md={{ span: 12, offset: 0 }}>{
                     <p>

@@ -11,13 +11,13 @@
 }
 
 .bg-transparent {
-    background-color: rgba(255, 255, 255, .5);
+    background-color: rgba(255, 255, 255, 0);
 }
 
-.bg-gradiant {
+.bg-osu-gradient {
     background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
     background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+    animation: gradient 10s ease infinite;
 }
 
 
@@ -107,17 +107,20 @@ nav .dropdown-item {
 /*                             Body
 /* ################################################################# */
 
-/* body {
-    background-color: #000000;
-    color: #FFFFFF;
-} */
-
 body {
-    background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
+    background-color: #000000 !important;
+    color: #FFFFFF;
+}
+
+/* body{
+    background-color: #000000 !important;
+} */
+body {
+    /* background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
     background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
-    height: 100vh;
-  }
+    animation: gradient 10s ease infinite;
+    height: 100vh; */
+  } 
   
   @keyframes gradient {
     0% {

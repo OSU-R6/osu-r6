@@ -16,20 +16,23 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Coaching from './pages/Coaching'
 import Alumni from './pages/Alumni'
+import Player from './pages/Player'
+import Roster from './pages/Roster'
+import NotFound from './pages/NotFound'
 
-
-
-function Roster() {
-    
+function PlayerBlank() {
+    return (
+        <>
+            <Outlet />
+        </>
+    )
 }
 
-function Player() {
-    
-}
-
-function NotFound() {
-    
-}
+// function NotFound() {
+//     return (
+//         <h1>Page Not found</h1>
+//     );
+// }
 
 function App() {
     return (
@@ -40,7 +43,8 @@ function App() {
             <Route path="/About" element={<About />} />
             <Route path="/Alumni" element={<Alumni />} />
             <Route path="/Coaching" element={<Coaching />} />
-            <Route path="/Roster" element={<Roster />}>
+            <Route path="/Roster" element={<Roster />}/>
+            <Route path="/Player">
                 <Route path=":player" element={<Player />} />
             </Route>
             <Route path="*" element={<NotFound />} />

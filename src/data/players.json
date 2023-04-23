@@ -1,0 +1,12 @@
+{
+    "players": [
+        {
+            "name": "Player1",
+            "video": "/videos/conner_3k.mp4"
+        },
+        {
+            "name": "Player2",
+            "video": "/videos/conner_3k.mp4"
+        }
+    ]
+}

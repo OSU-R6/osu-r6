@@ -8,7 +8,7 @@ function Navigation() {
     <Navbar className="nav px-4">
         <Navbar.Brand href="/">
             <img
-              src="images/image6.png"
+              src="/images/image6.png"
               height="125em"
               width="125em"
               className="d-inline-block align-top"
@@ -45,15 +45,6 @@ function Navigation() {
                         </Dropdown.Menu>
                     </Dropdown>
                 </Nav.Item>
-                {/* <NavDropdown title="" id="nav-dropdown">
-                    <NavDropdown.Header>Main Rosters</NavDropdown.Header>
-                    <NavDropdown.Item eventKey="4.1">Black Team</NavDropdown.Item>
-                    <NavDropdown.Item eventKey="4.2">Orange Team</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Header>Other</NavDropdown.Header>
-                    <NavDropdown.Item eventKey="4.1">Coaches</NavDropdown.Item>
-                    <NavDropdown.Item eventKey="4.1">Alumni</NavDropdown.Item>
-                </NavDropdown> */}
             </Nav>
        </Navbar.Collapse>
     </Navbar>

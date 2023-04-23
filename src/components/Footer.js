@@ -10,10 +10,10 @@ function Footer() {
                 <Navbar.Collapse className="justify-content-center">
                         <Nav>
                             <Nav.Item>
-                                <div class="icon mx-2"><Nav.Link href="https://discord.gg/zYgcRtxsGv" target="_blank"><BsDiscord /></Nav.Link></div>
+                                <div className="icon mx-2"><Nav.Link href="https://discord.gg/zYgcRtxsGv" target="_blank"><BsDiscord /></Nav.Link></div>
                             </Nav.Item>
                             <Nav.Item>
-                                <div class="icon mx-2"><Nav.Link href="#" target="_blank"><BsInstagram /></Nav.Link></div>
+                                <div className="icon mx-2"><Nav.Link href="#" target="_blank"><BsInstagram /></Nav.Link></div>
                             </Nav.Item>
                         </Nav>
                 </Navbar.Collapse>
