@@ -43,7 +43,7 @@ function Player() {
             </Carousel> */}
             <Row className='p-4 m-0'>
                 {playerData.videos.map(video => ( 
-                    <video width="100%" autoPlay muted loop className="bg-osu-gradient p-1 my-4">
+                    <video autoPlay muted loop className="bg-osu-gradient p-1 mx-auto m-4 video-player">
                         <source src={video} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
