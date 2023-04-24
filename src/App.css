@@ -73,6 +73,16 @@ nav .dropdown-item {
     color: #000000 !important;
 }
 
+.navbar-brand{
+    width:10%;
+}
+
+.logo {
+    width: 100%;
+    min-width: 100px;
+    max-width: 150px;
+}
+
 
 
 /* ################################################################# */
@@ -111,16 +121,6 @@ body {
     background-color: #000000 !important;
     color: #FFFFFF;
 }
-
-/* body{
-    background-color: #000000 !important;
-} */
-body {
-    /* background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
-    background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
-    height: 100vh; */
-  } 
   
   @keyframes gradient {
     0% {
@@ -141,11 +141,13 @@ body {
 .banner {
     display: block;
     margin: auto;
+    width: 60%;
+    min-width: 500px;
 }
 
 .alum-info {
     color:#FFFFFF;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .row{

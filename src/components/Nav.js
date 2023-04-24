@@ -9,21 +9,13 @@ function Navigation() {
         <Navbar.Brand href="/">
             <img
               src="/images/image6.png"
-              height="125em"
-              width="125em"
-              className="d-inline-block align-top"
+              className="d-inline-block align-top logo"
               alt="React Bootstrap logo"
             />
           </Navbar.Brand>
 
         <Navbar.Collapse className="justify-content-end">
             <Nav className="justify-content-end " activeKey="/home">
-                {/* <Nav.Item>
-                    <Nav.Link href="/">Home</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link href="/About">Program</Nav.Link>
-                </Nav.Item> */}
                 <Nav.Item>
                     <Dropdown align="end">
                         <Dropdown.Toggle>
