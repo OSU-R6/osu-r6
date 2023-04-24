@@ -145,6 +145,13 @@ body {
     min-width: 300px;
 }
 
+.video-carousel{
+    width: 95%;
+    max-width: 1800px;
+    display: block;
+    margin: auto;
+}
+
 .video-player{
     width: 100% !important;
     max-width: 1200px !important;

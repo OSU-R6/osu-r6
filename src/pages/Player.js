@@ -20,27 +20,19 @@ function Player() {
     return playerData ? (
         <>
             <Banner image={playerData.name}/>
-            {/* <Carousel slide={false}>
-                <Carousel.Item interval={7000} onSlide={handleSelect}>
+            <Carousel slide={false} className="m-4">
+                {playerData.videos.map(video => ( 
+                    <Carousel.Item interval={null}>
+                    <video autoPlay muted loop className="bg-osu-gradient p-1 video-carousel mt-4">
+                        <source src={video} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    </Carousel.Item>
+                ))}
+    
+            </Carousel>
+                    
 
-                    <video id="vid" width="100%" autoPlay muted loop>
-                        <source src={playerData.videos[0]} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                </Carousel.Item>
-                <Carousel.Item interval={8000}>
-                    <video width="100%" autoPlay muted loop>
-                        <source src={playerData.videos[1]} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <video width="100%" autoPlay muted loop>
-                        <source src={playerData.videos[2]} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                </Carousel.Item>
-            </Carousel> */}
             <Row className='p-4 m-0'>
                 {playerData.videos.map(video => ( 
                     <video autoPlay muted loop className="bg-osu-gradient p-1 mx-auto m-4 video-player">
