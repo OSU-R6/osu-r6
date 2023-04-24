@@ -1,12 +1,19 @@
-{
+{ 
     "players": [
         {
-            "name": "Player1",
-            "video": "/videos/conner_3k.mp4"
+            "name": "soupzeit",
+            "videos": [
+                "/videos/soupzeit.mp4",
+                "/videos/soupzeit.mp4"
+            ]
         },
         {
-            "name": "Player2",
-            "video": "/videos/conner_3k.mp4"
+            "name": "sweatycarrot",
+            "videos": [
+                "/videos/sweatycarrot.mp4",
+                "/videos/sweatycarrot2.mp4",
+                "/videos/sweatycarrot3.mp4"
+            ]
         }
     ]
 }

@@ -5,7 +5,7 @@ import { BsDiscord, BsInstagram } from "react-icons/bs";
 
 function Footer() {
     return (
-        <div class ="footer">
+        <div className="footer">
             <Navbar>
                 <Navbar.Collapse className="justify-content-center">
                         <Nav>
