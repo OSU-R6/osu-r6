@@ -8,28 +8,15 @@ import Banner from '../components/Banner'
 import NotFound from './NotFound'
 import players from '../data/players.json'
 
-// const players = {
-//     sweatycarrot: {
-//         name: "SweatyCarrot",
-//         video: "/videos/sweatycarrot.mp4"
-//     },
-//     soupzeit: {
-//         name: "Soupzeit",
-//         video: "/videos/soupzeit.mp4"
-//     }
-// }
 
-const sourceData = players;
-
-function handleSelect() {
-    var vid = document.getElementById("vid");
-    vid.currentTime = 5;
-  };
+const playersData = players;
 
 function Player() {
-    const {playerName} = useParams()
-    console.log(sourceData.players.find(player => player.name === playerName))
-    const playerData = sourceData.players[1]
+    const {player} = useParams()
+    var index = playersData.players.findIndex(function(x){
+        return x.name === player
+      });
+    const playerData = playersData.players[index]
     return playerData ? (
         <>
             <Banner image={playerData.name}/>
@@ -56,15 +43,11 @@ function Player() {
             </Carousel> */}
             <Row className='p-4 m-0'>
                 {playerData.videos.map(video => ( 
-                    <video width="100%" autoPlay muted loop>
+                    <video width="100%" autoPlay muted loop className="bg-osu-gradient p-1 my-4">
                         <source src={video} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 ))}
-                {/* <video id="vid" width="100%" autoPlay muted loop>
-                    <source src={playerData.videos[0]} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video> */}
             </Row>
         </>
     ): <NotFound />

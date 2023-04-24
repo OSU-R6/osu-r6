@@ -1,14 +1,20 @@
 { 
     "players": [
         {
-            "name": "soupzeit",
+            "firstName": "Christian",
+            "lastName": "Bergdorf",
+            "name": "Soupzeit",
+            "status" : "alumni",
             "videos": [
                 "/videos/soupzeit.mp4",
                 "/videos/soupzeit.mp4"
             ]
         },
         {
-            "name": "sweatycarrot",
+            "firstName": "Connor",
+            "lastName": "Smith",
+            "name": "SweatyCarrot",
+            "status" : "alumni",
             "videos": [
                 "/videos/sweatycarrot.mp4",
                 "/videos/sweatycarrot2.mp4",
