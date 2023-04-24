@@ -20,6 +20,35 @@
                 "/videos/sweatycarrot2.mp4",
                 "/videos/sweatycarrot3.mp4"
             ]
+        },
+        {
+            "firstName": "Bryce",
+            "lastName": "Campbell",
+            "name": "Astral",
+            "status" : "active",
+            "videos": [
+                "/videos/astral1.mp4"
+            ]
+        },
+        {
+            "firstName": "Landon",
+            "lastName": "Thronburg",
+            "name": "EngLTrain",
+            "status" : "active",
+            "videos": [
+                "/videos/engltrain1.mp4",
+                "/videos/engltrain2.mp4"
+            ]
+        },
+        {
+            "firstName": "Ash",
+            "lastName": "QuakeLord",
+            "name": "Vonslakken",
+            "status" : "alumni",
+            "videos": [
+                "/videos/vonslakken1.mp4",
+                "/videos/vonslakken3.mp4"
+            ]
         }
     ]
 }
