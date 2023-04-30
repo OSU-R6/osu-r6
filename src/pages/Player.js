@@ -19,7 +19,7 @@ function Player() {
     const playerData = playersData.players[index]
     return playerData ? (
         <>
-            <Banner image={playerData.name}/>
+            <Banner>{playerData.name}</Banner>
             <Carousel slide={false} className="m-4">
                 {playerData.videos.map(video => ( 
                     <Carousel.Item interval={null}>

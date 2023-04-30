@@ -8,7 +8,7 @@ const playersData = players.players;
 function Alumni() {
     return(
         <>
-            <Banner image="alumni"/>
+            <Banner>ALUMNI</Banner>
             <Row className="alum-info bg-osu-black p-5 mx-0">
 
                 {playersData.map(player => {

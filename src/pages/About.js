@@ -5,7 +5,7 @@ import Banner from '../components/Banner'
 function About() {
     return(
         <>
-            <Banner image="osu_r6"/>
+            <Banner>OSU R6</Banner>
             <Row className="alum-info bg-osu-black p-5 mx-0">
                 <Col md={{ span: 12, offset: 0 }}>{
                     <p className="pre-wrap">
