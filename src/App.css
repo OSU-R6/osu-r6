@@ -15,8 +15,10 @@
 }
 
 .bg-osu-gradient {
-    background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
-    background-size: 400% 400%;
+    background: linear-gradient(-65deg, #DC4405, #DC4405, #DC4405, #fa601e, #fc9569, #fa601e, #DC4405, #DC4405, #DC4405);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 500% 100%;
     animation: gradient 10s ease infinite;
 }
 
