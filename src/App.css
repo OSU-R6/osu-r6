@@ -14,7 +14,7 @@
     background-color: rgba(255, 255, 255, 0);
 }
 
-.bg-osu-gradient {
+.bg-osu-shine {
     background: linear-gradient(-65deg, #DC4405, #DC4405, #DC4405, #fa601e, #fc9569, #fa601e, #DC4405, #DC4405, #DC4405);
     background-position: center;
     background-attachment: fixed;

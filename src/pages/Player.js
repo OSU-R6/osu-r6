@@ -23,7 +23,7 @@ function Player() {
             <Carousel slide={false} className="m-4">
                 {playerData.videos.map(video => ( 
                     <Carousel.Item interval={null}>
-                    <video autoPlay muted loop className="bg-osu-gradient p-1 video-carousel mt-4">
+                    <video autoPlay muted loop className="bg-osu-shine p-1 video-carousel mt-4">
                         <source src={video} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
@@ -35,7 +35,7 @@ function Player() {
 
             <Row className='p-4 m-0'>
                 {playerData.videos.map(video => ( 
-                    <video autoPlay muted loop className="bg-osu-gradient p-1 mx-auto m-4 video-player">
+                    <video autoPlay muted loop className="bg-osu-shine p-1 mx-auto m-4 video-player">
                         <source src={video} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
