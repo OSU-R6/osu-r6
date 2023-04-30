@@ -20,6 +20,22 @@
     animation: gradient 10s ease infinite;
 }
 
+.banner-block {
+    background: black;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.banner-text {
+    font-family: "Scout Condensed Bold";
+    background-clip: text;
+    color: transparent;
+    font-size: 1000%;
+    line-height: 100%;
+    margin: 0;
+    user-select: none;
+}
 
 @font-face {
     font-family: "Scout Condensed Bold";
