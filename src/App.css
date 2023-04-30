@@ -14,13 +14,36 @@
     background-color: rgba(255, 255, 255, 0);
 }
 
-.bg-osu-gradient {
-    background: linear-gradient(-45deg, #DC4405, #FFFFFF, #DC4405);
-    background-size: 400% 400%;
+.bg-osu-shine {
+    background: linear-gradient(-65deg, #DC4405, #DC4405, #DC4405, #fa601e, #fc9569, #fa601e, #DC4405, #DC4405, #DC4405);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 500% 100%;
     animation: gradient 10s ease infinite;
 }
 
+.banner-block {
+    background: black;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
 
+.banner-text {
+    font-family: "Scout Condensed Bold";
+    background-clip: text;
+    color: transparent;
+    font-size: 1000%;
+    line-height: 100%;
+    margin: 0;
+    user-select: none;
+}
+
+@font-face {
+    font-family: "Scout Condensed Bold";
+    src: local("ScoutCond-Bold"),
+        url("./fonts/scout/ScoutCond-Bold.otf") format("opentype");
+}
 
 /* ################################################################# */
 /*                             Nav Bar

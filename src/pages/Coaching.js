@@ -5,7 +5,7 @@ import Banner from '../components/Banner'
 function Coaching() {
     return(
         <>
-            <Banner image="coaching"/>
+            <Banner>COACHING</Banner>
             <Row className="alum-info bg-osu-black p-5 mx-0">
                 <Col md={{ span: 12, offset: 0 }}>{
                     <p>
