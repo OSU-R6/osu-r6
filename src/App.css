@@ -21,6 +21,11 @@
 }
 
 
+@font-face {
+    font-family: "Scout Condensed Bold";
+    src: local("ScoutCond-Bold"),
+        url("./fonts/scout/ScoutCond-Bold.otf") format("opentype");
+}
 
 /* ################################################################# */
 /*                             Nav Bar
