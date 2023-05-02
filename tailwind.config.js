@@ -14,6 +14,10 @@ module.exports = {
             'dark': '#C13C04'
           }
         },
+        fontFamily: {
+          scoutCB: "Scout Condensed Bold",
+          scoutCR: "Scout Condensed Regular",
+        },
       }
     },
     plugins: [],

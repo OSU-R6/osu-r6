@@ -49,6 +49,12 @@
         url("./fonts/scout/ScoutCond-Bold.otf") format("opentype");
 }
 
+@font-face {
+    font-family: "Scout Condensed Regular";
+    src: local("ScoutCond-Regular"),
+        url("./fonts/scout/ScoutCond-Regular.otf") format("opentype");
+}
+
 /* ################################################################# */
 /*                             Nav Bar
 /* ################################################################# */
