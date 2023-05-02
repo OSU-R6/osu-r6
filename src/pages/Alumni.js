@@ -14,7 +14,7 @@ function Alumni() {
                 {playersData.map(player => {
                     if(player.status === "alumni") {
                         console.log("200");
-                        return <a href={"/Player/" + player.name}>{player.firstName} "{player.name}" {player.lastName}</a>;
+                        return <a href={"/player/" + player.name}>{player.firstName} "{player.name}" {player.lastName}</a>;
                     }
                 })}
 
