@@ -41,12 +41,12 @@ function App() {
             <Navigation />
             <Routes>
                 <Route exact path="/" element={<Home />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/About" element={<About />} />
-                <Route path="/Alumni" element={<Alumni />} />
-                <Route path="/Coaching" element={<Coaching />} />
-                <Route path="/Roster" element={<Roster />}/>
-                <Route path="/Player">
+                <Route path="/login" element={<Login />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/alumni" element={<Alumni />} />
+                <Route path="/coaching" element={<Coaching />} />
+                <Route path="/roster" element={<Roster />}/>
+                <Route path="/player">
                     <Route path=":player" element={<Player />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
