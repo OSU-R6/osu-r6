@@ -25,7 +25,10 @@ function Navigation() {
                     src="/images/image6.png"
                     className="sm:w-36 sm:h-36 h-24 w-24"
                     alt="Rainbow Six Beaver Logo"
-                    onClick={() => navigate("/")}
+                    onClick={() => {
+                        setNavOpen(false)
+                        navigate("/")
+                    }}
                 />
                 <button className="lg:hidden text-white" onClick={() => setNavOpen((prev) => !prev)}>
                     <div  className="object-cover text-osu hover:text-white">
