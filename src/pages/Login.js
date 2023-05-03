@@ -15,6 +15,7 @@ async function loginHandler(email, password) {
                 email: email,
                 password: password
             }),
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/json',
             }
