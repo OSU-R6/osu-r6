@@ -27,9 +27,15 @@ async function loginHandler(email, password) {
 }
 
 async function logoutHandler(){
+    console.log("in Logout")
     const response = await fetch('http://localhost:8001/users/logout', {
-        method: 'POST'
+        method: 'POST',
+        credentials: 'include'
     })
+    if(response.status == 200)
+        return true
+    else
+        return false
 }
 
 function Login() {
@@ -42,6 +48,7 @@ function Login() {
     const [ passError, setPassError ] = useState(false)
     const [ loginError, setLoginError ] = useState(false)
     const [ serverError, setServerError ] = useState(false)
+    const [ logoutError, setLogoutError ] = useState(false)
 
     const inputStyle = "appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     const inputErrorStyle = "appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -100,10 +107,20 @@ function Login() {
                     <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4">
                         <h1 className="text-xl text-white font-semi-bold mb-6">You are currently logged in</h1>
                         <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm"
-                            onClick={() => dispatch(logout())}
+                            onClick={async () => {
+                                const logoutSuccess = await logoutHandler()
+                                if(logoutSuccess) {
+                                    setLogoutError(false)
+                                    dispatch(logout())
+                                } else {
+                                    setLogoutError(true)
+                                }
+                                }
+                            }
                         >
                             Log out
                         </button>
+                        {logoutError && <ErrorMessage>Error Logging Out</ErrorMessage>}
                     </div>
                 </div>
             }
