@@ -50,7 +50,7 @@ function Navigation() {
                     <StyledNavLink to={"/about"} onClick={() => setNavOpen(false)}>The Program</StyledNavLink>
                     <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Try Out</StyledNavLink>
                     <div className="hidden sm:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
-                    <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Black Team</StyledNavLink>
+                    <StyledNavLink to={"/blackteam"} onClick={() => setNavOpen(false)}>Black Team</StyledNavLink>
                     <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Orange Team</StyledNavLink>
                     <div className="hidden sm:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
                     <StyledNavLink to={"/coaching"} onClick={() => setNavOpen(false)}>Coaching</StyledNavLink>
