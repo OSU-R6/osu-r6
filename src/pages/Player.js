@@ -1,47 +1,52 @@
-import {
-    useParams
-} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Carousel from 'react-bootstrap/Carousel';
 import Banner from '../components/Banner'
 import NotFound from './NotFound'
-import players from '../data/players.json'
+import { useEffect, useState } from 'react';
 
 
-const playersData = players;
 
 function Player() {
     const {player} = useParams()
-    var index = playersData.players.findIndex(function(x){
-        return x.name === player
-      });
-    const playerData = playersData.players[index]
-    return playerData ? (
-        <>
-            <Banner>{playerData.name}</Banner>
-            <Carousel slide={false} className="m-4">
-                {playerData.videos.map(video => ( 
-                    <Carousel.Item interval={null}>
-                    <video autoPlay muted loop className="bg-osu-shine p-1 video-carousel mt-4">
-                        <source src={video} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                    </Carousel.Item>
-                ))}
-    
-            </Carousel>
-                    
+    const [clips, setClips] = useState([])
 
+    useEffect(() => {
+        getClips()
+    }, [])
+
+    const getClips = async () => {
+        const response = await fetch('http://localhost:8001' + '/clips/user/' + player)
+        const responseBody = await response.json()
+        setClips(responseBody.clips)
+    }
+
+    return (
+        <>
+            <Banner>{player}</Banner>
+            <Carousel slide={false} className="m-4">
+                {clips.map(video => {
+                    return (  
+                        <Carousel.Item interval={null}>
+                        <video autoPlay muted loop className="bg-osu-shine p-1 video-carousel mt-4">
+                            <source src={'http://localhost:8001' + video.link} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                        </Carousel.Item>
+                    )
+                })}   
+            </Carousel>                    
             <Row className='p-4 m-0'>
-                {playerData.videos.map(video => ( 
-                    <video autoPlay muted loop className="bg-osu-shine p-1 mx-auto m-4 video-player">
-                        <source src={video} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                ))}
+                {clips.map(video => {
+                    return (  
+                        <video autoPlay muted loop className="bg-osu-shine p-1 mx-auto m-4 video-player">
+                            <source src={'http://localhost:8001' + video.link} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )
+                })}
             </Row>
         </>
-    ): <NotFound />
+    )
 }
 export default Player;
