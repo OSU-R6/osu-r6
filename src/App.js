@@ -17,6 +17,7 @@ import Login from './pages/Login'
 import About from './pages/About'
 import Coaching from './pages/Coaching'
 import Alumni from './pages/Alumni'
+import BlackTeam from './pages/BlackTeam'
 import Player from './pages/Player'
 import Roster from './pages/Roster'
 import NotFound from './pages/NotFound'
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/alumni" element={<Alumni />} />
+                <Route path="/blackteam" element={<BlackTeam />} />
                 <Route path="/coaching" element={<Coaching />} />
                 <Route path="/roster" element={<Roster />}/>
                 <Route path="/player">
