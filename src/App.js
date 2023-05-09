@@ -10,17 +10,18 @@ import {
     Navigate
 } from 'react-router-dom'
 
-import Navigation from './components/Nav'
+import About from './pages/About'
+import Account from './pages/Account'
+import Alumni from './pages/Alumni'
+import BlackTeam from './pages/BlackTeam'
+import Coaching from './pages/Coaching'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import Login from './pages/Login'
-import About from './pages/About'
-import Coaching from './pages/Coaching'
-import Alumni from './pages/Alumni'
-import BlackTeam from './pages/BlackTeam'
+import Navigation from './components/Nav'
+import NotFound from './pages/NotFound'
 import Player from './pages/Player'
 import Roster from './pages/Roster'
-import NotFound from './pages/NotFound'
 
 function PlayerBlank() {
     return (
@@ -30,12 +31,6 @@ function PlayerBlank() {
     )
 }
 
-// function NotFound() {
-//     return (
-//         <h1>Page Not found</h1>
-//     );
-// }
-
 function App() {
     return (
         <>
@@ -44,6 +39,7 @@ function App() {
                 <Route exact path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/account" element={<Account />} />
                 <Route path="/alumni" element={<Alumni />} />
                 <Route path="/blackteam" element={<BlackTeam />} />
                 <Route path="/coaching" element={<Coaching />} />
