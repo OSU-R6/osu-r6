@@ -16,7 +16,7 @@ function Player() {
     }, [])
 
     const getClips = async () => {
-        const response = await fetch('http://localhost:8001' + '/clips/user/' + player)
+        const response = await fetch('http://localhost:8001' + '/clips/GetPublicClips/' + player)
         const responseBody = await response.json()
         setClips(responseBody.clips)
     }
