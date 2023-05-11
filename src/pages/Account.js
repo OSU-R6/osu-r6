@@ -2,39 +2,19 @@ import Banner from '../components/Banner'
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
-import { isloggedIn } from '../redux/selectors'
+import { isloggedIn, getUser } from '../redux/selectors'
 
 function Alumni() {
 
     const [clips, setClips] = useState([])
-    //const [player, setPlayer] = useState("")
 
     const loggedIn = useSelector(isloggedIn)
+    const user = useSelector(getUser)
+    console.log(user)
 
     useEffect(() => {
-        //checkLoginStatus()
         getClips()
     }, [])
-
-    // const checkLoginStatus = async () => {
-    //     try{
-    //         const response = await fetch('http://localhost:8001' + '/users/authenticate', {
-    //             credentials: 'include'
-    //         })
-    //         if (response.status === 200){
-    //             dispatch(login())
-    //             const responseBody = await response.json()
-    //             setPlayer(responseBody.ign)
-    //             getClips()
-    //         } else {
-    //             dispatch(logout())
-    //             navigate("/login")
-    //         }
-    //     } catch {
-    //         dispatch(logout())
-    //         navigate("/login")
-    //     }
-    // }
 
     const getClips = async () => {
         try{
@@ -48,12 +28,43 @@ function Alumni() {
         }
     }
 
+    async function titleUpdateHandler(clip, e) {
+        const formData = new FormData(e.target);
+        const title = formData.get('title')
+        const response = await fetch('http://localhost:8001' + '/clips/UpdateTitle/' + clip.id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                title: title
+            }),
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json',
+            }
+        })
+        getClips()
+    }
+
+    async function privacyUpdateHandler(clip) {
+        const response = await fetch('http://localhost:8001' + '/clips/TogglePrivacy/' + clip.id, {
+            method: 'PATCH',
+            credentials: 'include'
+        })
+        getClips()
+    }
+
+    async function deleteHandler(clip) {
+        const response = await fetch('http://localhost:8001' + '/clips/' + clip.id, {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+        getClips()
+    }
 
     return(
         <>
             {loggedIn ? (
                 <>
-                    <Banner>Account</Banner>
+                    <Banner>{user.data.firstName} "{user.data.ign}" {user.data.lastName}</Banner>
                     <div>
                         <div>
                         {clips.map(clip => {
@@ -62,19 +73,7 @@ function Alumni() {
                                     <div className="px-8 pt-6 pb-8 mt-4 border">
                                         <form className="mb-4" onSubmit={ async (e) => {
                                             e.preventDefault()
-                                            const formData = new FormData(e.target);
-                                            const title = formData.get('title')
-                                            const response = await fetch('http://localhost:8001' + '/clips/UpdateTitle/' + clip.id, {
-                                                method: 'PATCH',
-                                                body: JSON.stringify({
-                                                    title: title
-                                                }),
-                                                credentials: 'include',
-                                                headers: {
-                                                    'Content-type': 'application/json',
-                                                }
-                                            })
-                                            getClips()
+                                            titleUpdateHandler(clip, e)
                                         }}>
                                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="title">
                                                 Title: {clip.title}
@@ -84,11 +83,7 @@ function Alumni() {
                                         </form>
                                         <form className="mb-4" onSubmit={ async (e) => {
                                             e.preventDefault()
-                                            const response = await fetch('http://localhost:8001' + '/clips/TogglePrivacy/' + clip.id, {
-                                                method: 'PATCH',
-                                                credentials: 'include'
-                                            })
-                                            getClips()
+                                            privacyUpdateHandler(clip)
                                         }}>
                                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="privacyToggle">
                                                 Public : {clip.public.toString()}
@@ -97,11 +92,7 @@ function Alumni() {
                                         </form>
                                         <form onSubmit={ async (e) => {
                                             e.preventDefault()
-                                            const response = await fetch('http://localhost:8001' + '/clips/' + clip.id, {
-                                                method: 'DELETE',
-                                                credentials: 'include'
-                                            })
-                                            getClips()
+                                            deleteHandler(clip)
                                         }}>
                                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="privacyToggle">
                                                 Delete
