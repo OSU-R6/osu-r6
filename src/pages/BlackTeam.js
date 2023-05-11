@@ -19,7 +19,11 @@ function BlackTeam() {
 
             <div>
                 {team.map(player => {
-                        return <a href={"/player/" + player.ign}>{player.firstName} "{player.ign}" {player.lastName}</a>;
+                        return (
+                            <form onSubmit={ async (e) => { navigate('/player/' + player.ign)}}>
+                                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 mt-2.5 text-sm font-semibold text-white shadow-sm" id="privacyToggle" type="submit">{player.firstName} "{player.ign}" {player.lastName}</button>
+                            </form>
+                        )
                 })}
             </div>
 
