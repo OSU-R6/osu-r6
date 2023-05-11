@@ -7,11 +7,12 @@ import { BsDiscord, BsInstagram, BsTwitter } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux'
 
 import { logout } from '../redux/loginReducer'
-import { isloggedIn } from '../redux/selectors'
+import { clearUser } from '../redux/userReducer'
+import { isloggedIn, getUser } from '../redux/selectors'
 
 function Footer() {
     const loggedIn = useSelector(isloggedIn)
-
+    const user = useSelector(getUser)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -22,12 +23,14 @@ function Footer() {
         })
         if(response.status == 200){
             dispatch(logout())
+            dispatch(clearUser())
+            console.log(user)
             navigate('/')
         }
     }
 
     return (
-        <div className="footer">
+        <div className="footer mt-5">
             <Navbar>
                 <Navbar.Collapse className="justify-content-center">
                         <Nav>
@@ -49,14 +52,14 @@ function Footer() {
                         {loggedIn ? (
                             <>
                             <Nav.Item>
-                                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm"
+                                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm mx-2"
                                     onClick={async () => {
                                         navigate('/account')
                                     }}
                                 >Account</button>
                             </Nav.Item>
                             <Nav.Item>
-                                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { await logoutHandler() }}>Log out</button>
+                                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm mx-2" onClick={async () => { await logoutHandler() }}>Log out</button>
                             </Nav.Item>
                             </>
                         ) : (

@@ -6,7 +6,8 @@ import ErrorMessage from '../components/ErrorMessage'
 import Banner from '../components/Banner'
 
 import { login } from '../redux/loginReducer'
-import { isloggedIn } from '../redux/selectors'
+import { setUser } from '../redux/userReducer'
+import { isloggedIn, getUser } from '../redux/selectors'
 
 async function loginHandler(email, password) {
     try {
@@ -27,9 +28,19 @@ async function loginHandler(email, password) {
     }
 }
 
+async function getUserInfo(){
+    const response = await fetch('http://localhost:8001/' + 'users/authenticate', {
+            method: 'GET',
+            credentials: 'include'
+        })
+    const responseBody = await response.json()
+    return responseBody
+}
+
 function Login() {
     const dispatch = useDispatch()
     const loggedIn = useSelector(isloggedIn)
+    const user = useSelector(getUser)
     const navigate = useNavigate()
 
     const [ username, setUserName ] = useState("")
@@ -56,7 +67,9 @@ function Login() {
                             setPassError(false)
                             setServerError(false)
                             dispatch(login())
+                            console.log("hello?")
                             dispatch(setUser(await getUserInfo()))
+                            console.log("hello2")
                         } else if(loginStatus == 401) {
                             setLoginError(true)
                             setUserError(false)
@@ -95,7 +108,7 @@ function Login() {
                 :
                 <div>
                     <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4">
-                        <h1 className="text-xl text-white font-semi-bold mb-6">You are currently logged in</h1>
+                        <h1 className="text-xl text-white font-semi-bold mb-6">You are currently logged in as {user.data.firstName} "{user.data.ign}" {user.data.lastName}</h1>
                         <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { navigate('/account') }}>Account</button>
                     </div>
                 </div>
