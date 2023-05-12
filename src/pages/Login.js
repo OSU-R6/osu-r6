@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import ErrorMessage from '../components/ErrorMessage'
 import Banner from '../components/Banner'
@@ -67,9 +67,7 @@ function Login() {
                             setPassError(false)
                             setServerError(false)
                             dispatch(login())
-                            console.log("hello?")
                             dispatch(setUser(await getUserInfo()))
-                            console.log("hello2")
                         } else if(loginStatus == 401) {
                             setLoginError(true)
                             setUserError(false)
@@ -108,8 +106,8 @@ function Login() {
                 :
                 <div>
                     <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4">
-                        <h1 className="text-xl text-white font-semi-bold mb-6">You are currently logged in as {user.data.firstName} "{user.data.ign}" {user.data.lastName}</h1>
-                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { navigate('/account') }}>Account</button>
+                        <h1 className="text-xl text-white font-semi-bold mb-6">You're logged in!</h1>
+                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { navigate('/account') }}>My Account</button>
                     </div>
                 </div>
             }

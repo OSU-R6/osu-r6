@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
@@ -24,7 +23,6 @@ function Footer() {
         if(response.status == 200){
             dispatch(logout())
             dispatch(clearUser())
-            console.log(user)
             navigate('/')
         }
     }

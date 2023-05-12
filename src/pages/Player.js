@@ -2,28 +2,35 @@ import { useParams } from 'react-router-dom'
 import Row from 'react-bootstrap/Row';
 import Carousel from 'react-bootstrap/Carousel';
 import Banner from '../components/Banner'
-import NotFound from './NotFound'
 import { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function Player() {
-    const {player} = useParams()
+    const params = useParams()
     const [clips, setClips] = useState([])
+    const [player, setPlayer] = useState({})
+
+    const navigate = useNavigate()
 
     useEffect(() => {
-        getClips()
+        getProfile()
     }, [])
 
-    const getClips = async () => {
-        const response = await fetch('http://localhost:8001' + '/clips/GetPublicClips/' + player)
-        const responseBody = await response.json()
-        setClips(responseBody.clips)
+    const getProfile = async () => {
+        const profile = await fetch('http://localhost:8001' + '/users/GetPublicProfile/' + params.player)
+        if(profile.status != 200)
+            navigate('/404')
+        const profileBody = await profile.json()
+        setPlayer(profileBody)
+        const playerClips = await fetch('http://localhost:8001' + '/clips/GetPublicClips/' + profileBody.ign)
+        const playerClipsBody = await playerClips.json()
+        setClips(playerClipsBody.clips)
     }
 
     return (
         <>
-            <Banner>{player}</Banner>
+            <Banner>{player.ign}</Banner>
             <Carousel slide={false} className="m-4">
                 {clips.map(video => {
                     return (  
