@@ -29,17 +29,14 @@
 .banner-block {
     background: black;
     text-align: center;
-    padding: 20px;
-    margin: 0;
 }
 
 .banner-text {
     font-family: "Scout Condensed Bold";
     background-clip: text;
     color: transparent;
-    font-size: 1000%;
+    font-size: 800%;
     line-height: 100%;
-    margin: 0;
     user-select: none;
 }
 
@@ -53,6 +50,10 @@
     font-family: "Scout Condensed Regular";
     src: local("ScoutCond-Regular"),
         url("./fonts/scout/ScoutCond-Regular.otf") format("opentype");
+}
+
+.r6-font{
+    font-family: "Scout Condensed Bold";
 }
 
 /* ################################################################# */
@@ -171,13 +172,6 @@ body {
     width: 100%;
 }
 
-.banner {
-    display: block;
-    margin: auto;
-    width: 60%;
-    min-width: 300px;
-}
-
 .video-carousel{
     width: 95%;
     max-width: 1800px;
@@ -195,10 +189,38 @@ body {
     font-size: 1.5em;
 }
 
-.row{
-    width: 100%;
-}
-
 .pre-wrap {
     white-space: pre-wrap;
+}
+
+/* ################################################################# */
+/*                           Home Page
+/* ################################################################# */
+
+.bannerImage {
+    align-content: center;
+    margin: auto;
+    display: flex;
+}
+
+/* ################################################################# */
+/*                           Player Page
+/* ################################################################# */
+.bio {
+    color: white;
+    font-family: "Scout Condensed Bold";
+    font-size: 1.5em;
+    max-width: 75%;
+    margin: auto;
+    text-align: center;
+    white-space: pre-wrap
+}
+
+.clip-title {
+    color: white;
+    font-family: "Scout Condensed Bold";
+    font-size: 2em;
+    max-width: 75%;
+    margin: auto;
+    text-align: center;
 }
