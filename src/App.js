@@ -21,6 +21,7 @@ import Login from './pages/Login'
 import Navigation from './components/Nav'
 import NotFound from './pages/NotFound'
 import Player from './pages/Player'
+import Register from './pages/Register'
 import Roster from './pages/Roster'
 
 function PlayerBlank() {
@@ -38,6 +39,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/alumni" element={<Alumni />} />
