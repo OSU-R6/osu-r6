@@ -61,13 +61,10 @@ function Player() {
                 </div>
             </div>
             <MiniBanner>STATS</MiniBanner>
-            <div className='flex justify-center items-center my-5 mx-20 px-20 bio columns-2'>
-                <div className='w-full'>
-                    <img className="bannerImage" src="\images\Connor.png"/>
-                </div>
-                <div className='w-full'>
-                    <img className="bannerImage" src="\images\Connor.png"/>
-                </div>
+            <div className='flex justify-center items-center my-5 mx-20 px-20 bio grid grid-cols-2'>
+                    <div className="cols-2">
+                        <iframe className="w-full" src="https://tracker.gg/overlays/overlay/28470467-0ac9-43dc-a7ed-e562193a49eb"></iframe>
+                    </div>
             </div>
             <MiniBanner>CLIPS</MiniBanner>                   
             <Row className='p-4 m-0'>
