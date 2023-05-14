@@ -15,6 +15,24 @@ function Footer() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        checkLogin()
+    }, [])
+
+    const checkLogin = async () => {
+        try{
+            const response = await fetch('http://localhost:8001' + '/users/authenticate', {
+                credentials: 'include'
+            })
+            console.log(response)
+            if(response.status == 401){
+                logoutHandler()
+            }
+        } catch {
+            logoutHandler()
+        }
+    }
+
     async function logoutHandler(){
         const response = await fetch('http://localhost:8001/users/logout', {
             method: 'POST',
