@@ -220,7 +220,10 @@ body {
     color: white;
     font-family: "Scout Condensed Bold";
     font-size: 2em;
-    max-width: 75%;
     margin: auto;
     text-align: center;
 }
+
+.preformatted {
+    white-space: pre-wrap;
+  }
