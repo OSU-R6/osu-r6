@@ -31,15 +31,15 @@ function Player() {
 
     return (
         <>
-            <Banner>{player.firstName} "{player.ign}" {player.lastName}</Banner>
+            <Banner>{player.firstName} '{player.ign}' {player.lastName}</Banner>
             <div className='flex justify-center items-center m-4'>
                 <div className='w-full'>
-                    <Carousel slide={false} className="">
+                    <Carousel slide={false} className=''>
                         {clips.map(video => {
                             return (  
                                 <Carousel.Item interval={null}>
-                                <video autoPlay muted loop className="bg-osu-shine p-1 video-carousel mt-4">
-                                    <source src={'http://localhost:8001' + video.link} type="video/mp4" />
+                                <video autoPlay muted loop className='bg-osu-shine p-1 video-carousel mt-4'>
+                                    <source src={'http://localhost:8001' + video.link} type='video/mp4' />
                                     Your browser does not support the video tag.
                                 </video>
                                 </Carousel.Item>
@@ -50,23 +50,22 @@ function Player() {
             </div>
             <MiniBanner>BIO</MiniBanner>
             <div className='flex justify-center items-center my-5 grid grid-cols-6 gap-3 bio'>
-                <div className='w-full col-span-6 xl:col-span-2'>
-                    <img className="bannerImage" src="\images\Connor.png"/>
+                <div className='w-full col-span-6 xl:col-start-0 xl:col-span-2'>
+                    <img className='bannerImage' src='\images\Connor.png'/>
                 </div>
-                <div className='grid-cols-1'/>
-                <div className='w-full col-span-6 xl:col-span-3 preformatted'>
+                <div className='w-full col-span-6 xl:col-start-4 xl-span-3 preformatted'>
                     <p className='pre-wrap'>
-                    {player.bio}<br></br>{player.bio}
+                        {player.bio}
                     </p>
                 </div>
             </div>
             <MiniBanner>STATS</MiniBanner>
             <div className='flex justify-center items-center my-5 mx-20 px-20 bio columns-2'>
                 <div className='w-full'>
-                    <img className="bannerImage" src="\images\Connor.png"/>
+                    <img className='bannerImage' src='\images\Connor.png'/>
                 </div>
                 <div className='w-full'>
-                    <img className="bannerImage" src="\images\Connor.png"/>
+                    <img className='bannerImage' src='\images\Connor.png'/>
                 </div>
             </div>
             <MiniBanner>CLIPS</MiniBanner>                   
@@ -74,9 +73,9 @@ function Player() {
                 {clips.map(video => {
                     return (  
                         <>
-                        <div className="clip-title">{video.title}</div>
-                        <video controls muted loop className="bg-osu-shine p-1 mx-auto m-4 video-player">
-                            <source src={'http://localhost:8001' + video.link} type="video/mp4" />
+                        <div className='clip-title'>{video.title}</div>
+                        <video controls muted loop className='bg-osu-shine p-1 mx-auto m-4 video-player'>
+                            <source src={'http://localhost:8001' + video.link} type='video/mp4' />
                             Your browser does not support the video tag.
                         </video>
                         </>

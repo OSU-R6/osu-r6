@@ -25,6 +25,9 @@
     background-size: 500% 100%;
     animation: gradient 10s ease infinite;
 }
+.text-osu {
+    color: #DC4405;
+}
 
 .banner-block {
     background: black;
@@ -226,4 +229,12 @@ body {
 
 .preformatted {
     white-space: pre-wrap;
+  }
+
+.add-clip-button {
+    scale: 5;
+}
+
+.clips .grid {
+    grid-auto-rows: 1fr; /* Set the height of all rows to 1 fraction */
   }
