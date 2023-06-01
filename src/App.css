@@ -25,8 +25,13 @@
     background-size: 500% 100%;
     animation: gradient 10s ease infinite;
 }
+
 .text-osu {
     color: #DC4405;
+}
+
+.r6-font {
+    font-family: "Scout Condensed Bold";
 }
 
 .banner-block {
@@ -210,13 +215,9 @@ body {
 /*                           Player Page
 /* ################################################################# */
 .bio {
-    color: white;
-    font-family: "Scout Condensed Bold";
-    font-size: 1.5em;
+    font-size: 1.25em;
     max-width: 75%;
     margin: auto;
-    text-align: center;
-    white-space: pre-wrap
 }
 
 .clip-title {
@@ -238,3 +239,25 @@ body {
 .clips .grid {
     grid-auto-rows: 1fr; /* Set the height of all rows to 1 fraction */
   }
+
+
+/* ################################################################# */
+/*                           Player Banners
+/* ################################################################# */
+
+.player-banner-image {
+    max-height: 500px;
+}
+
+.player-banner:hover > .player-banner-image {
+    filter: drop-shadow(1px 1px 5px #ffffff);
+}
+
+.player-banner .player-role {
+    -webkit-text-stroke: 0.5px #DC4405;
+}
+
+.player-banner .player-ign {
+    -webkit-text-stroke: 0.5px #DC4405;
+}
+

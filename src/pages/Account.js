@@ -188,15 +188,9 @@ function Alumni() {
             {loggedIn ? (
                 <>
                     <Banner>{user.data.firstName} '{user.data.ign}' {user.data.lastName}</Banner>
-
-                    {/* <div className='m-4'>
-                        <form onSubmit={viewProfileHandler}>
-                            <button className='rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm'>View Profile</button>
-                        </form>
-                    </div> */}
                     
-                    {/* Profile Image */}
                     <div className='grid grid-cols-3 gap-3 justify-center m-4'>
+                        {/* Profile Image */}
                         <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
                             { pfpUploadToggle ?
                             <div className='flex justify-center w-full'>
@@ -224,15 +218,12 @@ function Alumni() {
                             </div>
                             :
                             <>
-                            <img className='m-auto' src={'http://localhost:8001' + player.pfp}/>
+                            <img className='m-auto' src={'http://localhost:8001' + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
                             <div className='flex'>
                                 <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm scale-150 text-osu hover:text-white mx-auto my-2' onClick={ async (e) => {
                                     setPfpUploadToggle(true)
                                 }} ><span className='flex'><div className='my-auto'><BiEditAlt /></div> Edit</span></button>
                             </div>
-                            {/* <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm absolute top-0 right-0 scale-150 text-osu hover:text-white' onClick={ async (e) => {
-                                setPfpUploadToggle(true)
-                            }} ><span className='flex'><div className='my-auto'><BiEditAlt /></div> Edit</span></button> */}
                             </>
                             }
                         </div>
@@ -270,9 +261,6 @@ function Alumni() {
                                 <div className='whitespace-pre-line text-center'>
                                     {player.bio}
                                 </div>
-                                {/* <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold text-osu shadow-sm absolute top-8 right-0 scale-150' onClick={ async (e) => {
-                                    setUpdateBio(true)
-                                }} ><span className='flex'><div className='my-auto'><BiEditAlt /></div> Edit</span></button> */}
                                 </>
                                 }
                             </div>
