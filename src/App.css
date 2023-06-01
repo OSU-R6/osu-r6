@@ -238,3 +238,25 @@ body {
 .clips .grid {
     grid-auto-rows: 1fr; /* Set the height of all rows to 1 fraction */
   }
+
+
+/* ################################################################# */
+/*                           Player Banners
+/* ################################################################# */
+
+.player-banner-image {
+    max-height: 500px;
+}
+
+.player-banner-image:hover {
+    filter: drop-shadow(1px 1px 5px #dc460575);
+}
+
+.player-banner .player-role {
+    font-family: "Scout Condensed Bold";
+    /* filter: drop-shadow(1px 1px 1px #FFFFFF); */
+}
+
+.player-banner .player-ign {
+    font-family: "Scout Condensed Bold";
+}

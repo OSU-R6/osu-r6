@@ -22,15 +22,17 @@ function Footer() {
 
     const checkLogin = async () => {
         try{
-            const response = await fetch('http://localhost:8001' + '/users/authenticate', {
-                credentials: 'include'
-            })
-            if(response.status == 200){
-                const responseBody = await response.json()
-                dispatch(setUser(responseBody))
-            }
-            else if(response.status == 401){
-                logoutHandler()
+            if(loggedIn){
+                const response = await fetch('http://localhost:8001' + '/users/authenticate', {
+                    credentials: 'include'
+                })
+                if(response.status == 200){
+                    const responseBody = await response.json()
+                    dispatch(setUser(responseBody))
+                }
+                else if(response.status == 401){
+                    logoutHandler()
+                }
             }
         } catch {
             logoutHandler()
