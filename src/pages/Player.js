@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom'
-import Row from 'react-bootstrap/Row';
 import Carousel from 'react-bootstrap/Carousel';
 import Banner from '../components/Banner'
 import MiniBanner from '../components/MiniBanner'
@@ -49,14 +48,16 @@ function Player() {
                 </div>
             </div>
             <MiniBanner>BIO</MiniBanner>
-            <div className='flex justify-center items-center my-5 grid grid-cols-6 gap-3 bio'>
-                <div className='w-full col-span-6 xl:col-start-0 xl:col-span-2'>
-                    <img className='bannerImage' src='\images\Connor.png'/>
+            <div className='grid grid-cols-3 gap-3 justify-center m-4'>
+                <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
+                    <img className='m-auto' src={'http://localhost:8001' + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
                 </div>
-                <div className='w-full col-span-6 xl:col-start-4 xl-span-3 preformatted'>
-                    <p className='pre-wrap'>
-                        {player.bio}
-                    </p>
+                <div className='col-span-3 lg:col-span-2 my-auto'>
+                    <div className=' w-full h-full bg-black p-4 rounded text-white relative'>
+                        <div className='whitespace-pre-line text-center bio'>
+                            {player.bio}
+                        </div>
+                    </div>
                 </div>
             </div>
             <MiniBanner>STATS</MiniBanner>
@@ -69,19 +70,21 @@ function Player() {
                 </div>
             </div>
             <MiniBanner>CLIPS</MiniBanner>                   
-            <Row className='p-4 m-0'>
+            <div className='grid grid-cols-12 gap-4 m-4 clips'>
                 {clips.map(video => {
                     return (  
                         <>
-                        <div className='clip-title'>{video.title}</div>
-                        <video controls muted loop className='bg-osu-shine p-1 mx-auto m-4 video-player'>
-                            <source src={'http://localhost:8001' + video.link} type='video/mp4' />
-                            Your browser does not support the video tag.
-                        </video>
+                        <div className='col-span-12 lg:col-span-6 2xl:col-span-4'>
+                            <div className='clip-title'>{video.title}</div>
+                            <video controls muted loop className='bg-osu-shine p-1 mx-auto m-4 video-player'>
+                                <source src={'http://localhost:8001' + video.link} type='video/mp4' />
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
                         </>
                     )
                 })}
-            </Row>
+            </div>
         </>
     )
 }

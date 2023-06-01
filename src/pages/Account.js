@@ -189,8 +189,8 @@ function Alumni() {
                 <>
                     <Banner>{user.data.firstName} '{user.data.ign}' {user.data.lastName}</Banner>
                     
-                    {/* Profile Image */}
                     <div className='grid grid-cols-3 gap-3 justify-center m-4'>
+                        {/* Profile Image */}
                         <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
                             { pfpUploadToggle ?
                             <div className='flex justify-center w-full'>
@@ -218,7 +218,7 @@ function Alumni() {
                             </div>
                             :
                             <>
-                            <img className='m-auto' src={'http://localhost:8001' + player.pfp}/>
+                            <img className='m-auto' src={'http://localhost:8001' + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
                             <div className='flex'>
                                 <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm scale-150 text-osu hover:text-white mx-auto my-2' onClick={ async (e) => {
                                     setPfpUploadToggle(true)
