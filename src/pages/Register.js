@@ -132,9 +132,19 @@ function Login() {
                             <input className={inputStyle} value={lastName} onChange={e => { if(nameRegex.test(e.target.value) || e.target.value === '') setLastName(e.target.value)}} id="lastName" type="text" placeholder="Last Name" required/>
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="firstName">In Game Name</label>
+                            <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="ign">In Game Name</label>
                             <input className={ignAvailibilityError ? inputErrorStyle : inputStyle} value={ign} onChange={e => {setIgn(e.target.value), setIgnAvailibilityError(false)}} id="ign" type="text" placeholder="" required/>
                             {ignAvailibilityError && <ErrorMessage>In Game Name Already Linked To Account</ErrorMessage>}
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="role">Role</label>
+                            <select className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm" id="role" required>
+                                <option>Entry</option>
+                                <option>Flex</option>
+                                <option>Support</option>
+                                <option>IGL</option>
+                                <option>Substitute</option>
+                            </select>
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="invite">Invite Token</label>
