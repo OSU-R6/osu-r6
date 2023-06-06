@@ -242,22 +242,27 @@ body {
 
 
 /* ################################################################# */
-/*                           Player Banners
+/*                           Player Cards
 /* ################################################################# */
 
-.player-banner-image {
-    max-height: 500px;
+.player-card {
+    border: 2px solid #DC4405;
+    border-radius: 20px;
 }
 
-.player-banner:hover > .player-banner-image {
-    filter: drop-shadow(1px 1px 5px #ffffff);
+.player-card img {
+    /* max-height: 500px; */
 }
 
-.player-banner .player-role {
+.player-card:hover > div .player-card-image {
+    filter: drop-shadow(0px 0px 0.5px #ffffff);
+}
+
+.player-card .player-role {
     -webkit-text-stroke: 0.5px #DC4405;
 }
 
-.player-banner .player-ign {
+.player-card .player-ign {
     -webkit-text-stroke: 0.5px #DC4405;
 }
 
