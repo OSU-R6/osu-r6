@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Player() {
     const params = useParams()
+    const [spotlight, setSpotlight] = useState([])
     const [clips, setClips] = useState([])
     const [player, setPlayer] = useState({})
 
@@ -23,6 +24,9 @@ function Player() {
             navigate('/404')
         const profileBody = await profile.json()
         setPlayer(profileBody)
+        const playerSpotlight = await fetch('http://localhost:8001' + '/clips/GetSpotlight/' + profileBody.ign)
+        const playerSpotlightBody = await playerSpotlight.json()
+        setSpotlight(playerSpotlightBody.clips)
         const playerClips = await fetch('http://localhost:8001' + '/clips/GetPublicClips/' + profileBody.ign)
         const playerClipsBody = await playerClips.json()
         setClips(playerClipsBody.clips)
@@ -31,11 +35,13 @@ function Player() {
     return (
         <>
             <Banner>{player.firstName} '{player.ign}' {player.lastName}</Banner>
+            { (spotlight.length > 0) &&
+            <>
             <div className='flex justify-center items-center m-4'>
                 <div className='w-full'>
                     <Carousel slide={false} className=''>
-                        {clips.map(video => {
-                            return (  
+                        {spotlight.map(video => {
+                            return (
                                 <Carousel.Item interval={null}>
                                 <video autoPlay muted loop className='bg-osu-shine p-1 video-carousel mt-4'>
                                     <source src={'http://localhost:8001' + video.link} type='video/mp4' />
@@ -43,12 +49,14 @@ function Player() {
                                 </video>
                                 </Carousel.Item>
                             )
-                        })}   
-                    </Carousel>  
+                        })}
+                    </Carousel>
                 </div>
             </div>
-            <MiniBanner>BIO</MiniBanner>
-            <div className='grid grid-cols-3 gap-3 justify-center m-4'>
+            {/* <MiniBanner>BIO</MiniBanner> */}
+            </>
+            }
+            <div className='grid grid-cols-3 gap-3 justify-center m-4 pt-5'>
                 <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
                     <img className='m-auto' src={'http://localhost:8001' + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
                 </div>
@@ -60,7 +68,7 @@ function Player() {
                     </div>
                 </div>
             </div>
-            <MiniBanner>STATS</MiniBanner>
+            {/* <MiniBanner>STATS</MiniBanner>
             <div className='flex justify-center items-center my-5 mx-20 px-20 bio columns-2'>
                 <div className='w-full'>
                     <img className='bannerImage' src='\images\Connor.png'/>
@@ -68,11 +76,11 @@ function Player() {
                 <div className='w-full'>
                     <img className='bannerImage' src='\images\Connor.png'/>
                 </div>
-            </div>
-            <MiniBanner>CLIPS</MiniBanner>                   
+            </div> */}
+            <MiniBanner>CLIPS</MiniBanner>
             <div className='grid grid-cols-12 gap-4 m-4 clips'>
                 {clips.map(video => {
-                    return (  
+                    return (
                         <>
                         <div className='col-span-12 lg:col-span-6 2xl:col-span-4'>
                             <div className='clip-title'>{video.title}</div>
