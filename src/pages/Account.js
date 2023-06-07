@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { isloggedIn, getUser } from '../redux/selectors'
-import { BsTrash, BsLock, BsUnlock, BsXLg, BsCheckLg, BsPlusLg, BsPlusCircle } from 'react-icons/bs';
+import { BsTrash, BsLock, BsUnlock, BsXLg, BsCheckLg, BsPlusLg, BsPlusCircle, BsStar, BsStarFill } from 'react-icons/bs';
 import { BiEditAlt } from 'react-icons/bi';
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
@@ -40,6 +40,9 @@ function Alumni() {
 
     const publicStyle = 'rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold text-green-500 hover:text-red-500 shadow-sm'
     const privateStyle = 'rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-green-500 shadow-sm'
+
+    const spotlightStyle = 'rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold text-osu shadow-sm'
+    const notSpotlightStyle = 'rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold text-osu hover:text-white shadow-sm'
 
     useEffect(() => {
         getProfile()
@@ -163,6 +166,14 @@ function Alumni() {
         getProfile()
     }
 
+    async function spotlightUpdateHandler(clip) {
+        const response = await fetch('http://localhost:8001' + '/clips/ToggleSpotlight/' + clip.id, {
+            method: 'PATCH',
+            credentials: 'include'
+        })
+        getProfile()
+    }
+
     async function privacyUpdateHandler(clip) {
         const response = await fetch('http://localhost:8001' + '/clips/TogglePrivacy/' + clip.id, {
             method: 'PATCH',
@@ -178,10 +189,6 @@ function Alumni() {
         })
         getProfile()
     }
-
-    // function viewProfileHandler() {
-    //     navigate('/player/' + player.ign)
-    // }
 
     return(
         <>
@@ -311,6 +318,12 @@ function Alumni() {
                                             privacyUpdateHandler(clip)
                                         }}>
                                             <button className={clip.public ? publicStyle : privateStyle} id='privacyToggle' type='submit'>{clip.public ? <BsUnlock /> : <BsLock />}</button>
+                                        </form>
+                                        <form className='inline mr-2 float-right' onSubmit={ async (e) => {
+                                            e.preventDefault()
+                                            spotlightUpdateHandler(clip)
+                                        }}>
+                                            <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='privacyToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
                                         </form>
                                     </div>
                                 </div>

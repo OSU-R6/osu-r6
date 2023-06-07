@@ -60,10 +60,6 @@
         url("./fonts/scout/ScoutCond-Regular.otf") format("opentype");
 }
 
-.r6-font{
-    font-family: "Scout Condensed Bold";
-}
-
 /* ################################################################# */
 /*                             Nav Bar
 /* ################################################################# */
@@ -251,7 +247,7 @@ body {
 }
 
 .player-card img {
-    /* max-height: 500px; */
+    max-height: 500px;
 }
 
 .player-card:hover > div .player-card-image {

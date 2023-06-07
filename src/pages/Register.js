@@ -25,9 +25,8 @@ async function checkIgnAvailibility(ign) {
     }
 }
 
-async function registerHandler(email, password, firstName, lastName, ign, invite){
+async function registerHandler(email, password, firstName, lastName, ign, role, invite){
     try {
-        console.log(invite)
         const response = await fetch('http://localhost:8001/users/', {
             method: 'POST',
             body: JSON.stringify({
@@ -35,6 +34,7 @@ async function registerHandler(email, password, firstName, lastName, ign, invite
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
+                role: role,
                 ign: ign
             }),
             credentials: 'include',
@@ -60,6 +60,7 @@ function Login() {
     const [ firstName, setFirstName ] = useState("")
     const [ lastName, setLastName ] = useState("")
     const [ ign, setIgn ] = useState("")
+    const [ role, setRole ] = useState("")
     const [ invite, setInvite ] = useState("")
     const [ passwordMismatchError, setPasswordMismatchError ] = useState(false)
     const [ emailAvailibilityError, setEmailAvailibilityError ] = useState(false)
@@ -87,7 +88,7 @@ function Login() {
                         const ignAvailible = await checkIgnAvailibility(ign)
                         if(!ignAvailible) setIgnAvailibilityError(true)
                         if(emailAvailible && ignAvailible){
-                            const registerStatus  = await registerHandler(email, password, firstName, lastName, ign, invite)
+                            const registerStatus  = await registerHandler(email, password, firstName, lastName, ign, role, invite)
                             if(registerStatus == 201){
                                 setSuccess(true)
                             } else if(registerStatus == 401) {
@@ -138,7 +139,7 @@ function Login() {
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="role">Role</label>
-                            <select className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm" id="role" required>
+                            <select className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm" onChange={e => {setRole(e.target.value)}} id="role" required>
                                 <option>Entry</option>
                                 <option>Flex</option>
                                 <option>Support</option>
