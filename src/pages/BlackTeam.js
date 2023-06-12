@@ -2,6 +2,8 @@ import Banner from '../components/Banner'
 import PlayerCard from '../components/PlayerCard'
 import { useEffect, useState } from 'react'
 
+const API = 'http://localhost:8080'
+
 function BlackTeam() {
     const [team, setTeam] = useState([])
 
@@ -10,10 +12,10 @@ function BlackTeam() {
     }, [])
 
     const getTeamData = async () => {
-        const response = await fetch('http://localhost:8001/users/active')
+        const response = await fetch(API + '/users/active')
         const responseBody = await response.json()
         const tempTeam = await Promise.all(responseBody.map(async (player) => {
-            const profile = await fetch('http://localhost:8001/users/GetPublicProfile/' + player.ign);
+            const profile = await fetch(API + '/users/GetPublicProfile/' + player.ign);
             return profile.json();
         }));
         setTeam(tempTeam);

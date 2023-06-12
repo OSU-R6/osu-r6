@@ -9,9 +9,11 @@ import { login } from '../redux/loginReducer'
 import { setUser } from '../redux/userReducer'
 import { isloggedIn, getUser } from '../redux/selectors'
 
+const API = 'http://localhost:8080'
+
 async function loginHandler(email, password) {
     try {
-        const response = await fetch('http://localhost:8001/users/login', {
+        const response = await fetch(API + '/users/login', {
             method: 'POST',
             body: JSON.stringify({
                 email: email,
@@ -29,7 +31,7 @@ async function loginHandler(email, password) {
 }
 
 async function getUserInfo(){
-    const response = await fetch('http://localhost:8001/' + 'users/authenticate', {
+    const response = await fetch(API + '/users/authenticate', {
             method: 'GET',
             credentials: 'include'
         })
