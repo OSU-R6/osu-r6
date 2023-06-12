@@ -8,6 +8,8 @@ import { BiEditAlt } from 'react-icons/bi';
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
 
+const API = 'http://localhost:8080'
+
 function Alumni() {
 
     const [clips, setClips] = useState([])
@@ -54,10 +56,10 @@ function Alumni() {
 
     const getProfile = async () => {
         try{
-            const profile = await fetch('http://localhost:8001' + '/users/GetPublicProfile/' + user.data.ign)
+            const profile = await fetch(API + '/users/GetPublicProfile/' + user.data.ign)
             setPlayer(await profile.json())
             setBio(player.bio)
-            const response = await fetch('http://localhost:8001' + '/clips/GetPrivateClips', {
+            const response = await fetch(API + '/clips/GetPrivateClips', {
                 credentials: 'include'
             })
             const responseBody = await response.json()
@@ -74,7 +76,7 @@ function Alumni() {
         else setUploadError(false)
         if(!uploadError && !titleError) {
             const formData = new FormData(e.target);
-            const response = await fetch('http://localhost:8001' + '/clips/', {
+            const response = await fetch(API + '/clips/', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData
@@ -104,7 +106,7 @@ function Alumni() {
             setPfpUploadError(true)
         } else {
             const formData = new FormData(e.target);
-            const response = await fetch('http://localhost:8001' + '/users/pfp', {
+            const response = await fetch(API + '/users/pfp', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData
@@ -134,7 +136,7 @@ function Alumni() {
     async function titleUpdateHandler(clip, e) {
         const formData = new FormData(e.target);
         const title = formData.get('title')
-        const response = await fetch('http://localhost:8001' + '/clips/UpdateTitle/' + clip.id, {
+        const response = await fetch(API + '/clips/UpdateTitle/' + clip.id, {
             method: 'PATCH',
             body: JSON.stringify({
                 title: title
@@ -153,7 +155,7 @@ function Alumni() {
     async function bioUpdateHandler(e) {
         const formData = new FormData(e.target);
         const bio = formData.get('bio')
-        const response = await fetch('http://localhost:8001' + '/users/UpdateBio', {
+        const response = await fetch(API + '/users/UpdateBio', {
             method: 'PATCH',
             body: JSON.stringify({
                 bio: bio
@@ -167,7 +169,7 @@ function Alumni() {
     }
 
     async function spotlightUpdateHandler(clip) {
-        const response = await fetch('http://localhost:8001' + '/clips/ToggleSpotlight/' + clip.id, {
+        const response = await fetch(API + '/clips/ToggleSpotlight/' + clip.id, {
             method: 'PATCH',
             credentials: 'include'
         })
@@ -175,7 +177,7 @@ function Alumni() {
     }
 
     async function privacyUpdateHandler(clip) {
-        const response = await fetch('http://localhost:8001' + '/clips/TogglePrivacy/' + clip.id, {
+        const response = await fetch(API + '/clips/TogglePrivacy/' + clip.id, {
             method: 'PATCH',
             credentials: 'include'
         })
@@ -183,7 +185,7 @@ function Alumni() {
     }
 
     async function deleteHandler(clip) {
-        const response = await fetch('http://localhost:8001' + '/clips/' + clip.id, {
+        const response = await fetch(API + '/clips/' + clip.id, {
             method: 'DELETE',
             credentials: 'include'
         })
@@ -225,7 +227,7 @@ function Alumni() {
                             </div>
                             :
                             <>
-                            <img className='m-auto' src={'http://localhost:8001' + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
+                            <img className='m-auto' src={API + player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
                             <div className='flex'>
                                 <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm scale-150 text-osu hover:text-white mx-auto my-2' onClick={ async (e) => {
                                     setPfpUploadToggle(true)
@@ -303,7 +305,7 @@ function Alumni() {
                                     }
                                     </div>
                                     <video muted loop controls className='bg-osu-shine p-1 rounded mx-auto mx-4 my-1 video-player'>
-                                        <source src={'http://localhost:8001' + clip.link} type='video/mp4' />
+                                        <source src={API + clip.link} type='video/mp4' />
                                         Your browser does not support the video tag.
                                     </video>
                                     <div className='block'>

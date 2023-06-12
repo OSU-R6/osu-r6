@@ -10,6 +10,8 @@ import { logout } from '../redux/loginReducer'
 import { clearUser } from '../redux/userReducer'
 import { isloggedIn, getUser } from '../redux/selectors'
 
+const API = 'http://localhost:8080'
+
 function Footer() {
     const loggedIn = useSelector(isloggedIn)
     const user = useSelector(getUser)
@@ -23,7 +25,7 @@ function Footer() {
     const checkLogin = async () => {
         try{
             if(loggedIn){
-                const response = await fetch('http://localhost:8001' + '/users/authenticate', {
+                const response = await fetch(API + '/users/authenticate', {
                     credentials: 'include'
                 })
                 if(response.status == 200){
@@ -40,7 +42,7 @@ function Footer() {
     }
 
     async function logoutHandler(){
-        const response = await fetch('http://localhost:8001/users/logout', {
+        const response = await fetch(API + '/users/logout', {
             method: 'POST',
             credentials: 'include'
         })
