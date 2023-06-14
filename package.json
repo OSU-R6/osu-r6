@@ -15,7 +15,6 @@
   },
   "scripts": {
     "start": "SET PORT=80 && react-scripts start",
-    "bash-start": "export PORT=8000 && react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },

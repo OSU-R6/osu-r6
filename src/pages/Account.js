@@ -8,7 +8,7 @@ import { BiEditAlt } from 'react-icons/bi';
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
 
-const API = 'http://localhost:8080'
+const API = process.env.REACT_APP_API_URL
 
 function Alumni() {
 
