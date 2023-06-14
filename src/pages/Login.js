@@ -9,7 +9,7 @@ import { login } from '../redux/loginReducer'
 import { setUser } from '../redux/userReducer'
 import { isloggedIn, getUser } from '../redux/selectors'
 
-const API = 'http://localhost:8080'
+const API = process.env.REACT_APP_API_URL
 
 async function loginHandler(email, password) {
     try {

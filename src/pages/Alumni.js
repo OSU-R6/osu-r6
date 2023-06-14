@@ -2,7 +2,7 @@ import Banner from '../components/Banner'
 import PlayerCard from '../components/PlayerCard';
 import { useEffect, useState } from 'react'
 
-const API = 'http://localhost:8080'
+const API = process.env.REACT_APP_API_URL
 
 function Alumni() {
     const [alumni, setAlumni] = useState([])

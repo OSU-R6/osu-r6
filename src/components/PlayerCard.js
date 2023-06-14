@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const API = 'http://localhost:8080'
+const API = process.env.REACT_APP_API_URL
 
 const PlayerCard = ({ player }) => {
 

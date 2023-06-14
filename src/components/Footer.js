@@ -10,7 +10,7 @@ import { logout } from '../redux/loginReducer'
 import { clearUser } from '../redux/userReducer'
 import { isloggedIn, getUser } from '../redux/selectors'
 
-const API = 'http://localhost:8080'
+const API = process.env.REACT_APP_API_URL
 
 function Footer() {
     const loggedIn = useSelector(isloggedIn)
@@ -19,7 +19,10 @@ function Footer() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        checkLogin()
+        checkLogin(),
+        console.log("test: " + process.env.TEST),
+        console.log("api: " + API),
+        console.log("Node Env: " + process.env.NODE_ENV)
     }, [])
 
     const checkLogin = async () => {

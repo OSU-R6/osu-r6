@@ -4,10 +4,11 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage'
 import Banner from '../components/Banner'
 
+const API = process.env.REACT_APP_API_URL
 
 async function checkEmailAvailibility(email) {
     try {
-        const response = await fetch('http://localhost:8001/users/email-availibility/' + email)
+        const response = await fetch(API + '/users/email-availibility/' + email)
         if(response.status == 200) return true
         else return false
     } catch (err) {
@@ -17,7 +18,7 @@ async function checkEmailAvailibility(email) {
 
 async function checkIgnAvailibility(ign) {
     try {
-        const response = await fetch('http://localhost:8001/users/ign-availibility/' + ign)
+        const response = await fetch(API + '/users/ign-availibility/' + ign)
         if(response.status == 200) return true
         else return false
     } catch (err) {
@@ -27,7 +28,7 @@ async function checkIgnAvailibility(ign) {
 
 async function registerHandler(email, password, firstName, lastName, ign, role, invite){
     try {
-        const response = await fetch('http://localhost:8001/users/', {
+        const response = await fetch(API + '/users/', {
             method: 'POST',
             body: JSON.stringify({
                 email: email,
