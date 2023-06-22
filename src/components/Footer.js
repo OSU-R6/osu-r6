@@ -19,10 +19,7 @@ function Footer() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        checkLogin(),
-        console.log("test: " + process.env.TEST),
-        console.log("api: " + API),
-        console.log("Node Env: " + process.env.NODE_ENV)
+        checkLogin()
     }, [])
 
     const checkLogin = async () => {
