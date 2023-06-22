@@ -12,6 +12,7 @@ import {
 
 import About from './pages/About'
 import Account from './pages/Account'
+import Admin from './pages/Admin'
 import Alumni from './pages/Alumni'
 import BlackTeam from './pages/BlackTeam'
 import Coaching from './pages/Coaching'
@@ -24,32 +25,25 @@ import Player from './pages/Player'
 import Register from './pages/Register'
 import Roster from './pages/Roster'
 
-function PlayerBlank() {
-    return (
-        <>
-            <Outlet />
-        </>
-    )
-}
-
 function App() {
     return (
         <>
             <Navigation />
             <Routes>
+                <Route path="/404" element={<NotFound />} />
                 <Route exact path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/alumni" element={<Alumni />} />
                 <Route path="/blackteam" element={<BlackTeam />} />
                 <Route path="/coaching" element={<Coaching />} />
-                <Route path="/roster" element={<Roster />}/>
+                <Route path="/login" element={<Login />} />
                 <Route path="/player">
                     <Route path=":player" element={<Player />} />
                 </Route>
-                <Route path="/404" element={<NotFound />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/roster" element={<Roster />}/>
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
