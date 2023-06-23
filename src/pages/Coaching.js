@@ -1,18 +1,12 @@
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Banner from '../components/Banner'
 
 function Coaching() {
     return(
-        <>
+        <div className=" min-h-full">
             <Banner>COACHING</Banner>
-            <Row className="alum-info bg-osu-black p-5 mx-0">
-                <Col md={{ span: 12, offset: 0 }}>{
-                    <p>
-                        A fake champ that has no idea what he's doing.
-                    </p>
-                }</Col>
-            </Row>
-        </>
+            <div className="text-white m-4 text-xl font-semi-bold">
+                A fake champ that has no idea what he's doing.
+            </div>
+        </div>
     );
 } export default Coaching;

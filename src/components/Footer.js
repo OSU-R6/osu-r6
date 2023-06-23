@@ -85,7 +85,7 @@ function Footer() {
                             <Nav.Item>
                                 <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2' onClick={async () => { navigate('/player/' + user.data.ign) }}>Profile</button>
                             </Nav.Item>
-                            { user.data.admin &&
+                            { user.data != null && user.data.admin &&
                             <Nav.Item>
                                 <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2' onClick={async () => { navigate('/admin') }}>Admin</button>
                             </Nav.Item>

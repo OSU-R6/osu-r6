@@ -108,8 +108,8 @@ function Login() {
                 :
                 <div>
                     <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4">
-                        <h1 className="text-xl text-white font-semi-bold mb-6">You're logged in!</h1>
-                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { navigate('/account') }}>My Account</button>
+                        {user.data != null && <h1 className="text-xxl text-white font-semi-bold m-auto pb-4">Hey {user.data.ign}!</h1>}
+                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm m-auto" onClick={async () => { navigate('/account') }}>My Account</button>
                     </div>
                 </div>
             }

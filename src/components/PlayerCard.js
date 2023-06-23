@@ -5,7 +5,6 @@ const API = process.env.REACT_APP_API_URL
 const PlayerCard = ({ player }) => {
 
     const navigate = useNavigate()
-    console.log(player.ign)
 
     return (
         <div className='col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-1 rounded-2xl hover:bg-zinc-950 player-card' onClick={ async () => {navigate('/player/' + player.ign)}}>
