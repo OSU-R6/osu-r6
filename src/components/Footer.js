@@ -76,22 +76,27 @@ function Footer() {
                         {loggedIn ? (
                             <>
                             <Nav.Item>
-                                <button className='rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm mx-2'
+                                <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2'
                                     onClick={async () => {
                                         navigate('/account')
                                     }}
                                 >Account</button>
                             </Nav.Item>
                             <Nav.Item>
-                                <button className='rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm mx-2' onClick={async () => { navigate('/player/' + user.data.ign) }}>Profile</button>
+                                <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2' onClick={async () => { navigate('/player/' + user.data.ign) }}>Profile</button>
                             </Nav.Item>
+                            { user.data.admin &&
                             <Nav.Item>
-                                <button className='rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm mx-2' onClick={async () => { await logoutHandler() }}>Log out</button>
+                                <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2' onClick={async () => { navigate('/admin') }}>Admin</button>
+                            </Nav.Item>
+                            }
+                            <Nav.Item>
+                                <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2' onClick={async () => { await logoutHandler() }}>Log out</button>
                             </Nav.Item>
                             </>
                         ) : (
                             <Nav.Item>
-                                <button className='rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm'
+                                <button className='px-1 py-2.5 text-lg font-semibold text-osu hover:text-white shadow-sm mx-2'
                                     onClick={async () => {
                                         navigate('/login')
                                     }}
