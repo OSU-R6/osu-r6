@@ -131,8 +131,6 @@ nav .dropdown-item {
     background-color: #000000;
     align-content: center;
     color: #FFFFFF;
-    height: 20vh;
-    flex-grow: 1;
 }
 
 .icon {
