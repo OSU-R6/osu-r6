@@ -1,4 +1,5 @@
 import Banner from '../components/Banner'
+import MiniBanner from '../components/MiniBanner'
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
@@ -277,6 +278,7 @@ function Alumni() {
                     </div>
 
                     {/* User Clip Management */}
+                    <MiniBanner>Clips</MiniBanner>
                     <div className='grid grid-cols-12 gap-4 m-4 clips'>
                         {clips.map((clip, i) => {
                             return (
@@ -333,7 +335,6 @@ function Alumni() {
                         })}
                         <div className='w-full col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 flex'>
                             {clipUploadToggle ?
-                            <>
                             <form className='w-full my-auto relative' onSubmit={ async (e) => {
                                 e.preventDefault()
                                 uploadHandler(e)
@@ -360,9 +361,7 @@ function Alumni() {
                                         </button>
                                     </div>
                                 </div>
-                            </form>
-                            </>
-                            
+                            </form>                           
                             :
                             <div className='m-4 m-auto'>
                                 <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={ async (e) => {

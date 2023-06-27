@@ -12,7 +12,7 @@ function BlackTeam() {
     }, [])
 
     const getTeamData = async () => {
-        const response = await fetch(API + '/users/active')
+        const response = await fetch(API + '/teams/1/roster')
         const responseBody = await response.json()
         const tempTeam = await Promise.all(responseBody.map(async (player) => {
             const profile = await fetch(API + '/users/GetPublicProfile/' + player.ign);

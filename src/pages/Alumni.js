@@ -12,7 +12,7 @@ function Alumni() {
     }, [])
 
     const getAlumniData = async () => {
-        const response = await fetch(API + '/users/alumni')
+        const response = await fetch(API + '/teams/4/roster')
         const responseBody = await response.json()
         const tempTeam = await Promise.all(responseBody.map(async (player) => {
             const profile = await fetch(API + '/users/GetPublicProfile/' + player.ign);
