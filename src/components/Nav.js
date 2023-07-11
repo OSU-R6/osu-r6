@@ -46,7 +46,7 @@ function Navigation() {
                 </button>
             </div>
             <div className="flex sm:items-center sm:justify-between ">
-                {navOpen && <div className="flex justify-center w-full sm:fit-content items-center sm:flex-row flex-col r6-font">
+                {navOpen && <div className="flex justify-center w-full sm:fit-content items-center sm:flex-row flex-col">
                     <StyledNavLink to={"/about"} onClick={() => setNavOpen(false)}>The Program</StyledNavLink>
                     <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Try Out</StyledNavLink>
                     <div className="hidden sm:flex inline-block bg-osu w-0.5 h-10 mx-3"/>

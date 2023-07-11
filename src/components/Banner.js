@@ -3,7 +3,7 @@ function Banner(props) {
         <>
             <div className="py-1 bg-osu-shine" />
             <div className="banner-block">
-                <p className="bg-osu-shine banner-text">{props.children}</p>
+                <div className="bg-osu-shine banner-text">{props.children}</div>
             </div>
             <div className="py-1 bg-osu-shine" />
         </>

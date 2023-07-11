@@ -1,17 +1,19 @@
 import { useParams } from 'react-router-dom'
-import Carousel from 'react-bootstrap/Carousel';
 import Banner from '../components/Banner'
 import MiniBanner from '../components/MiniBanner'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PlayerBio from '../components/PlayerBio';
+import ClipGallery from '../components/ClipGallery';
+import ClipCarousel from '../components/ClipCarousel';
 
 const API = process.env.REACT_APP_API_URL
 
 function Player() {
     const params = useParams()
-    const [spotlight, setSpotlight] = useState([])
-    const [clips, setClips] = useState([])
     const [player, setPlayer] = useState({})
+    const [galleryKey, setGalleryKey] = useState(0)
+    const [carouselKey, setCarouselKey] = useState(1)
 
     const navigate = useNavigate()
 
@@ -25,75 +27,17 @@ function Player() {
             navigate('/404')
         const profileBody = await profile.json()
         setPlayer(profileBody)
-        const playerSpotlight = await fetch(API + '/clips/GetSpotlight/' + profileBody.ign)
-        const playerSpotlightBody = await playerSpotlight.json()
-        setSpotlight(playerSpotlightBody.clips)
-        const playerClips = await fetch(API + '/clips/GetPublicClips/' + profileBody.ign)
-        const playerClipsBody = await playerClips.json()
-        setClips(playerClipsBody.clips)
+        setGalleryKey(prevKey => prevKey + 2)
+        setCarouselKey(prevKey => prevKey + 2)
     }
 
     return (
         <>
             <Banner>{player.firstName} '{player.ign}' {player.lastName}</Banner>
-            { (spotlight.length > 0) &&
-            <>
-            <div className='flex justify-center items-center m-4'>
-                <div className='w-full'>
-                    <Carousel slide={false} className=''>
-                        {spotlight.map(video => {
-                            return (
-                                <Carousel.Item interval={null}>
-                                <video autoPlay muted loop className='bg-osu-shine p-1 video-carousel mt-4'>
-                                    <source src={API + video.link} type='video/mp4' />
-                                    Your browser does not support the video tag.
-                                </video>
-                                </Carousel.Item>
-                            )
-                        })}
-                    </Carousel>
-                </div>
-            </div>
-            {/* <MiniBanner>BIO</MiniBanner> */}
-            </>
-            }
-            <div className='grid grid-cols-3 gap-3 justify-center m-4 pt-5'>
-                <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
-                    <img className='m-auto' src={API + player.pfp} onError={(e) => {e.target.src = '/images/placeholderSquish.png'}}/>
-                </div>
-                <div className='col-span-3 lg:col-span-2 my-auto'>
-                    <div className=' w-full h-full bg-black p-4 rounded text-white relative'>
-                        <div className='whitespace-pre-line text-center bio'>
-                            {player.bio}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* <MiniBanner>STATS</MiniBanner>
-            <div className='flex justify-center items-center my-5 mx-20 px-20 bio columns-2'>
-                <div className='w-full'>
-                    <img className='bannerImage' src='\images\Connor.png'/>
-                </div>
-                <div className='w-full'>
-                    <img className='bannerImage' src='\images\Connor.png'/>
-                </div>
-            </div> */}
+            <ClipCarousel key={carouselKey} player={player}/>
+            <PlayerBio player={player}/>
             <MiniBanner>CLIPS</MiniBanner>
-            <div className='grid grid-cols-12 gap-4 m-4 clips'>
-                {clips.map(video => {
-                    return (
-                        <>
-                        <div className='col-span-12 lg:col-span-6 2xl:col-span-4'>
-                            <div className='clip-title'>{video.title}</div>
-                            <video controls muted loop className='bg-osu-shine p-1 mx-auto m-4 video-player'>
-                                <source src={API + video.link} type='video/mp4' />
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        </>
-                    )
-                })}
-            </div>
+            <ClipGallery key={galleryKey} player={player}/>
         </>
     )
 }
