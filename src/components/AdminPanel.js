@@ -1,10 +1,10 @@
-import MiniBanner from '../components/MiniBanner'
+import Banner from '../components/Banner'
 
 const AdminPanel = (props) => {
     return (
         <>
-            <div className='col-span-12 xl:col-span-6'>
-                <MiniBanner>{props.title}</MiniBanner>
+            <div className=''>
+                <Banner static>{props.title}</Banner>
                 {props.children}
             </div>
 

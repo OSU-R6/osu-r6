@@ -90,56 +90,53 @@ const InvitePanel = () => {
 
     return (
         <>
-        <div className="text-white text-center text-6xl r6-font">Generate Invites</div>
-            <div className='flex'>
-                <form onSubmit={ async (e) => {
-                    e.preventDefault()
-                    await inviteHandler()
-                }} className="flex items-center m-auto my-4">
-                    <label className="text-white text-md font-bold px-2" htmlFor="role">Generate User Invite Token</label>
-                    <select className="py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2" onChange={e => {setTeam(e.target.value)}} id="team_id" defaultValue="1" required>
-                        <option value="1">Black Team</option>
-                        <option value="2">Orange Team</option>
-                        <option value="3">White Team</option>
-                        <option value="4">Alumni</option>
-                    </select>
-                    { team != 4 &&
-                    <>
-                    <select className="py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2" onChange={e => {setIsSub(e.target.value)}} id="is_sub" defaultValue={false} required>
-                        <option value={false}>Main Roster</option>
-                        <option value={true}>Substitute</option>
-                    </select>
-                    </>
-                    }
-                    <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mx-2" type="submit">Generate</button>
-                    {inviteError && <ErrorMessage>Unable to Generate Invite</ErrorMessage>}
-                </form>
-            </div>
+        <div className='flex my-4'>
+            <form onSubmit={ async (e) => {
+                e.preventDefault()
+                await inviteHandler()
+            }} className="flex items-center m-auto my-4">
+                <label className="text-white text-md font-bold px-2" htmlFor="role">Generate User Invite Token</label>
+                <select className="py-1 px-3 bg-black text-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2 invite-team-select" onChange={e => {setTeam(e.target.value)}} id="team_id" defaultValue="1" required>
+                    <option value="1">Black Team</option>
+                    <option value="2">Orange Team</option>
+                    <option value="3">White Team</option>
+                    <option value="4">Alumni</option>
+                </select>
+                { team != 4 &&
+                <>
+                <label className='text-white m-2'>Substitute</label>
+                <input className='m-2' type="checkbox" id="myCheckbox" name="myCheckbox" onChange={e => {setIsSub(e.target.checked)}}/>
+                </>
+                }
+                <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mx-2" type="submit">Generate</button>
+                {inviteError && <ErrorMessage>Unable to Generate Invite</ErrorMessage>}
+            </form>
+        </div>
 
-            { invite &&
-                <div className="flex items-center justify-center mx-4 mb-4">
-                    <div className="block py-1 text-white bg-gray-600 rounded px-2 break-all truncate max-w-lg">{invite}</div>
-                    <button className="rounded-md px-10 py-1.5 text-sm font-semibold text-osu shadow-sm" onClick={copyToClipboard(invite)}>Copy</button>
-                </div>
-            }
-            
-            { usedInvites.length > 0 &&
-            <>
-            <div className='m-4'>
-                <div className="text-white text-center text-6xl r6-font">Used Invites</div>
-                <DataTable columns={inactiveColumns} rows={usedInvites} />
+        { invite &&
+            <div className="flex items-center justify-center my-4">
+                <div className="block py-1 text-white bg-gray-600 rounded px-2 break-all truncate max-w-lg">{invite}</div>
+                <button className="rounded-md px-10 py-1.5 text-sm font-semibold text-osu shadow-sm" onClick={copyToClipboard(invite)}>Copy</button>
             </div>
-            </>
-            }
+        }
+        
+        { usedInvites.length > 0 &&
+        <>
+        <div className='my-4'>
+            <div className="text-white text-center text-6xl r6-font">Used Invites</div>
+            <DataTable columns={inactiveColumns} rows={usedInvites} />
+        </div>
+        </>
+        }
 
-            { activeInvites.length > 0 &&
-            <>
-            <div className='m-4'>
-                <div className="text-white text-center text-6xl r6-font">Active Invites</div>
-                <DataTable columns={activeColumns} rows={activeInvites} />
-            </div>
-            </>
-            }
+        { activeInvites.length > 0 &&
+        <>
+        <div className='my-4'>
+            <div className="text-white text-center text-6xl r6-font">Active Invites</div>
+            <DataTable columns={activeColumns} rows={activeInvites} />
+        </div>
+        </>
+        }
         </>
     )
 } 

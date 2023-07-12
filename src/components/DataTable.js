@@ -70,7 +70,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 const DataTable = ({rows, columns}) => {
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%' }} id="data-table">
       <ThemeProvider theme={theme}>
         <StyledDataGrid
           rows={rows}

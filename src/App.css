@@ -34,20 +34,6 @@
     font-family: "Scout Condensed Bold";
 }
 
-.banner-block {
-    background: black;
-    text-align: center;
-}
-
-.banner-text {
-    font-family: "Scout Condensed Bold";
-    background-clip: text;
-    color: transparent;
-    font-size: 800%;
-    line-height: 100%;
-    user-select: none;
-}
-
 @font-face {
     font-family: "Scout Condensed Bold";
     src: local("ScoutCond-Bold"),
@@ -59,6 +45,7 @@
     src: local("ScoutCond-Regular"),
         url("./fonts/scout/ScoutCond-Regular.otf") format("opentype");
 }
+
 
 /* ################################################################# */
 /*                             Nav Bar
@@ -122,6 +109,19 @@ nav .dropdown-item {
 }
 
 
+/* ################################################################# */
+/*                          Admin Nav Bar
+/* ################################################################# */
+
+.admin-nav {
+
+}
+
+.active-nav-selection {
+    background-color: rgb(220, 68, 5, 0.5);
+    color: #FFFFFF;
+}
+
 
 /* ################################################################# */
 /*                             Footer
@@ -146,7 +146,6 @@ nav .dropdown-item {
 .icon a:hover{
     color: #ffffff;
 }
-
 
 
 /* ################################################################# */
@@ -191,9 +190,23 @@ body {
     font-size: 1.5em;
 }
 
-p {
-    margin-bottom: 0 !important; /* Remove the bottom margin on all <p> elements */
+
+/* ################################################################# */
+/*                             Banner
+/* ################################################################# */
+
+.banner-block {
+    background: black;
+    text-align: center;
 }
+
+.banner-text {
+    font-family: "Scout Condensed Bold";
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+}
+
 
 /* ################################################################# */
 /*                           Home Page
@@ -260,3 +273,19 @@ p {
     -webkit-text-stroke: 0.5px #DC4405;
 }
 
+/* ################################################################# */
+/*                          Data Table
+/* ################################################################# */
+
+#data-table p {
+    margin-bottom: 0 !important;
+}
+
+
+/* ################################################################# */
+/*                          Invite Page
+/* ################################################################# */
+
+.invite-team-select option {
+    background-color: black;
+}
