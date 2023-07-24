@@ -2,20 +2,23 @@ import { useEffect, useState } from 'react'
 import { IconButton, Tooltip } from '@mui/material'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import DataTable from './DataTable'
+import ErrorMessage from './ErrorMessage'
 
-const InvitePanel = () => {
+const InvitesAP = () => {
 
     const API = process.env.REACT_APP_API_URL
 
     const [ team, setTeam ] = useState("1")
-    const [ isSub, setIsSub ] = useState(false)
+    const [ type, setType ] = useState("active")
     const [ invite, setInvite ] = useState("")
     const [ inviteError, setInviteError ] = useState(false)
     const [ activeInvites, setActiveInvites ] = useState([])
     const [ usedInvites, setUsedInvites ] = useState([])
+    const [ teams, setTeams ] = useState([])
 
     useEffect(() => {
         getInvites()
+        getTeams()
     }, [])
 
     const getInvites = async () => {
@@ -31,19 +34,23 @@ const InvitePanel = () => {
         setUsedInvites(inactiveBody)
     }
 
+    const getTeams = async () => {
+        const response = await fetch(API + '/teams/', {
+            credentials: 'include'
+        })
+        const responseBody = await response.json()
+        setTeams(responseBody)
+    }
+
     async function inviteHandler() {
         try{
-            var is_sub = isSub
-            if(team == "4"){
-                is_sub = false
-            }
             const response = await fetch(API + '/invites/', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ team_id: team, is_sub: is_sub })
+                body: JSON.stringify({ type: type, team_id: team})
             })
             if(response.status == 201){
                 const responseBody = await response.json()
@@ -63,10 +70,10 @@ const InvitePanel = () => {
     }
 
     const activeColumns = [
-        { field: 'creator', headerName: 'Creator', flex: 1, valueGetter: (params) => params.row.Creator?.ign || '' },
-        { field: 'token', headerName: 'Token', flex: 1 },
-        { field: 'team', headerName: 'Team', flex: 1, valueGetter: (params) => params.row.Team?.name || '' },
-        { field: 'is_sub', headerName: 'Sub', flex: 1, renderCell: (params) => params.value ? 'True' : 'False' },
+        { field: 'creator', headerName: 'Creator', flex: 2, valueGetter: (params) => params.row.inviter?.ign || '' },
+        { field: 'token', headerName: 'Token', flex: 3 },
+        { field: 'type', headerName: 'Type', flex: 1 },
+        { field: 'team', headerName: 'Team', flex: 2, valueGetter: (params) => params.row.team?.name || '' },
         {
             field: 'copy',
             headerName: 'Copy Token',
@@ -82,10 +89,10 @@ const InvitePanel = () => {
     ]
 
     const inactiveColumns = [
-        { field: 'creator', headerName: 'Creator', flex: 1, valueGetter: (params) => params.row.Creator?.ign || '' },
-        { field: 'team', headerName: 'Team', flex: 1, valueGetter: (params) => params.row.Team?.name || '' },
-        { field: 'is_sub', headerName: 'Sub', flex: 1, renderCell: (params) => params.value ? 'True' : 'False' },
-        { field: 'used_by', headerName: 'Used By', flex: 1, valueGetter: (params) => params.row.InvitedUser?.ign || '' }
+        { field: 'creator', headerName: 'Creator', flex: 2, valueGetter: (params) => params.row.inviter?.ign || '' },
+        { field: 'type', headerName: 'Type', flex: 1 },
+        { field: 'team', headerName: 'Team', flex: 2, valueGetter: (params) => params.row.team?.name || '' },
+        { field: 'used_by', headerName: 'Used By', flex: 2, valueGetter: (params) => params.row.invitee?.ign || '' }
     ]
 
     return (
@@ -96,17 +103,18 @@ const InvitePanel = () => {
                 await inviteHandler()
             }} className="flex items-center m-auto my-4">
                 <label className="text-white text-md font-bold px-2" htmlFor="role">Generate User Invite Token</label>
-                <select className="py-1 px-3 bg-black text-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2 invite-team-select" onChange={e => {setTeam(e.target.value)}} id="team_id" defaultValue="1" required>
-                    <option value="1">Black Team</option>
-                    <option value="2">Orange Team</option>
-                    <option value="3">White Team</option>
-                    <option value="4">Alumni</option>
+                <select className="py-1 px-3 bg-black text-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2 invite-team-select" onChange={e => {setType(e.target.value)}} id="invite_type" defaultValue="active" required>
+                    <option value="active">Active Player</option>
+                    <option value="inactive">Comp Veteran</option>
+                    <option value="community">Community Member</option>
+                    <option value="alumni">Alumni</option>
                 </select>
-                { team != 4 &&
-                <>
-                <label className='text-white m-2'>Substitute</label>
-                <input className='m-2' type="checkbox" id="myCheckbox" name="myCheckbox" onChange={e => {setIsSub(e.target.checked)}}/>
-                </>
+                { type == 'active' &&
+                <select className="py-1 px-3 bg-black text-white rounded-md shadow-sm focus:outline-none sm:text-sm mx-2 invite-team-select" onChange={e => {setTeam(e.target.value)}} id="invite_team_id" defaultValue="1" required>
+                    {teams.map((team) => (
+                        <option key={team.id} value={team.id}>{team.name}</option>
+                    ))}
+                </select>
                 }
                 <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mx-2" type="submit">Generate</button>
                 {inviteError && <ErrorMessage>Unable to Generate Invite</ErrorMessage>}
@@ -119,15 +127,6 @@ const InvitePanel = () => {
                 <button className="rounded-md px-10 py-1.5 text-sm font-semibold text-osu shadow-sm" onClick={copyToClipboard(invite)}>Copy</button>
             </div>
         }
-        
-        { usedInvites.length > 0 &&
-        <>
-        <div className='my-4'>
-            <div className="text-white text-center text-6xl r6-font">Used Invites</div>
-            <DataTable columns={inactiveColumns} rows={usedInvites} />
-        </div>
-        </>
-        }
 
         { activeInvites.length > 0 &&
         <>
@@ -137,7 +136,16 @@ const InvitePanel = () => {
         </div>
         </>
         }
+        
+        { usedInvites.length > 0 &&
+        <>
+        <div className='my-4'>
+            <div className="text-white text-center text-6xl r6-font">Used Invites</div>
+            <DataTable columns={inactiveColumns} rows={usedInvites} />
+        </div>
+        </>
+        }
         </>
     )
 } 
-export default InvitePanel
+export default InvitesAP

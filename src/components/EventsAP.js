@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import DataTable from './DataTable'
 
-const MatchPanel = () => {
+const EventsAP = () => {
 
     const API = process.env.REACT_APP_API_URL
 
@@ -34,4 +34,4 @@ const MatchPanel = () => {
         </>
     )
 } 
-export default MatchPanel
+export default EventsAP

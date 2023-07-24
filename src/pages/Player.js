@@ -22,7 +22,7 @@ function Player() {
     }, [])
 
     const getProfile = async () => {
-        const profile = await fetch(API + '/users/GetPublicProfile/' + params.player)
+        const profile = await fetch(API + '/users/' + params.player)
         if(profile.status != 200)
             navigate('/404')
         const profileBody = await profile.json()
