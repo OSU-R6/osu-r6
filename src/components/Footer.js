@@ -25,7 +25,7 @@ function Footer() {
     const checkLogin = async () => {
         try{
             if(loggedIn){
-                const response = await fetch(API + '/users/authenticate', {
+                const response = await fetch(API + '/auth', {
                     credentials: 'include'
                 })
                 if(response.status == 200){

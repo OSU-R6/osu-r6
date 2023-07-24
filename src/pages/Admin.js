@@ -1,9 +1,10 @@
 import AdminNav from '../components/AdminNav'
 import AdminPanel from '../components/AdminPanel'
-import InvitePanel from '../components/InvitePanel'
-import MatchPanel from '../components/MatchPanel'
-import EventPanel from '../components/EventPanel'
-import UserManagementPanel from '../components/UserManagementPanel'
+import InvitesAP from '../components/InvitesAP'
+import MatchesAP from '../components/MatchesAP'
+import EventsAP from '../components/EventsAP'
+import UsersAP from '../components/UsersAP'
+import TeamsAP from '../components/TeamsAP'
 import { useSelector } from 'react-redux'
 import { isloggedIn, getUser } from '../redux/selectors'
 import { useState } from 'react'
@@ -30,19 +31,23 @@ function Admin() {
                     <div className='mb-4'>
                         { activePanel === 0 ? (
                         <AdminPanel title="Invites">
-                            <InvitePanel/>
+                            <InvitesAP/>
                         </AdminPanel>
                         ) : activePanel === 1 ? (
                         <AdminPanel title="Users">
-                            <UserManagementPanel/>
+                            <UsersAP/>
                         </AdminPanel>
                         ) : activePanel === 2 ? (
+                            <AdminPanel title="Teams">
+                                <TeamsAP/>
+                            </AdminPanel>
+                        ) : activePanel === 3 ? (
                         <AdminPanel title="Matches">
-                            <MatchPanel/>
+                            <MatchesAP/>
                         </AdminPanel>
-                        ) : activePanel === 3 && (
+                        ) : activePanel === 4 && (
                             <AdminPanel title="Events">
-                                <EventPanel/>
+                                <EventsAP/>
                             </AdminPanel>
                         )}
                     </div>

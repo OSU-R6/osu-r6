@@ -11,7 +11,7 @@ const ClipGallery = (player) => {
     }, [])
 
     const getClips = async () => {
-        const playerClips = await fetch(API + '/clips/GetPublicClips/' + player.player.ign)
+        const playerClips = await fetch(API + '/users/' + player.player.ign + '/clips')
         const playerClipsBody = await playerClips.json()
         setClips(playerClipsBody.clips)
     }

@@ -53,14 +53,14 @@ function Alumni() {
 
     useEffect(() => {
         setUploadError(false)
-    }, [clipUploadToggle]);
+    }, [clipUploadToggle])
 
     const getProfile = async () => {
         try{
-            const profile = await fetch(API + '/users/GetPublicProfile/' + user.data.ign)
+            const profile = await fetch(API + '/users/' + user.data.ign)
             setPlayer(await profile.json())
             setBio(player.bio)
-            const response = await fetch(API + '/clips/GetPrivateClips', {
+            const response = await fetch(API + '/users/' + user.data.ign + '/clips', {
                 credentials: 'include'
             })
             const responseBody = await response.json()
@@ -137,7 +137,7 @@ function Alumni() {
     async function titleUpdateHandler(clip, e) {
         const formData = new FormData(e.target);
         const title = formData.get('title')
-        const response = await fetch(API + '/clips/UpdateTitle/' + clip.id, {
+        const response = await fetch(API + '/clips/edit/' + clip.id, {
             method: 'PATCH',
             body: JSON.stringify({
                 title: title

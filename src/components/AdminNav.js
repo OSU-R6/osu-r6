@@ -1,14 +1,17 @@
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
+import Diversity3Icon from '@mui/icons-material/Diversity3'
 import StadiumIcon from '@mui/icons-material/Stadium'
 import EventIcon from '@mui/icons-material/Event'
 import SettingsIcon from '@mui/icons-material/Settings'
+
 
 const AdminNav = ({ activePanel, onStateChange }) => {
 
     const navData = [
         { icon: <PersonAddAltIcon />, label: 'Invites' },
         { icon: <PeopleAltIcon />, label: 'Users' },
+        { icon: <Diversity3Icon />, label: 'Teams' },
         { icon: <StadiumIcon />, label: 'Matches' },
         { icon: <EventIcon />, label: 'Events' },
     ]

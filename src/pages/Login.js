@@ -31,7 +31,7 @@ async function loginHandler(email, password) {
 }
 
 async function getUserInfo(){
-    const response = await fetch(API + '/users/authenticate', {
+    const response = await fetch(API + '/auth', {
             method: 'GET',
             credentials: 'include'
         })

@@ -15,10 +15,10 @@ function BlackTeam() {
         const response = await fetch(API + '/teams/1/roster')
         const responseBody = await response.json()
         const tempTeam = await Promise.all(responseBody.map(async (player) => {
-            const profile = await fetch(API + '/users/GetPublicProfile/' + player.ign);
-            return profile.json();
-        }));
-        setTeam(tempTeam);
+            const profile = await fetch(API + '/users/' + player.ign)
+            return profile.json()
+        }))
+        setTeam(tempTeam)
     }
 
     return(
@@ -34,5 +34,5 @@ function BlackTeam() {
             </div>
 
         </>
-    );
-} export default BlackTeam;
+    )
+} export default BlackTeam
