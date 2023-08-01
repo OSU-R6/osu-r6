@@ -54,7 +54,7 @@ function Footer() {
     }
 
     return (
-        <div className='footer mt-5'>
+        <div className='footer my-4'>
             <Navbar>
                 <Navbar.Collapse className='justify-content-center'>
                         <Nav>

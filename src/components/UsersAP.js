@@ -30,13 +30,15 @@ const UsersAP = () => {
 
     return (
         <>
-        {users.length > 0 ?
-            <DataTable columns={columns} rows={users} />
-        :
-        <div>
-            Error Retrieving User Data
+        <div className='m-4'>
+            {users.length > 0 ?
+                <DataTable columns={columns} rows={users} />
+            :
+            <div>
+                Error Retrieving User Data
+            </div>
+            }
         </div>
-        }
         </>
     )
 } 

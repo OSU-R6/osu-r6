@@ -137,7 +137,7 @@ function Alumni() {
     async function titleUpdateHandler(clip, e) {
         const formData = new FormData(e.target);
         const title = formData.get('title')
-        const response = await fetch(API + '/clips/edit/' + clip.id, {
+        const response = await fetch(API + '/clips/' + clip.id, {
             method: 'PATCH',
             body: JSON.stringify({
                 title: title
@@ -156,7 +156,7 @@ function Alumni() {
     async function bioUpdateHandler(e) {
         const formData = new FormData(e.target);
         const bio = formData.get('bio')
-        const response = await fetch(API + '/users/UpdateBio', {
+        const response = await fetch(API + '/users/', {
             method: 'PATCH',
             body: JSON.stringify({
                 bio: bio
@@ -170,17 +170,29 @@ function Alumni() {
     }
 
     async function spotlightUpdateHandler(clip) {
-        const response = await fetch(API + '/clips/ToggleSpotlight/' + clip.id, {
+        const response = await fetch(API + '/clips/' + clip.id, {
             method: 'PATCH',
-            credentials: 'include'
+            body: JSON.stringify({
+                spotlight: String(!clip.spotlight)
+            }),
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json',
+            }
         })
         getProfile()
     }
 
     async function privacyUpdateHandler(clip) {
-        const response = await fetch(API + '/clips/TogglePrivacy/' + clip.id, {
+        const response = await fetch(API + '/clips/' + clip.id, {
             method: 'PATCH',
-            credentials: 'include'
+            body: JSON.stringify({
+                public: String(!clip.public)
+            }),
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json',
+            }
         })
         getProfile()
     }
@@ -325,6 +337,7 @@ function Alumni() {
                                         </form>
                                         <form className='inline mr-2 float-right' onSubmit={ async (e) => {
                                             e.preventDefault()
+                                            console.log(clip.spotlight)
                                             spotlightUpdateHandler(clip)
                                         }}>
                                             <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='privacyToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
@@ -353,6 +366,7 @@ function Alumni() {
                                         <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {setUpload(e.target.files); setUploadError(false)}} id='upload' name='video' type='file'/>
                                         {uploadError && <ErrorMessage>Please select an MP4 file under 10MB</ErrorMessage>}
                                         {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                                        {isCompressing && <ErrorMessage>Compressing...</ErrorMessage>}
                                     </div>
                                     <div className='flex justify-center'>
                                         <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit'>
