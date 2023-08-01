@@ -35,10 +35,11 @@ const InvitesAP = () => {
     }
 
     const getTeams = async () => {
-        const response = await fetch(API + '/teams/', {
+        const response = await fetch(API + '/teams/all', {
             credentials: 'include'
         })
         const responseBody = await response.json()
+        console.log(responseBody)
         setTeams(responseBody)
     }
 
