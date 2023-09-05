@@ -14,11 +14,13 @@ const Alumni = () => {
     const getAlumni = async () => {
         const response = await fetch(API + '/users/list/alumni')
         const responseBody = await response.json()
-        const roster = await Promise.all(responseBody.map(async (player) => {
-            const profile = await fetch(API + '/users/' + player.ign)
-            return profile.json()
-        }))
-        setAlumni(roster)
+        if(responseBody.length > 0){
+            const roster = await Promise.all(responseBody.map(async (player) => {
+                const profile = await fetch(API + '/users/' + player.ign)
+                return profile.json()
+            }))
+            setAlumni(roster)
+        }
     }
 
     return (

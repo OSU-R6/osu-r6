@@ -92,11 +92,21 @@ const MatchesAP = () => {
         { field: 'team', headerName: 'Team', flex: 1, valueGetter: (params) => params.row.Team?.name || '' },
         { field: 'opponent', headerName: 'Opponent', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1, hidden: true},
-        { field: 'date', headerName: 'Date', flex: 1, type: 'dateTime', valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy')},
-        { field: 'vod_link', headerName: 'VOD', flex: 1},
+        { field: 'date', headerName: 'Date', flex: 1, type: 'dateTime', editable: true, valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy')},
+        { field: 'vod_link', headerName: 'VOD', flex: 1, editable: true,},
         { field: 'team_score', headerName: 'OSU Score', flex: 1},
         { field: 'opponent_score', headerName: 'OP Score', flex: 1},
     ]
+
+    const saveCell= (cellData) => {
+        const { id, field, value } = cellData;
+        console.log("id: " + id + " field: " + field + " value: " + value)
+    }
+
+    const saveEdits = React.useCallback((updatedRow, originalRow) => {
+        console.log(updatedRow)
+        console.log(originalRow)
+    }, [])
 
     const toggleMatchCreate = () => {
         setMatchToggle(!matchToggle)
@@ -158,7 +168,7 @@ const MatchesAP = () => {
             <div className='m-4'>
                 <div className="text-white text-6xl r6-font my-2">Upcoming Matches</div>
                 {matches.length > 0 ?
-                <DataTable columns={matchColumns} rows={matches}/>
+                <DataTable columns={matchColumns} rows={matches} saveCell={saveCell}/>
                 :
                 <div className='text-white text-xl'>
                     No Upcoming Matches
@@ -168,7 +178,7 @@ const MatchesAP = () => {
             <div className='m-4'>
                 <div className="text-white text-6xl r6-font my-2">Past Matches</div>
                 {pastMatches.length > 0 ?
-                <DataTable columns={pastMatchColumns} rows={pastMatches}/>
+                <DataTable columns={pastMatchColumns} rows={pastMatches} saveCell={saveCell}/>
                 :
                 <div className='text-white text-xl'>
                     No Past Matches

@@ -14,11 +14,13 @@ const Community = () => {
     const getCommunity = async () => {
         const response = await fetch(API + '/users/list/community')
         const responseBody = await response.json()
-        const roster = await Promise.all(responseBody.map(async (player) => {
-            const profile = await fetch(API + '/users/' + player.ign)
-            return profile.json()
-        }))
-        setCommunity(roster)
+        if(responseBody.length > 0){
+            const roster = await Promise.all(responseBody.map(async (player) => {
+                const profile = await fetch(API + '/users/' + player.ign)
+                return profile.json()
+            }))
+            setCommunity(roster)
+        }
     }
 
     return (

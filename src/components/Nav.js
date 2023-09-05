@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { AiOutlineMenu, AiOutlineClose, AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
+import { set } from 'date-fns'
 
 function StyledNavLink(props) {
     const activeStyle = "font-scoutCR text-white rounded-lg px-2.5 sm:my-0 my-2 xl:text-5xl text-4xl"
@@ -26,9 +27,13 @@ function Navigation() {
     }, [])
 
     const getTeams = async () => {
+        try  {
         const response = await fetch(API + '/teams/')
         const responseBody = await response.json()
         setTeams(responseBody)
+        } catch (err) {
+            setTeams([])
+        }
     }   
 
     return (
@@ -63,7 +68,7 @@ function Navigation() {
                     <StyledNavLink to={"/about"} onClick={() => setNavOpen(false)}>The Program</StyledNavLink>
                     {/* <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Try Out</StyledNavLink> */}
                     <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
-                    {teams.map((team) => (
+                    {teams.length > 0 && teams.map((team) => (
                         <StyledNavLink to={"/team/" + team.id} onClick={() => {setNavOpen(false)}}>{team.name}</StyledNavLink>
                     ))}
                     <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
