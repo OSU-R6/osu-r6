@@ -68,15 +68,25 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   }
 }))
 
-const DataTable = ({rows, columns}) => {
+
+const DataTable = ({rows, columns, saveCell}) => {
+
+  const handleProcessRowUpdateError = React.useCallback((error) => {
+    console.log(error.message)
+  }, [])
+
   return (
     <div style={{ width: '100%' }} id="data-table">
       <ThemeProvider theme={theme}>
         <StyledDataGrid
           rows={rows}
           columns={columns}
+          onCellEditStop={saveCell}
+          // processRowUpdate={(updatedRow, originalRow) =>
+          //   saveRow(updatedRow, originalRow)
+          // }
           slots={{
-              toolbar: CustomToolbar,
+            toolbar: CustomToolbar
           }}
           initialState={{
             pagination: { paginationModel: { pageSize: 5 } },

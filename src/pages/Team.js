@@ -12,7 +12,7 @@ function Team() {
 
     useEffect(() => {
         getTeamData()
-    }, [team])
+    }, [])
 
     const getTeamData = async () => {
         const teamsResponse = await fetch(API + '/teams/' + params.team + '/info')
@@ -20,18 +20,20 @@ function Team() {
         setTeam(TeamsResponseBody)
         const response = await fetch(API + '/teams/'+ params.team + '/roster')
         const responseBody = await response.json()
-        const roster = await Promise.all(responseBody.map(async (player) => {
-            const profile = await fetch(API + '/users/' + player.ign)
-            return profile.json()
-        }))
-        setRoster(roster)
+        if(responseBody.length > 0){
+            const roster = await Promise.all(responseBody.map(async (player) => {
+                const profile = await fetch(API + '/users/' + player.ign)
+                return profile.json()
+            }))
+            setRoster(roster)
+        }
     }
 
     return(
         <>
             <Banner>{team.name}</Banner>
             <div className='grid grid-cols-12 gap-4 m-4 2xl:grid-cols-5'>
-                {roster.map( player => {
+                {roster.length > 0 && roster.map( player => {
                         return (
                             <PlayerCard player={player} />
                         )

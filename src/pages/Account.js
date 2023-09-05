@@ -1,17 +1,18 @@
 import Banner from '../components/Banner'
 import MiniBanner from '../components/MiniBanner'
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { isloggedIn, getUser } from '../redux/selectors'
-import { BsTrash, BsLock, BsUnlock, BsXLg, BsCheckLg, BsPlusLg, BsPlusCircle, BsStar, BsStarFill } from 'react-icons/bs';
-import { BiEditAlt } from 'react-icons/bi';
+import { BsTrash, BsLock, BsUnlock, BsXLg, BsCheckLg, BsPlusLg, BsPlusCircle, BsStar, BsStarFill } from 'react-icons/bs'
+import { RiImageEditFill } from 'react-icons/ri'
+import { BiEditAlt } from 'react-icons/bi'
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
 
 const API = process.env.REACT_APP_API_URL
 
-function Alumni() {
+function Account() {
 
     const [clips, setClips] = useState([])
 
@@ -20,6 +21,7 @@ function Alumni() {
     const [ uploadError, setUploadError ] = useState(false)
     const [ pfpUploadError, setPfpUploadError ] = useState(false)
     const [ clipUploadToggle, setClipUploadToggle ] = useState(false)
+    const [ compressing, setCompressing ] = useState(false)
     const [ pfpUploadToggle, setPfpUploadToggle ] = useState(false)
     const [ bioUpdateError, setBioUpdateError ] = useState(false)
 
@@ -76,6 +78,7 @@ function Alumni() {
         if(upload == null) setUploadError(true)
         else setUploadError(false)
         if(!uploadError && !titleError) {
+            setCompressing(true)
             const formData = new FormData(e.target);
             const response = await fetch(API + '/clips/', {
                 method: 'POST',
@@ -85,14 +88,17 @@ function Alumni() {
             switch(response.status){
                 case 500: {
                     setServerError(true)
+                    setCompressing(false)
                     break
                 }
                 case 400: {
                     setUploadError(true)
+                    setCompressing(false)
                     break
                 }
                 case 201: {
                     setUploadError(false)
+                    setCompressing(false)
                     setClipUploadToggle(false)
                     setUploadTitle('')
                     getProfile()
@@ -244,7 +250,7 @@ function Alumni() {
                             <div className='flex'>
                                 <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm scale-150 text-osu hover:text-white mx-auto my-2' onClick={ async (e) => {
                                     setPfpUploadToggle(true)
-                                }} ><span className='flex'><div className='my-auto'><BiEditAlt /></div> Edit</span></button>
+                                }} ><span className='flex'><div className='my-auto'><RiImageEditFill /></div><div className='mx-1'>Change</div></span></button>
                             </div>
                             </>
                             }
@@ -291,7 +297,7 @@ function Alumni() {
 
                     {/* User Clip Management */}
                     <MiniBanner>Clips</MiniBanner>
-                    <div className='grid grid-cols-12 gap-4 m-4 clips'>
+                    <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips'>
                         {clips.map((clip, i) => {
                             return (
                                 <div className='w-full col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3'>
@@ -366,7 +372,7 @@ function Alumni() {
                                         <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {setUpload(e.target.files); setUploadError(false)}} id='upload' name='video' type='file'/>
                                         {uploadError && <ErrorMessage>Please select an MP4 file under 10MB</ErrorMessage>}
                                         {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
-                                        {isCompressing && <ErrorMessage>Compressing...</ErrorMessage>}
+                                        {compressing && <SuccessMessage>Compressing Video...</SuccessMessage>}
                                     </div>
                                     <div className='flex justify-center'>
                                         <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit'>
@@ -377,7 +383,7 @@ function Alumni() {
                                 </div>
                             </form>                           
                             :
-                            <div className='m-4 m-auto'>
+                            <div className='m-auto py-5'>
                                 <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={ async (e) => {
                                     setClipUploadToggle(true)
                                     setUploadError(false)
@@ -389,5 +395,5 @@ function Alumni() {
                 </>
             ) : ( <Navigate to='/login'/> )}
         </>
-    );
-} export default Alumni;
+    )
+} export default Account;
