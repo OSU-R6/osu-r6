@@ -29,9 +29,9 @@ const Alumni = () => {
             {alumni.length > 0 &&
             <>
             <div className='grid grid-cols-12 gap-4 m-4 2xl:grid-cols-5'>
-                {alumni.map( player => {
+                {alumni.map( (player, i) => {
                         return (
-                            <PlayerCard player={player} />
+                            <PlayerCard key={i} player={player} />
                         )
                 })}
             </div>

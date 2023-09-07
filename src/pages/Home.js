@@ -75,9 +75,9 @@ function Home() {
                     <div>
                         {events.length > 0 ?
                         <>
-                        {events.map(event => {
+                        {events.map((event, i) => {
                             return (
-                                <EventCard event={event}/>
+                                <EventCard key={i} event={event}/>
                             )
                         })}
                         </>

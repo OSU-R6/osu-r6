@@ -68,8 +68,8 @@ function Navigation() {
                     <StyledNavLink to={"/about"} onClick={() => setNavOpen(false)}>The Program</StyledNavLink>
                     {/* <StyledNavLink to={"/"} onClick={() => setNavOpen(false)}>Try Out</StyledNavLink> */}
                     <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
-                    {teams.length > 0 && teams.map((team) => (
-                        <StyledNavLink to={"/team/" + team.id} onClick={() => {setNavOpen(false)}}>{team.name}</StyledNavLink>
+                    {teams.length > 0 && teams.map((team, i) => (
+                        <StyledNavLink key={i} to={"/team/" + team.id} onClick={() => {setNavOpen(false)}}>{team.name}</StyledNavLink>
                     ))}
                     <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
                     <StyledNavLink to={"/alumni"} onClick={() => setNavOpen(false)}>Alumni</StyledNavLink>

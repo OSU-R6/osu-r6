@@ -129,7 +129,7 @@ const EventsAP = () => {
                 {upcomingEvents.length > 0 ?
                 <DataTable columns={eventColumns} rows={upcomingEvents} />
                 :
-                <div>
+                <div className='text-white text-xl'>
                     No Upcoming Events
                 </div>
                 }   

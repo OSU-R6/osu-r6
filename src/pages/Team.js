@@ -33,9 +33,9 @@ function Team() {
         <>
             <Banner>{team.name}</Banner>
             <div className='grid grid-cols-12 gap-4 m-4 2xl:grid-cols-5'>
-                {roster.length > 0 && roster.map( player => {
+                {roster.length > 0 && roster.map( (player, i) => {
                         return (
-                            <PlayerCard player={player} />
+                            <PlayerCard key={i} player={player} />
                         )
                 })}
             </div>
