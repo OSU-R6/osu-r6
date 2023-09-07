@@ -18,10 +18,10 @@ const ClipGallery = (player) => {
 
     return (
         <>
-            <div className='grid grid-cols-12 gap-4 m-4 clips'>
+            <div className='grid grid-cols-12 gap-4 m-4 clips scale-100 lg:scale-75'>
                 {clips.map((video, index) => {
                     return (
-                        <div key={index} className='col-span-12 lg:col-span-6 2xl:col-span-4'>
+                        <div key={index} className='w-full col-span-12 lg:col-span-6 2xl:col-span-4'>
                             <div className='clip-title'>{video.title}</div>
                             <video controls muted loop className='bg-osu-shine p-1 mx-auto m-4 video-player'>
                                 <source src={API + video.link} type='video/mp4' />

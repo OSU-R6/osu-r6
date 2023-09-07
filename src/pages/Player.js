@@ -36,7 +36,6 @@ function Player() {
         <>
             <Banner>{player.firstName} '{player.ign}' {player.lastName}</Banner>
             <ClipCarousel key={carouselKey} player={player}/>
-            <Socials player={player}/>
             <PlayerBio player={player}/>
             <MiniBanner>CLIPS</MiniBanner>
             <ClipGallery key={galleryKey} player={player}/>

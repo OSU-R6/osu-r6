@@ -39,7 +39,6 @@ const InvitesAP = () => {
             credentials: 'include'
         })
         const responseBody = await response.json()
-        console.log(responseBody)
         setTeams(responseBody)
     }
 

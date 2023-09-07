@@ -74,7 +74,7 @@ function Footer() {
             <div className='footer p-5 grid grid-cols-12 bg-black'>
 
 
-                <div class="col-span-12 md:col-span-1"/>
+                <div className="col-span-12 md:col-span-1"/>
                 <div className='col-span-12 md:col-span-5 lg:col-span-4 pl-4'>
                     <div className='text-white r6-font text-3xl pb-3'>OREGON STATE RAINBOW SIX</div>
                     <div className='text-lg font-semibold text-osu'>
@@ -103,13 +103,13 @@ function Footer() {
                         )}
                     </div>
                 </div>
-                <div class="col-span-12 md:col-span-1 lg:col-span-4"/>
-                <div class="col-span-12 mt-4"/>
+                <div className="col-span-12 md:col-span-1 lg:col-span-4"/>
+                <div className="col-span-12 mt-4"/>
 
 
-                <div class="col-span-1"/>
+                <div className="col-span-1"/>
                 <div className='col-span-10 pt-0.5 bg-osu my-4'></div>
-                <div class="col-span-1"/>
+                <div className="col-span-1"/>
                 
 
                 <div className='col-span-12 flex'>
