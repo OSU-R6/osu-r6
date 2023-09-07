@@ -11,18 +11,21 @@ function Home() {
     const [ events, setEvents ] = useState([])
 
     useEffect(() => {
-        getMatches()
-        getEvents()
+        fetch(API + '/matches/upcoming')
+            .then(response => response.json())
+            .then(data => setMatches(data))
+            .catch(err => console.log(err))
+        fetch(API + '/events/upcoming')
+            .then(response => response.json())
+            .then(data => setEvents(data))
+            .catch(err => console.log(err))
     }, [])
 
     const getMatches = async () => { 
-        try{
-            const matches = await fetch(API + '/matches/upcoming')
-            const matchesBody = await matches.json()
-            setMatches(matchesBody)
-        } catch (err) {
-            setMatches([])
-        }
+        fetch(API + '/matches/upcoming')
+            .then(response => response.json())
+            .then(data => setMatches(data))
+            .catch(err => console.log(err))
     }
 
     const getEvents = async () => { 
@@ -31,7 +34,7 @@ function Home() {
             const eventsBody = await events.json()
             setEvents(eventsBody)
         } catch (err) {
-            setEvents([])
+            console.log("Server Connection Error")
         }
     }
 
@@ -72,9 +75,9 @@ function Home() {
                     <div>
                         {events.length > 0 ?
                         <>
-                        {events.map(event => {
+                        {events.map((event, i) => {
                             return (
-                                <EventCard event={event}/>
+                                <EventCard key={i} event={event}/>
                             )
                         })}
                         </>

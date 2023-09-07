@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom'
 import Banner from '../components/Banner'
 import MiniBanner from '../components/MiniBanner'
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PlayerBio from '../components/PlayerBio';
-import ClipGallery from '../components/ClipGallery';
-import ClipCarousel from '../components/ClipCarousel';
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import PlayerBio from '../components/PlayerBio'
+import ClipGallery from '../components/ClipGallery'
+import ClipCarousel from '../components/ClipCarousel'
+import Socials from '../components/Socials'
 
 const API = process.env.REACT_APP_API_URL
 
