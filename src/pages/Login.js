@@ -56,7 +56,7 @@ function Login() {
     const inputErrorStyle = "appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 
     return (
-        <div className="flex justify-center items-center min-h-full py-24 px-6 sm:py-32 lg:px-8">
+        <div className="flex justify-center items-center min-h-full my-4 lg:my-24 py-12 px-6 sm:py-32 lg:px-8">
             {!loggedIn ?
                 <div className="max-w-md w-full max-w-xs">
                     <Banner>USER LOGIN</Banner>

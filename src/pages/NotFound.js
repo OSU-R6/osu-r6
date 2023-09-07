@@ -3,5 +3,5 @@ function NotFound() {
         <>
             <h1>nope</h1>
         </>
-    );
-} export default NotFound;
+    )
+} export default NotFound

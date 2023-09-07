@@ -4,7 +4,6 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.13.7",
-    "@mui/styles": "^5.13.7",
     "@mui/x-data-grid": "^6.9.2",
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
