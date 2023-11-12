@@ -127,11 +127,11 @@ const ManageClips = (props) => {
     }
 
     async function deleteHandler(clip) {
-            const response = await fetch(API + '/clips/' + clip.id, {
-                method: 'DELETE',
-                credentials: 'include'
-            })
-            props.getProfile()
+        const response = await fetch(API + '/clips/' + clip.id, {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+        props.getProfile()
     }
 
     return (
