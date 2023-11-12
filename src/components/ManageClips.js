@@ -127,7 +127,6 @@ const ManageClips = (props) => {
     }
 
     async function deleteHandler(clip) {
-
             const response = await fetch(API + '/clips/' + clip.id, {
                 method: 'DELETE',
                 credentials: 'include'
@@ -183,7 +182,6 @@ const ManageClips = (props) => {
                             <form className='inline float-right' onSubmit={ async (e) => {
                                 e.preventDefault()
                                 setActionConfirmation(clip)
-                                //deleteHandler(clip)
                             }}>
                                 <button className='rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm text-xl' id='privacyToggle' type='submit'><BsTrash /></button>
                             </form>
