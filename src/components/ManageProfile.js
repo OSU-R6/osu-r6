@@ -14,6 +14,7 @@ const ManageProfile = (props) => {
     const [ serverError, setServerError ] = useState(false)
     const [ pfpUpload, setPfpUpload ] = useState(null)
     const [ bio, setBio ] = useState(props.player.bio)
+    const [ imagePreview, setImagePreview ] = useState('')
 
     const inputStyle = 'appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     const inputErrorStyle = 'appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
@@ -51,6 +52,32 @@ const ManageProfile = (props) => {
         }
     }
 
+    async function handleImageChange(e) {
+        const file = e.target.files[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+            const img = new Image()
+            img.onload = () => {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+
+                // Set the desired width and height:
+                canvas.width = 500
+                canvas.height = 1000
+
+                // Draw the image onto the canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+                // Convert canvas to an image and set it to the imageSrc state
+                setImagePreview(canvas.toDataURL('image/jpeg'))
+            }
+            img.src = e.target.result
+            }
+            reader.readAsDataURL(file)
+        }
+      }
+
     async function bioUpdateHandler(e) {
         const formData = new FormData(e.target)
         const bio = formData.get('bio')
@@ -83,10 +110,17 @@ const ManageProfile = (props) => {
                         }}><BsXLg /></button>
                         <div className='mb-6'>
                             <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload Profile Image</label>
-                            <input className={pfpUploadError ? inputErrorStyle : inputStyle} onChange={e => {setPfpUpload(e.target.files); setPfpUploadError(false)}} id='upload' name='image' type='file'/>
+                            <input className={pfpUploadError ? inputErrorStyle : inputStyle} onChange={e => {setPfpUpload(e.target.files); setPfpUploadError(false); handleImageChange(e)}} id='upload' name='image' type='file'/>
                             <p className='mt-1 text-sm text-gray-500' id='file_input_help'>PNG or JPG</p>
                             {pfpUploadError && <ErrorMessage>Please select a PNG or JPG file</ErrorMessage>}
                             {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                        </div>
+                        <div className='my-5'>
+                        {imagePreview ? (  
+                            <img src={imagePreview} alt='Resized preview' />
+                        ) : (
+                            <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
+                        )}
                         </div>
                         <div className='flex justify-center'>
                             <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit'>

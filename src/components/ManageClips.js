@@ -36,10 +36,18 @@ const ManageClips = (props) => {
     }, [clipUploadToggle])
 
     async function uploadHandler(e){
-        if(uploadTitle == '') setTitleMissingError(true)
-        else setTitleMissingError(false)
-        if(upload == null) setUploadError(true)
-        else setUploadError(false)
+        if(uploadTitle == '') {
+            setTitleMissingError(true)
+            return
+        } else {
+            setTitleMissingError(false)
+        }
+        if(upload == null) {
+            setUploadError(true)
+            return
+        } else {
+            setUploadError(false)
+        }
         if(!uploadError && !titleMissingError) {
             setCompressing(true)
             const formData = new FormData(e.target);
