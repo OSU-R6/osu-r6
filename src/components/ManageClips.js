@@ -180,7 +180,6 @@ const ManageClips = (props) => {
                             </form>
                             <form className='inline mr-2 float-right' onSubmit={ async (e) => {
                                 e.preventDefault()
-                                console.log(clip.spotlight)
                                 spotlightUpdateHandler(clip)
                             }}>
                                 <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='privacyToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
@@ -212,7 +211,7 @@ const ManageClips = (props) => {
                             {compressing && <SuccessMessage>Compressing Video...</SuccessMessage>}
                         </div>
                         <div className='flex justify-center'>
-                            <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit'>
+                            <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={compressing}>
                                 <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z'/></svg>
                                 <span>Upload</span>
                             </button>
