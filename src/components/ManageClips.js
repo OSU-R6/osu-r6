@@ -4,6 +4,7 @@ import { BiEditAlt } from 'react-icons/bi'
 import MiniBanner from '../components/MiniBanner'
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
+import Confirmation from '../components/Confirmation'
 import { set } from 'date-fns'
 
 
@@ -21,6 +22,8 @@ const ManageClips = (props) => {
     const [ uploadTitle, setUploadTitle ] = useState('')
     const [ upload, setUpload ] = useState(null)
     const [ updateTitle, setUpdateTitle ] = useState()
+
+    const [ actionConfirmation, setActionConfirmation ] = useState(null)
 
     const inputStyle = 'appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     const inputErrorStyle = 'appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
@@ -133,6 +136,16 @@ const ManageClips = (props) => {
 
     return (
         <>
+        {actionConfirmation && 
+            <Confirmation 
+            content={`delete "${actionConfirmation.title}"`}
+            onConfirm={() => {
+                deleteHandler(actionConfirmation) 
+                setActionConfirmation(null)}
+            }
+            onCancel={() => {setActionConfirmation(null)}}
+            />
+        }
         <MiniBanner>Clips</MiniBanner>
         <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips scale-100 lg:scale-75'>
             {props.clips.map((clip, i) => {
@@ -168,7 +181,7 @@ const ManageClips = (props) => {
                         <div className='block text-xl'>
                             <form className='inline float-right' onSubmit={ async (e) => {
                                 e.preventDefault()
-                                deleteHandler(clip)
+                                setActionConfirmation(clip)
                             }}>
                                 <button className='rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm text-xl' id='privacyToggle' type='submit'><BsTrash /></button>
                             </form>
@@ -182,7 +195,7 @@ const ManageClips = (props) => {
                                 e.preventDefault()
                                 spotlightUpdateHandler(clip)
                             }}>
-                                <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='privacyToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
+                                <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='spotlightToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
                             </form>
                         </div>
                     </div>
