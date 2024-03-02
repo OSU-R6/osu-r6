@@ -16,6 +16,7 @@ const AdminNav = ({ activePanel, onStateChange }) => {
         { icon: <Diversity3Icon />, label: 'Teams' },
         { icon: <StadiumIcon />, label: 'Matches' },
         { icon: <EventIcon />, label: 'Events' },
+        { icon: <PeopleAltIcon />, label: 'Prospects' },
     ]
 
     const activeStyle = "active-nav-selection pl-3"

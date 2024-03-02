@@ -131,7 +131,7 @@ const InvitesAP = () => {
         { activeInvites.length > 0 &&
         <>
         <div className='my-4'>
-            <div className="text-white text-center text-6xl r6-font">Active Invites</div>
+            <div className="text-white text-5xl lg:text-6xl r6-font my-2">Active Invites</div>
             <DataTable columns={activeColumns} rows={activeInvites} />
         </div>
         </>
@@ -140,7 +140,7 @@ const InvitesAP = () => {
         { usedInvites.length > 0 &&
         <>
         <div className='my-4'>
-            <div className="text-white text-center text-6xl r6-font">Used Invites</div>
+            <div className="text-white text-5xl lg:text-6xl r6-font my-2">Used Invites</div>
             <DataTable columns={inactiveColumns} rows={usedInvites} />
         </div>
         </>

@@ -7,7 +7,8 @@ function Home() {
 
     const API = process.env.REACT_APP_API_URL
 
-    const [ matches, setMatches ] = useState([])
+    const [ matchesUpcoming, setMatchesUpcoming ] = useState([])
+    const [ matchesPast, setMatchesPast ] = useState([])
     const [ events, setEvents ] = useState([])
 
     const navigate = useNavigate()
@@ -15,30 +16,17 @@ function Home() {
     useEffect(() => {
         fetch(API + '/matches/upcoming')
             .then(response => response.json())
-            .then(data => setMatches(data))
+            .then(data => setMatchesUpcoming(data))
+            .catch(err => console.log(err))
+        fetch(API + '/matches/past')
+            .then(response => response.json())
+            .then(data => setMatchesPast(data))
             .catch(err => console.log(err))
         fetch(API + '/events/upcoming')
             .then(response => response.json())
             .then(data => setEvents(data))
             .catch(err => console.log(err))
     }, [])
-
-    const getMatches = async () => { 
-        fetch(API + '/matches/upcoming')
-            .then(response => response.json())
-            .then(data => setMatches(data))
-            .catch(err => console.log(err))
-    }
-
-    const getEvents = async () => { 
-        try{
-            const events = await fetch(API + '/events/upcoming')
-            const eventsBody = await events.json()
-            setEvents(eventsBody)
-        } catch (err) {
-            console.log("Server Connection Error")
-        }
-    }
 
     return(
         <>
@@ -51,21 +39,20 @@ function Home() {
                     <div className="col-span-12 lg:col-span-6">
                         <img className="bannerImage osu-glow w-full" src="\images\R6_3.png"/>
                     </div>
-                </div>
-               
+                </div>      
             </div>
 
             <div className='grid grid-cols-12 gap-4 m-4 w-75 mx-auto'>
-                <div className='col-span-12 lg:col-span-6'>
+                <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
                     <div  className='text-center margin-auto'>
-                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>MATCHES</div>
+                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>UPCOMING MATCHES</div>
                     </div>
                     <div>
-                        {matches.length > 0 ?
+                        {matchesUpcoming.length > 0 ?
                         <>
-                        {matches.map(match => {
+                        {matchesUpcoming.map(match => {
                             return (
-                                <MatchCard match={match}/>
+                                <MatchCard match={match} status={"upcoming"}/>
                             )
                         })}
                         </>
@@ -76,7 +63,27 @@ function Home() {
                         }
                     </div>
                 </div>
-                <div className='col-span-12 lg:col-span-6'>
+                <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
+                    <div  className='text-center margin-auto'>
+                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>RECENT MATCHES</div>
+                    </div>
+                    <div>
+                        {matchesPast.length > 0 ?
+                        <>
+                        {matchesPast.slice(0, 2).map(match => {
+                            return (
+                                <MatchCard match={match} status={"past"}/>
+                            )
+                        })}
+                        </>
+                        :
+                        <div className='text-center text-osu r6-font xl:text-5xl lg:text-4xl text-3xl my-4'>
+                            No Recent Matches
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div className='col-span-12 xl:col-span-4'>
                     <div  className='text-center'>
                         <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>COMMUNITY EVENTS</div>
                     </div>

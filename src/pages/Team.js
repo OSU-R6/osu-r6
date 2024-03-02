@@ -11,8 +11,9 @@ function Team() {
     const [roster, setRoster] = useState([])
 
     useEffect(() => {
+        setRoster([])
         getTeamData()
-    }, [])
+    }, [params])
 
     const getTeamData = async () => {
         const teamsResponse = await fetch(API + '/teams/' + params.team + '/info')

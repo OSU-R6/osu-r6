@@ -17,7 +17,7 @@ function StyledNavLink(props) {
 
 function Navigation() {
     const navigate = useNavigate()
-    const [navOpen, setNavOpen] = useState(false)
+    const [navOpen, setNavOpen] = useState(true)
     const [teams, setTeams] = useState([])
 
     const API = process.env.REACT_APP_API_URL
@@ -74,6 +74,8 @@ function Navigation() {
                     <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
                     <StyledNavLink to={"/alumni"} onClick={() => setNavOpen(false)}>Alumni</StyledNavLink>
                     <StyledNavLink to={"/community"} onClick={() => setNavOpen(false)}>Community</StyledNavLink>
+                    <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
+                    <StyledNavLink to={"/tryout"} onClick={() => setNavOpen(false)}>Try Out</StyledNavLink>
                 </div>}
                 <button className="hidden lg:flex text-white" onClick={() => setNavOpen((prev) => !prev)}>
                     <div  className="object-cover text-osu hover:text-white">

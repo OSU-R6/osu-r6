@@ -169,7 +169,8 @@ const ManageProfile = (props) => {
                     <>
                     <div className='flex'>
                         <button className='bg-transparent font-semibold text-osu hover:text-white shadow-sm mx-auto mb-2' onClick={ async (e) => {
-                            setUpdateBioToggle(true)
+                            setUpdateBioToggle(true),
+                            setBio(props.player.bio)
                         }} ><span className='flex'><div className='my-auto'><BiEditAlt /></div> Edit</span></button>
                     </div>
                     <div className='whitespace-pre-line text-center text-2xl'>
