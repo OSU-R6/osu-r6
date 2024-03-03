@@ -45,7 +45,7 @@ function Login() {
     const user = useSelector(getUser)
     const navigate = useNavigate()
 
-    const [ username, setUserName ] = useState("")
+    const [ userEmail, setUserEmail ] = useState("")
     const [ password, setPassword ] = useState("")
     const [ userError, setUserError ] = useState(false)
     const [ passError, setPassError ] = useState(false)
@@ -62,7 +62,7 @@ function Login() {
                     <Banner>USER LOGIN</Banner>
                     <form className="px-8 pt-6 pb-8 mb-4" onSubmit={ async (e) => {
                         e.preventDefault()
-                        var loginStatus  = await loginHandler(username, password)
+                        var loginStatus  = await loginHandler(userEmail, password)
                         if(loginStatus == 200){
                             setLoginError(false)
                             setUserError(false)
@@ -83,11 +83,11 @@ function Login() {
                         }
                     }}>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="username">
-                                Username
+                            <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="email">
+                                Email
                             </label>
-                            <input className={userError ? inputErrorStyle : inputStyle} value={username} onChange={e => setUserName(e.target.value)} id="username" type="text" placeholder="Username"/>
-                            {userError && <ErrorMessage>Please enter a username</ErrorMessage>}
+                            <input className={userError ? inputErrorStyle : inputStyle} value={userEmail} onChange={e => setUserEmail(e.target.value)} id="email" type="text" placeholder="Email"/>
+                            {userError && <ErrorMessage>Please enter an email</ErrorMessage>}
                         </div>
                         <div className="mb-6">
                             <label className="block text-gray-700 text-white text-sm font-bold mb-2" htmlFor="password">
@@ -95,7 +95,7 @@ function Login() {
                             </label>
                             <input className={passError ? inputErrorStyle : inputStyle} value={password} onChange={e => setPassword(e.target.value)} id="password" type="password" placeholder="*************"/>
                             {passError && <ErrorMessage>Please enter a password</ErrorMessage>}
-                            {loginError && <ErrorMessage>Username or password are not valid</ErrorMessage>}
+                            {loginError && <ErrorMessage>Email or password are not valid</ErrorMessage>}
                             {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
                         </div>
                         <div className="flex justify-center">

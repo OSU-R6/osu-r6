@@ -70,7 +70,7 @@ function Footer() {
     }
 
     return (
-        <div className='bg-osu pt-2 mt-5'>
+        <div className='bg-osu pt-1 mt-5'>
             <div className='footer p-5 grid grid-cols-12 bg-black'>
 
 
@@ -84,6 +84,7 @@ function Footer() {
                         ))}
                         <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/alumni')}}>Alumni</button>
                         <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/community')}}>Community</button>
+                        <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/tryout')}}>Try Out</button>
                     </div>
                 </div>
                 <div className='col-span-12 md:col-span-5 lg:col-span-3 mt-6 md:mt-0 pl-4'>

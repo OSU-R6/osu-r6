@@ -5,6 +5,7 @@ import MatchesAP from '../components/MatchesAP'
 import EventsAP from '../components/EventsAP'
 import UsersAP from '../components/UsersAP'
 import TeamsAP from '../components/TeamsAP'
+import ProspectsAP from '../components/ProspectsAP'
 import { useSelector } from 'react-redux'
 import { isloggedIn, getUser } from '../redux/selectors'
 import { useState } from 'react'
@@ -26,10 +27,10 @@ function Admin() {
         { loggedIn && user.data.admin ? (
             <>
             <div className='grid grid-cols-10'>
-                <div className='col-span-4 sm:col-span-3 md:col-span-2 2xl:col-span-1'>
+                <div className='col-span-12 sm:col-span-3 md:col-span-2 2xl:col-span-1'>
                     <AdminNav activePanel={activePanel} onStateChange={handleActivePanelChange}/>
                 </div>
-                <div className='col-span-6 sm:col-span-7 md:col-span-8 2xl:col-span-9'>
+                <div className='col-span-12 sm:col-span-7 md:col-span-8 2xl:col-span-9'>
                     <div className='mb-4'>
                         { activePanel === 0 ? (
                         <AdminPanel title="Invites">
@@ -40,17 +41,21 @@ function Admin() {
                             <UsersAP/>
                         </AdminPanel>
                         ) : activePanel === 2 ? (
-                            <AdminPanel title="Teams">
-                                <TeamsAP/>
-                            </AdminPanel>
+                        <AdminPanel title="Teams">
+                            <TeamsAP/>
+                        </AdminPanel>
                         ) : activePanel === 3 ? (
                         <AdminPanel title="Matches">
                             <MatchesAP/>
                         </AdminPanel>
-                        ) : activePanel === 4 && (
-                            <AdminPanel title="Events">
-                                <EventsAP/>
-                            </AdminPanel>
+                        ) : activePanel === 4 ? (
+                        <AdminPanel title="Events">
+                            <EventsAP/>
+                        </AdminPanel>
+                        ) : activePanel === 5 && (
+                        <AdminPanel title="Prospects">
+                            <ProspectsAP/>
+                        </AdminPanel>
                         )}
                     </div>
                 </div>
