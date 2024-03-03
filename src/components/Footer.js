@@ -70,7 +70,7 @@ function Footer() {
     }
 
     return (
-        <div className='bg-osu pt-2 mt-5'>
+        <div className='bg-osu pt-1 mt-5'>
             <div className='footer p-5 grid grid-cols-12 bg-black'>
 
 

@@ -2,6 +2,9 @@ import MatchCard from "../components/MatchCard";
 import EventCard from "../components/EventCard";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Stream } from "@mui/icons-material";
+import StreamEmbed from "../components/StreamEmbed";
+import MiniBanner from "../components/MiniBanner";
 
 function Home() {
 
@@ -10,6 +13,9 @@ function Home() {
     const [ matchesUpcoming, setMatchesUpcoming ] = useState([])
     const [ matchesPast, setMatchesPast ] = useState([])
     const [ events, setEvents ] = useState([])
+    const [ matchesLive, setMatchesLive ] = useState([]);
+
+    const EMBED_URL = 'https://embed.twitch.tv/embed/v1.js';
 
     const navigate = useNavigate()
 
@@ -26,33 +32,51 @@ function Home() {
             .then(response => response.json())
             .then(data => setEvents(data))
             .catch(err => console.log(err))
+        fetch(API + '/matches/live')
+            .then(response => response.json())
+            .then(data => setMatchesLive(data))
+            .catch(err => console.log(err))
     }, [])
 
     return(
         <>
-            <div className="home-banner">
-                
-                <div className="m-5 grid grid-cols-12 align-middle items-center">
-                    <div className="col-span-12 lg:col-span-6 text-center">
-                        <div className="text-white osu-glow r6-font md:text-9xl text-7xl m-auto pb-2 my-4">Oregon State Rainbow Six</div>
+            <div className="home-banner test-banner">  
+                <div className="mx-5 grid grid-cols-12 align-middle items-center h-screen">
+                    <div className="col-span-12 xl:col-span-6 text-center">
+                        <div className="text-white text-shadow-osu osu-glow r6-font md:text-9xl text-7xl m-auto">Oregon State</div>
                     </div>
-                    <div className="col-span-12 lg:col-span-6">
-                        <img className="bannerImage osu-glow w-full" src="\images\R6_3.png"/>
+                    <div className="col-span-12 xl:col-span-6 text-center">
+                        <div className="text-white text-shadow-osu osu-glow r6-font md:text-9xl text-7xl m-auto">Rainbow Six</div>
                     </div>
                 </div>      
             </div>
 
-            <div className='grid grid-cols-12 gap-4 m-4 w-75 mx-auto'>
-                <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
+            { matchesLive.length > 0 &&
+                <div className="live-match">
+                    <div  className='text-center margin-auto my-4'>
+                        <div className='text-white r6-font text-shadow-osu underline md:text-6xl text-5xl'>LIVE MATCH</div>
+                    </div>
+                    {matchesLive.map((match, i) => {
+                        if (match.stream_link !== null) {
+                            return(
+                                <StreamEmbed key={i} match={match} />
+                            )
+                        }
+                    })}
+                </div>
+            }
+
+            <div className='grid grid-cols-12 gap-4 m-4 mx-auto'>
+                <div className='col-span-12 lg:col-span-6 2xl:col-span-4 mb-4'>
                     <div  className='text-center margin-auto'>
-                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>UPCOMING MATCHES</div>
+                        <div className='text-white r6-font text-shadow-osu underline md:text-6xl text-5xl'>UPCOMING MATCHES</div>
                     </div>
                     <div>
                         {matchesUpcoming.length > 0 ?
                         <>
-                        {matchesUpcoming.map(match => {
+                        {matchesUpcoming.slice(0, 3).map((match, i) => {
                             return (
-                                <MatchCard match={match} status={"upcoming"}/>
+                                <MatchCard key={i} match={match} pastMatch={false}/>
                             )
                         })}
                         </>
@@ -63,16 +87,16 @@ function Home() {
                         }
                     </div>
                 </div>
-                <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
+                <div className='col-span-12 lg:col-span-6 2xl:col-span-4 mb-4'>
                     <div  className='text-center margin-auto'>
-                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>RECENT MATCHES</div>
+                        <div className='text-white r6-font text-shadow-osu underline md:text-6xl text-5xl'>RECENT MATCHES</div>
                     </div>
                     <div>
                         {matchesPast.length > 0 ?
                         <>
-                        {matchesPast.slice(0, 2).map(match => {
+                        {matchesPast.slice(0, 3).reverse().map((match, i) => {
                             return (
-                                <MatchCard match={match} status={"past"}/>
+                                <MatchCard key={i} match={match} pastMatch={true}/>
                             )
                         })}
                         </>
@@ -83,9 +107,9 @@ function Home() {
                         }
                     </div>
                 </div>
-                <div className='col-span-12 xl:col-span-4'>
+                <div className='col-span-12 2xl:col-span-4 mb-4'>
                     <div  className='text-center'>
-                        <div className='text-white r6-font underline xl:text-6xl lg:text-5xl text-4xl pb-4'>COMMUNITY EVENTS</div>
+                        <div className='text-white r6-font text-shadow-osu underline md:text-6xl text-5xl'>COMMUNITY EVENTS</div>
                     </div>
                     <div>
                         {events.length > 0 ?

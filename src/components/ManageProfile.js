@@ -64,7 +64,7 @@ const ManageProfile = (props) => {
 
                 // Set the desired width and height:
                 canvas.width = 500
-                canvas.height = 1000
+                canvas.height = 800
 
                 // Draw the image onto the canvas
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height)

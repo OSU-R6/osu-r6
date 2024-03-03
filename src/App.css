@@ -206,9 +206,6 @@ body {
     color: transparent;
     user-select: none;
 }
-.home-banner {
-    margin-bottom : 10em;
-}
 
 
 /* ################################################################# */
@@ -221,8 +218,46 @@ body {
     display: flex;
 }
 
+.home-banner {
+    position: relative;
+    margin-bottom : 10em;
+    background-image: url("../public/images/R6_4.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.live-match {
+    margin-bottom : 10em;
+}
+
+.home-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: radial-gradient(ellipse, transparent, black 70%);
+  }
+
 .osu-glow {
     filter: drop-shadow(0px 0px 3px #DC4405);
+}
+
+.white-glow {
+    filter: drop-shadow(0px 0px 3px #FFFFFF);
+}
+
+.black-glow {
+    filter: drop-shadow(0px 0px 3px #000000);
+}
+
+.text-shadow-osu {
+    text-shadow: -1px -1px 0 #DC4405, 1px -1px 0 #DC4405, -1px 1px 0 #DC4405, 1px 1px 0 #DC4405;
+}
+
+.text-shadow-white {
+    text-shadow: -1px -1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF;
 }
 
 /* ################################################################# */
@@ -262,15 +297,47 @@ body {
 .player-card {
     border: 2px solid #DC4405;
     border-radius: 20px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    max-width: 400px;
 }
 
 .player-card img {
-    max-height: 500px;
+    max-height: 425px;
+    z-index: 1;
 }
 
-.player-card:hover > div .player-card-image {
-    filter: drop-shadow(0px 0px 0.5px #ffffff);
+.player-card-bg {
+    position: relative;
 }
+
+.player-card-bg::before {
+    content: "";
+    background-image: url("../public/images/PlayerBG.png");
+    background-position: center;
+    border-top-right-radius: 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.player-card-bg:hover::before {
+    opacity: 1;
+}
+
+.player-card-divider {
+    background-color: #DC4405;
+    height: 2px;
+    width: 100%;
+}
+
+/* .player-card:hover > div .player-card-image {
+    filter: drop-shadow(0px 0px 0.5px #ffffff);
+} */
 
 .player-card .player-role {
     -webkit-text-stroke: 0.5px #DC4405;
