@@ -14,14 +14,14 @@ const EventCard = ({ event }) => {
 
     return (
         <div className='text-osu r6-font text-4xl text-center my-4'>
-            <div className='text-white'>
+            <div className='text-white text-5xl'>
                 {event.type}
             </div>
-            <div>
+            <div className='text-osu text-4xl'>
                 {event.dateOnly} @ {event.timeOnly}
             </div>
             { event.description != null && 
-            <div>
+            <div className='text-white text-3xl'>
                 {event.description}
             </div>
             }
