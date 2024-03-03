@@ -2,6 +2,7 @@ import { BsXLg } from 'react-icons/bs'
 import { BiEditAlt } from 'react-icons/bi'
 import { RiImageEditFill } from 'react-icons/ri'
 import { useState } from 'react'
+import ErrorMessage from './ErrorMessage'
 
 const ManageProfile = (props) => {
 
