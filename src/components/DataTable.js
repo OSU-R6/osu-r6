@@ -75,7 +75,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }))
 
 
-const DataTable = ({rows, columns, saveCell}) => {
+const DataTable = ({rows, columns, getRowId}) => {
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log(error.message)
@@ -87,10 +87,7 @@ const DataTable = ({rows, columns, saveCell}) => {
         <StyledDataGrid
           rows={rows}
           columns={columns}
-          onCellEditStop={saveCell}
-          // processRowUpdate={(updatedRow, originalRow) =>
-          //   saveRow(updatedRow, originalRow)
-          // }
+          getRowId = {getRowId}
           slots={{
             toolbar: CustomToolbar
           }}

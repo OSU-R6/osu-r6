@@ -62,14 +62,14 @@ function Team() {
                 {roster.length > 0 && roster.map( (player, i) => {
                         if(player.isSubstitute === false){
                             return (
-                                <PlayerCard key={i} player={player} />
+                                <PlayerCard key={i} player={player} igl={player.id === team.igl_id} captain={player.id === team.captain_id}/>
                             )
                         }
                 })}
                 {roster.length > 0 && roster.map( (player, i) => {
                         if(player.isSubstitute === true){
                             return (
-                                <PlayerCard key={i} player={player} />
+                                <PlayerCard key={i} player={player}/>
                             )
                         }
                 })}

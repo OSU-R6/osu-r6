@@ -54,7 +54,7 @@ const ProspectsAP = () => {
         { field: 'lastName', headerName: 'Last Name', flex: 0, hide: true },
         { field: 'email', headerName: 'Email', flex: 1 },
         { field: 'rank', headerName: 'Rank', flex: 1 },
-        { field: 'competitiveness', headerName: 'Copetitiveness', flex: 1 },
+        { field: 'competitiveness', headerName: 'Competitiveness', flex: 1 },
         { field: 'commitment', headerName: 'Weekly Time (hrs)', flex: 1, hide: true },
         { field: 'role', headerName: 'Role', flex: 0 },
         { field: 'uplay', headerName: 'UPlay', flex: 1, 
@@ -126,21 +126,27 @@ const ProspectsAP = () => {
         <>
         <div className='m-4'>
             <div className="text-white xl:text-6xl text-5xl r6-font my-2">Pending Prospects</div>
-            {
+            {pendingProspects.length > 0 ?
                 <DataTable columns={pendingColumns} rows={pendingProspects} />
+                :
+                <div className='text-white text-2xl r6-font my-4'>No Pending Prospects</div>
             }
         </div>
         <div className='m-4'>
+        {acceptedProspects.length > 0 &&
+            <>
             <div className="text-white xl:text-6xl text-5xl r6-font my-2">Accepted Prospects</div>
-            {
-                <DataTable columns={columns} rows={acceptedProspects} />
-            }
+            <DataTable columns={columns} rows={acceptedProspects} />
+            </>
+        }
         </div>
         <div className='m-4'>
+        {rejectedProspects.length > 0 &&
+            <>
             <div className="text-white xl:text-6xl text-5xl r6-font my-2">Rejected Prospects</div>
-            {
-                <DataTable columns={columns} rows={rejectedProspects} />
-            }
+            <DataTable columns={columns} rows={rejectedProspects} />
+            </>
+        }
         </div>
         </>
     )
