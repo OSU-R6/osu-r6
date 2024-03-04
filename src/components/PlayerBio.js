@@ -8,7 +8,7 @@ const PlayerBio = ({ player }) => {
         <>
             <div className='grid grid-cols-3 gap-3 justify-center py-2 scale-100 lg:scale-75'>
                 <div className='col-span-3 lg:col-span-1 justify-center relative my-2 px-4'>
-                    <img className='m-auto' src={API + player.pfp} onError={(e) => {e.target.src = '/images/placeholderSquish.png'}}/>
+                    <img className='m-auto' src={API + player.pfp} onError={(e) => {e.target.src = '/images/placeholder.png'}}/>
                 </div>
                 <div className='col-span-3 lg:col-span-2 my-auto py-4'>
                     <div className='text-osu text-7xl font-bold r6-font flex mb-4'>

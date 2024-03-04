@@ -156,7 +156,7 @@ const UsersAP = () => {
                             <label className="text-white text-md font-bold px-2 col-span-1">Role *</label>
                             <select className="col-span-2 rounded-md p-1 w-full" name="role" value={formData.role} onChange={handleChange} required>
                                 <option value="">Select Option</option>
-                                <option value="Entry">Enrtry</option>
+                                <option value="Entry">Entry</option>
                                 <option value="Support">Support</option>
                                 <option value="Flex">Flex</option>
                             </select>
