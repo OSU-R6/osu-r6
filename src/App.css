@@ -260,6 +260,16 @@ body {
     text-shadow: -1px -1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF;
 }
 
+.event-card {
+    max-width: 100%;
+}
+
+@screen lg {
+    .event-card {
+        max-width: 50%;
+    }
+  }
+
 /* ################################################################# */
 /*                           Player Page
 /* ################################################################# */
@@ -380,4 +390,12 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+}
+
+/* ################################################################# */
+/*                        Announcements
+/* ################################################################# */
+
+.announcement-form {
+    min-width: 50%;
 }

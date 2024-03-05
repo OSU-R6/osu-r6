@@ -59,15 +59,15 @@ const EventCard = ({ event }) => {
     }
 
     return (
-        <div className='text-osu r6-font text-4xl text-center my-12'>
-            <div className='text-white text-5xl'>
+        <div className='text-osu my-6 mx-4 event-card'>
+            <div className='text-white text-4xl r6-font'>
                 {event.title}
             </div>
-            <div className='text-osu text-4xl'>
+            <div className='text-osu text-3xl r6-font'>
                 {event.dateOnly} @ {event.timeOnly}
             </div>
             { event.description != null && 
-            <div className='text-white text-3xl'>
+            <div className='text-white text-xl'>
                 {event.description}
             </div>
             }
@@ -78,17 +78,20 @@ const EventCard = ({ event }) => {
                     e.preventDefault()
                     await signUpHandler()
                     getSignUpStatus()
-                }} className="">
-                    <button className="rounded-md bg-osu hover:bg-osu-dark px-3 py-0.5 text-2xl font-semibold text-white shadow-sm mt-4" type="submit">Sign Up</button>
+                }} className="mt-2 flex">
+                    <div className='flex r6-font'>
+                        <div className='text-3xl text-white mr-2'>Interested?</div>
+                        <button className="rounded-md bg-osu hover:bg-osu-dark px-3 py-0.5 text-2xl font-semibold text-white shadow-sm mx-2" type="submit">Sign Up</button>
+                    </div>
                 </form>
                 :
                 <form onSubmit={ async (e) => {
                     e.preventDefault()
                     await optOutHandler()
                     getSignUpStatus()
-                }} className=" mt-4 flex">
-                    <div className='m-auto flex items-center'>
-                        <div className='text-3xl text-white mx-2'><span>Signed Up</span></div>
+                }} className="mt-2 flex">
+                    <div className='flex r6-font'>
+                        <div className='text-3xl text-white mr-2'>Signed Up!</div>
                         <button className="relative rounded-md bg-osu hover:bg-osu-dark px-3 py-0.5 text-2xl font-semibold text-white shadow-sm mx-2" type="submit">
                             <span className="">Opt Out</span>
                         </button>

@@ -117,7 +117,7 @@ const EventsAP = () => {
             setEditModal(false)
             getEvents()
         } catch {
-            console.log('Error Editing Match')
+            console.log('Error Editing Event')
         }
     }
 
@@ -129,7 +129,7 @@ const EventsAP = () => {
             })
             getEvents()
         } catch {
-            console.log('Error Deleting Match')
+            console.log('Error Deleting Event')
         }
     }
 
@@ -202,7 +202,7 @@ const EventsAP = () => {
                 {upcomingEvents.length > 0 ?
                     <DataTable columns={eventColumns} rows={upcomingEvents} /> 
                     :
-                    <div className='text-white text-2xl r6-font my-4'>No Past Events</div>
+                    <div className='text-white text-2xl r6-font my-4'>No Upcoming Events</div>
                 }
             </div>
             <div className='m-4'>
@@ -291,7 +291,7 @@ const EventsAP = () => {
                         </div>
                         <div className='grid grid-cols-3 my-2'>
                             <label className="col-span-1 text-white text-md font-bold px-2" >Description</label>
-                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name="description"  value={formData.description} onChange={handleChange} ></input>
+                            <textarea className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name="description"  value={formData.description} onChange={handleChange} ></textarea>
                         </div>
                         <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Save</button>
                         {error && <ErrorMessage>Unable to Edit Event</ErrorMessage>}
