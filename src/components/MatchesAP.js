@@ -54,7 +54,7 @@ const MatchesAP = () => {
         try{
             const pastMatches = await fetch(API + '/matches/past')
             const pastMatchesBody = await pastMatches.json()
-            setPastMatches(pastMatchesBody)
+            setPastMatches(pastMatchesBody.reverse())
         }
         catch (err) {
             setPastMatches([])

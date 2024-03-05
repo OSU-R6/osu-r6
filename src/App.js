@@ -25,6 +25,8 @@ import Player from './pages/Player'
 import Register from './pages/Register'
 import Team from './pages/Team'
 import TryOut from './pages/TryOut'
+import Announcements from './pages/Announcements'
+import Announcement from './pages/Announcement'
 
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -47,8 +49,12 @@ function App() {
                         <Route exact path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/account" element={<Account />} />
-                        <Route path="/alumni" element={<Alumni />} />
                         <Route path="/admin" element={<Admin />} />
+                        <Route path="/alumni" element={<Alumni />} />
+                        <Route path="/announcements" element={<Announcements />} />
+                        <Route path="/announcement">
+                            <Route path=":announcement" element={<Announcement />} />
+                        </Route>
                         <Route path="/coaching" element={<Coaching />} />
                         <Route path="/community" element={<Community />} />
                         <Route path="/tryout" element={<TryOut />} />
