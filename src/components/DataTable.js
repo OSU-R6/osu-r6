@@ -23,6 +23,12 @@ function CustomToolbar() {
 const theme = createTheme({
   palette: {
     mode: 'dark', // Set the desired mode for your component
+    osu: {
+      main: '#DC4405', // Example: Custom primary color
+    },
+    text: {
+      osu: 'rgba(0,0,0,0.85)',
+    },
     // Define your custom color palette for the component's theme
   },
   // Additional customizations for the component's theme
@@ -69,7 +75,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }))
 
 
-const DataTable = ({rows, columns, saveCell}) => {
+const DataTable = ({rows, columns, getRowId}) => {
 
   const handleProcessRowUpdateError = React.useCallback((error) => {
     console.log(error.message)
@@ -81,10 +87,7 @@ const DataTable = ({rows, columns, saveCell}) => {
         <StyledDataGrid
           rows={rows}
           columns={columns}
-          onCellEditStop={saveCell}
-          // processRowUpdate={(updatedRow, originalRow) =>
-          //   saveRow(updatedRow, originalRow)
-          // }
+          getRowId = {getRowId}
           slots={{
             toolbar: CustomToolbar
           }}

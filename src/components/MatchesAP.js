@@ -1,28 +1,42 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { format } from 'date-fns'
+import { format, set } from 'date-fns'
 import DataTable from './DataTable'
-import { BsFillPlusCircleFill, BsFillArrowUpCircleFill } from 'react-icons/bs'
+import { BsFillPlusCircleFill, BsTrash } from 'react-icons/bs'
+import { BiEditAlt } from 'react-icons/bi'
 import ErrorMessage from './ErrorMessage'
-import SuccessMessage from './SuccessMessage'
+import { Button } from '@mui/material'
+import FormModal from './FormModal'
+import Confirmation from './Confirmation'
 
 
 const MatchesAP = () => {
 
     const API = process.env.REACT_APP_API_URL
 
+    const initialFormData = {
+        team_id: '',
+        date: null,
+        dateOnly: null,
+        time: null,
+        opponent: '',
+        description: '',
+        stream_link: '',
+        vod_link: '',
+        team_score: null,
+        opponent_score: null
+    }
+  
+
+
     const [ matches, setMatches ] = useState([])
     const [ pastMatches, setPastMatches ] = useState([])
     const [ teams, setTeams ] = useState([])
-    const [ team, setTeam ] = useState(1)
-    const [ date, setDate ] = useState(null)
-    const [ time, setTime ] = useState(null)
-    const [ opponent, setOpponent ] = useState("")
-    const [ description, setDescription ] = useState(null)
-    const [ stream, setStream ] = useState(null)
     const [ error, setError ] = useState(false)
-    const [ success, setSuccess ] = useState(false)
     const [ matchToggle, setMatchToggle ] = useState(false)
+    const [ editModal, setEditModal ] = useState(false)
+    const [ actionConfirmation, setActionConfirmation ] = useState(null)
+    const [ formData, setFormData] = useState(initialFormData);
 
     useEffect(() => {
         getMatches()
@@ -40,7 +54,7 @@ const MatchesAP = () => {
         try{
             const pastMatches = await fetch(API + '/matches/past')
             const pastMatchesBody = await pastMatches.json()
-            setPastMatches(pastMatchesBody)
+            setPastMatches(pastMatchesBody.reverse())
         }
         catch (err) {
             setPastMatches([])
@@ -55,9 +69,17 @@ const MatchesAP = () => {
         setTeams(responseBody)
     }
 
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prevState => ({
+          ...prevState,
+          [name]: value
+        }))
+    }
+
     async function createMatchHandler() {
         try{
-            const dateTime = new Date(date + 'T' + time)
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
             const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
             const response = await fetch(API + '/matches/', {
                 method: 'POST',
@@ -65,19 +87,49 @@ const MatchesAP = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ date: sqlDateTime, team_id: team, opponent: opponent, description: description, stream_link: stream})
+                body: JSON.stringify({ date: sqlDateTime, team_id: formData.team_id, opponent: formData.opponent, description: formData.description, stream_link: formData.stream_link})
             })
             if(response.status == 201){
                 setError(false)
-                setSuccess(true)
+                toggleMatchCreate()
                 getMatches()
             } else {
                 setError(true)
-                setSuccess(false)
             }
         } catch {
             setError(true)
-            setSuccess(false)
+        }
+    }
+
+    async function editMatchHandler() {
+        try{
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
+            const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
+            formData.date = sqlDateTime
+            const response = await fetch(API + '/matches/' + formData.id, {
+                method: 'PATCH',
+                body: JSON.stringify(formData),
+                credentials: 'include',
+                headers: {
+                    'Content-type': 'application/json',
+                }
+            })
+            toggleMatchEdit()
+            getMatches()
+        } catch {
+            console.log('Error Editing Match')
+        }
+    }
+
+    async function deleteMatchHandler(id) {
+        try{
+            const response = await fetch(API + '/matches/' + id, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+            getMatches()
+        } catch {
+            console.log('Error Deleting Match')
         }
     }
 
@@ -85,7 +137,29 @@ const MatchesAP = () => {
         { field: 'team', headerName: 'Team', flex: 1, valueGetter: (params) => params.row.Team?.name || '' },
         { field: 'opponent', headerName: 'Opponent', flex: 1 },
         { field: 'date', headerName: 'Date', flex: 1, valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy hh:mm a')},
-        { field: 'stream_link', headerName: 'Stream', flex: 1}
+        { field: 'stream_link', headerName: 'Stream', flex: 1},
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 1,
+            renderCell: (params) => (
+            <div style={{ display: 'flex', gap: '10px'}}>
+                <Button variant="contained" color="osu" size="small" onClick={() => {
+                    params.row.time = format(new Date(params.row.date), 'HH:mm'),
+                    params.row.dateOnly = format(new Date(params.row.date), 'yyyy-MM-dd'),
+                    setFormData(params.row),
+                    toggleMatchEdit()
+                    }}>
+                    <div className='text-black scale-150 py-1.5'><BiEditAlt /></div>
+                </Button>,
+                <Button variant="contained" color="error" size="small" onClick={() => {
+                    setActionConfirmation(params.row)
+                    }}>
+                    <div className='text-black scale-125'><BsTrash/></div>
+                </Button>
+            </div>
+            ),
+        }
     ]
 
     const pastMatchColumns=[
@@ -96,95 +170,167 @@ const MatchesAP = () => {
         { field: 'vod_link', headerName: 'VOD', flex: 1, editable: true,},
         { field: 'team_score', headerName: 'OSU Score', flex: 1},
         { field: 'opponent_score', headerName: 'OP Score', flex: 1},
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 1,
+            renderCell: (params) => (
+            <div style={{ display: 'flex', gap: '10px'}}>
+                <Button variant="contained" color="osu" size="small" onClick={() => {
+                    params.row.time = format(new Date(params.row.date), 'HH:mm'),
+                    params.row.dateOnly = format(new Date(params.row.date), 'yyyy-MM-dd'),
+                    setFormData(params.row),
+                    toggleMatchEdit()
+                    }}>
+                    <div className='text-black scale-150 py-1.5'><BiEditAlt /></div>
+                </Button>
+            </div>
+            ),
+        }
     ]
 
-    const saveCell= (cellData) => {
-        const { id, field, value } = cellData;
-        console.log("id: " + id + " field: " + field + " value: " + value)
-    }
-
-    const saveEdits = React.useCallback((updatedRow, originalRow) => {
-        console.log(updatedRow)
-        console.log(originalRow)
-    }, [])
-
     const toggleMatchCreate = () => {
+        setFormData(initialFormData)
         setMatchToggle(!matchToggle)
         setError(false)
-        setSuccess(false)
+    }
+
+    const toggleMatchEdit = () => {
+        setEditModal(!editModal)
+        setError(false)
     }
 
     return (
         <>
-            <div className='m-4 grid grid-cols-12'>
-                <div className="text-white text-6xl r6-font my-2 col-span-12">
-                    <div className='flex'>
-                        
-                        <button onClick={toggleMatchCreate} className='flex text-osu hover:text-white'>
-                            <span className='mr-3'>Create Match</span>
-                            <span className='scale-75'>{matchToggle ? <BsFillArrowUpCircleFill/> : <BsFillPlusCircleFill/>}</span>
-                        </button>
-                    </div>
+            <div className='m-4'>
+                <div className="text-white text-5xl lg:text-6xl r6-font my-2">
+                    <span>Upcoming Matches</span>
+                    <button onClick={toggleMatchCreate} className='flex text-white hover:text-osu float-right'>
+                        <span className=''>{<BsFillPlusCircleFill/>}</span>
+                    </button>
                 </div>
-                {matchToggle &&
+                {matches.length > 0 ?
+                    <DataTable columns={matchColumns} rows={matches}/>
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Past Matches</div>
+                }
+            </div>
+
+            <div className='m-4'>
+                <div className="text-white text-5xl lg:text-6xl r6-font my-2">Past Matches</div>
+                {pastMatches.length > 0 ?
+                    <DataTable columns={pastMatchColumns} rows={pastMatches}/>
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Past Matches</div>
+                }
+            </div>
+
+
+            {actionConfirmation && 
+                <Confirmation 
+                content={`delete match vs "${actionConfirmation.opponent}" on ${format(new Date(actionConfirmation.date), 'MM/dd/yyyy')}`}
+                onConfirm={() => {
+                    deleteMatchHandler(actionConfirmation.id) 
+                    setActionConfirmation(null)}
+                }
+                onCancel={() => {setActionConfirmation(null)}}
+                />
+            }
+
+            {matchToggle &&
+            <FormModal onClose={() => setMatchToggle(false)}>
+                <div className='text-white text-4xl r6-font'>Create Match</div>
                 <form onSubmit={ async (e) => {
                     e.preventDefault()
                     await createMatchHandler()
                 }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="text-white text-md font-bold px-2 col-span-1" htmlFor="match-date">Date *</label>
-                        <input className='col-span-2 rounded-md p-1' type='date' id='match-date' onChange={e => {setDate(e.target.value)}} required></input>
+                        <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
+                        <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="text-white text-md font-bold px-2 col-span-1" htmlFor="match-date">Time *</label>
-                        <input className='col-span-2 rounded-md p-1' type='time' id='match-time' onChange={e => {setTime(e.target.value)}} required></input>
+                        <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
+                        <input className='col-span-2 rounded-md p-1' type='time' name='time' onChange={handleChange} required></input>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="text-white text-md font-bold px-2 col-span-1" htmlFor="match-team">Team *</label>
-                        <select className="col-span-2 rounded-md p-1 w-full" id="match-team" onChange={e => {setTeam(e.target.value)}} defaultValue="1" required>
+                        <label className="text-white text-md font-bold px-2 col-span-1">Team *</label>
+                        <select className="col-span-2 rounded-md p-1 w-full" name="team_id" value={formData.team_id} onChange={handleChange} required>
+                            <option value=''>Select Team</option>
                             {teams.map((team) => (
                                 <option key={team.id} value={team.id}>{team.name}</option>
                             ))}
                         </select>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="col-span-1 text-white text-md font-bold px-2" htmlFor="match-opponent">Opponent *</label>
-                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Opponent' id="match-opponent" value={opponent} onChange={e => {setOpponent(e.target.value)}} required></input>
+                        <label className="col-span-1 text-white text-md font-bold px-2">Opponent *</label>
+                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Opponent' name="opponent" value={formData.opponent} onChange={handleChange} required></input>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="col-span-1 text-white text-md font-bold px-2" htmlFor="match-description">Description</label>
-                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Description' id="match-opponent" onChange={e => {setDescription(e.target.value)}} ></input>
+                        <label className="col-span-1 text-white text-md font-bold px-2">Description</label>
+                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name="description" value={formData.description} onChange={handleChange} ></input>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
-                        <label className="col-span-1 text-white text-md font-bold px-2" htmlFor="match-description">Stream Link</label>
-                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Stream Link' id="match-stream" onChange={e => {setStream(e.target.value)}} ></input>
+                        <label className="col-span-1 text-white text-md font-bold px-2">Stream Link</label>
+                        <input className='col-span-2 rounded-md p-1' type='text' placeholder='Stream Link' name="stream_link" value={formData.stream_link} onChange={handleChange} ></input>
                     </div>
-                    <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm my-4" type="submit">Create</button>
+                    <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Create</button>
                     {error && <ErrorMessage>Unable to Create Match</ErrorMessage>}
-                    {success && <SuccessMessage>Match Created</SuccessMessage>}
                 </form>
-                }
-            </div>
-            <div className='m-4'>
-                <div className="text-white text-6xl r6-font my-2">Upcoming Matches</div>
-                {matches.length > 0 ?
-                <DataTable columns={matchColumns} rows={matches} saveCell={saveCell}/>
-                :
-                <div className='text-white text-xl'>
-                    No Upcoming Matches
-                </div>
-                } 
-            </div>
-            <div className='m-4'>
-                <div className="text-white text-6xl r6-font my-2">Past Matches</div>
-                {pastMatches.length > 0 ?
-                <DataTable columns={pastMatchColumns} rows={pastMatches} saveCell={saveCell}/>
-                :
-                <div className='text-white text-xl'>
-                    No Past Matches
-                </div>
-                } 
-            </div>
+            </FormModal>
+            }
+
+            { editModal &&
+                <FormModal onClose={() => setEditModal(false)}>
+                    <div className='text-white text-4xl r6-font'>Edit Match</div>
+                    <form onSubmit={ async (e) => {
+                        e.preventDefault()
+                        await editMatchHandler()
+                    }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
+                            <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
+                            <input className='col-span-2 rounded-md p-1' type='time' name='time' value={formData.time} onChange={handleChange} required></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="text-white text-md font-bold px-2 col-span-1">Team *</label>
+                            <select className="col-span-2 rounded-md p-1 w-full" name='team_id' value={formData.team_id} onChange={handleChange} required>
+                                {teams.map((team) => (
+                                    <option key={team.id} value={team.id}>{team.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">Opponent *</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Opponent' name='opponent' value={formData.opponent} onChange={handleChange} required></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">Description</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name='description' value={formData.description} onChange={handleChange} ></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">Stream Link</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Stream Link' name='stream_link' value={formData.stream_link} onChange={handleChange} ></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">VOD Link</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Vod Link' name='vod_link' value={formData.vod_link} onChange={handleChange} ></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">Team Score</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Team Score' name='team_score' value={formData.team_score} onChange={handleChange} ></input>
+                        </div>
+                        <div className='grid grid-cols-3 my-2'>
+                            <label className="col-span-1 text-white text-md font-bold px-2">Opponent Score</label>
+                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Opponent Score' name='opponent_score' value={formData.opponent_score} onChange={handleChange} ></input>
+                        </div>            
+                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Update</button>
+                        {error && <ErrorMessage>Unable to Edit Match</ErrorMessage>}
+                    </form>
+                </FormModal>
+            }
         </>
     )
 } 
