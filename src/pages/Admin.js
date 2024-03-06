@@ -1,5 +1,6 @@
 import AdminNav from '../components/AdminNav'
 import AdminPanel from '../components/AdminPanel'
+import AnnouncementsAP from '../components/AnnouncementsAP'
 import InvitesAP from '../components/InvitesAP'
 import MatchesAP from '../components/MatchesAP'
 import EventsAP from '../components/EventsAP'
@@ -52,10 +53,14 @@ function Admin() {
                         <AdminPanel title="Events">
                             <EventsAP/>
                         </AdminPanel>
-                        ) : activePanel === 5 && (
+                        ) : activePanel === 5 ? (
                         <AdminPanel title="Prospects">
                             <ProspectsAP/>
                         </AdminPanel>
+                        ) : activePanel === 6 && (
+                            <AdminPanel title="Announcements">
+                                <AnnouncementsAP/>
+                            </AdminPanel>
                         )}
                     </div>
                 </div>

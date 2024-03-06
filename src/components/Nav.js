@@ -23,8 +23,15 @@ function Navigation() {
     const API = process.env.REACT_APP_API_URL
 
     useEffect(() => {
-        getTeams()
+        getTeams() 
+        checkScreenSize()
     }, [])
+
+    const checkScreenSize = () => {
+        const screenWidth = window.innerWidth
+        const isLarge = screenWidth >= 1024
+        setNavOpen(isLarge)
+    }
 
     const getTeams = async () => {
         try  {
@@ -76,7 +83,7 @@ function Navigation() {
                         <div className="hidden lg:flex inline-block bg-osu w-0.5 h-10 mx-3"/>
                         <StyledNavLink to={"/tryout"}>Try Out</StyledNavLink>
                     </div>
-                    }
+                }
                 <button className="hidden lg:flex text-white" onClick={() => setNavOpen((prev) => !prev)}>
                     <div  className="object-cover text-osu hover:text-white">
                         {navOpen 

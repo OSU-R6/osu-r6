@@ -220,14 +220,13 @@ body {
 
 .home-banner {
     position: relative;
-    margin-bottom : 10em;
     background-image: url("../public/images/R6_4.png");
     background-size: cover;
     background-position: center;
 }
 
-.live-match {
-    margin-bottom : 10em;
+.h-screen-80 {
+    height: 80vh;
 }
 
 .home-banner::before {
@@ -237,7 +236,10 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: radial-gradient(ellipse, transparent, black 70%);
+    background-image: radial-gradient(ellipse at center, transparent, black 70%);
+    background-size: 150% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
 .osu-glow {
@@ -258,6 +260,28 @@ body {
 
 .text-shadow-white {
     text-shadow: -1px -1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF;
+}
+
+.event-card {
+    max-width: 100%;
+}
+
+.matches-divider {
+    max-width: 50%;
+}
+
+@screen lg {
+    .event-card {
+        max-width: 50%;
+    }
+}
+
+@screen 2xl {
+
+    .home-banner::before {
+        background-image: radial-gradient(ellipse at center, transparent, black 70%);
+        background-size: 105% 100%;
+      }
 }
 
 /* ################################################################# */
@@ -380,4 +404,12 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+}
+
+/* ################################################################# */
+/*                        Announcements
+/* ################################################################# */
+
+.announcement-form {
+    min-width: 50%;
 }

@@ -5,7 +5,6 @@ import DataTable from './DataTable'
 import { BsFillPlusCircleFill, BsTrash } from 'react-icons/bs'
 import { BiEditAlt } from 'react-icons/bi'
 import ErrorMessage from './ErrorMessage'
-import SuccessMessage from './SuccessMessage'
 import { Button } from '@mui/material'
 import FormModal from './FormModal'
 import Confirmation from './Confirmation'
@@ -15,25 +14,29 @@ const MatchesAP = () => {
 
     const API = process.env.REACT_APP_API_URL
 
-    const [ matches, setMatches ] = useState([])
-    const [ pastMatches, setPastMatches ] = useState([])
-    const [ teams, setTeams ] = useState([])
-    const [ error, setError ] = useState(false)
-    const [ success, setSuccess ] = useState(false)
-    const [ matchToggle, setMatchToggle ] = useState(false)
-    const [ editModal, setEditModal ] = useState(false)
-    const [ actionConfirmation, setActionConfirmation ] = useState(null)
-    const [ formData, setFormData] = useState({
-        team_id: 1,
+    const initialFormData = {
+        team_id: '',
         date: null,
+        dateOnly: null,
         time: null,
         opponent: '',
         description: '',
         stream_link: '',
         vod_link: '',
-        team_score: 0,
-        opponent_score: 0
-      });
+        team_score: null,
+        opponent_score: null
+    }
+  
+
+
+    const [ matches, setMatches ] = useState([])
+    const [ pastMatches, setPastMatches ] = useState([])
+    const [ teams, setTeams ] = useState([])
+    const [ error, setError ] = useState(false)
+    const [ matchToggle, setMatchToggle ] = useState(false)
+    const [ editModal, setEditModal ] = useState(false)
+    const [ actionConfirmation, setActionConfirmation ] = useState(null)
+    const [ formData, setFormData] = useState(initialFormData);
 
     useEffect(() => {
         getMatches()
@@ -51,7 +54,7 @@ const MatchesAP = () => {
         try{
             const pastMatches = await fetch(API + '/matches/past')
             const pastMatchesBody = await pastMatches.json()
-            setPastMatches(pastMatchesBody)
+            setPastMatches(pastMatchesBody.reverse())
         }
         catch (err) {
             setPastMatches([])
@@ -76,7 +79,7 @@ const MatchesAP = () => {
 
     async function createMatchHandler() {
         try{
-            const dateTime = new Date(formData.date + 'T' + formData.time)
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
             const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
             const response = await fetch(API + '/matches/', {
                 method: 'POST',
@@ -88,21 +91,19 @@ const MatchesAP = () => {
             })
             if(response.status == 201){
                 setError(false)
-                setSuccess(true)
+                toggleMatchCreate()
                 getMatches()
             } else {
                 setError(true)
-                setSuccess(false)
             }
         } catch {
             setError(true)
-            setSuccess(false)
         }
     }
 
     async function editMatchHandler() {
         try{
-            const dateTime = new Date(formData.date + 'T' + formData.time)
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
             const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
             formData.date = sqlDateTime
             const response = await fetch(API + '/matches/' + formData.id, {
@@ -113,7 +114,7 @@ const MatchesAP = () => {
                     'Content-type': 'application/json',
                 }
             })
-            setEditModal(false)
+            toggleMatchEdit()
             getMatches()
         } catch {
             console.log('Error Editing Match')
@@ -144,16 +145,14 @@ const MatchesAP = () => {
             renderCell: (params) => (
             <div style={{ display: 'flex', gap: '10px'}}>
                 <Button variant="contained" color="osu" size="small" onClick={() => {
-                    setEditModal(true),
                     params.row.time = format(new Date(params.row.date), 'HH:mm'),
-                    params.row.date = format(new Date(params.row.date), 'yyyy-MM-dd'),
+                    params.row.dateOnly = format(new Date(params.row.date), 'yyyy-MM-dd'),
                     setFormData(params.row),
-                    console.log(params.row)
+                    toggleMatchEdit()
                     }}>
                     <div className='text-black scale-150 py-1.5'><BiEditAlt /></div>
                 </Button>,
                 <Button variant="contained" color="error" size="small" onClick={() => {
-                    console.log(params.row)
                     setActionConfirmation(params.row)
                     }}>
                     <div className='text-black scale-125'><BsTrash/></div>
@@ -178,11 +177,10 @@ const MatchesAP = () => {
             renderCell: (params) => (
             <div style={{ display: 'flex', gap: '10px'}}>
                 <Button variant="contained" color="osu" size="small" onClick={() => {
-                    setEditModal(true),
                     params.row.time = format(new Date(params.row.date), 'HH:mm'),
-                    params.row.date = format(new Date(params.row.date), 'yyyy-MM-dd'),
+                    params.row.dateOnly = format(new Date(params.row.date), 'yyyy-MM-dd'),
                     setFormData(params.row),
-                    console.log(params.row)
+                    toggleMatchEdit()
                     }}>
                     <div className='text-black scale-150 py-1.5'><BiEditAlt /></div>
                 </Button>
@@ -192,9 +190,14 @@ const MatchesAP = () => {
     ]
 
     const toggleMatchCreate = () => {
+        setFormData(initialFormData)
         setMatchToggle(!matchToggle)
         setError(false)
-        setSuccess(false)
+    }
+
+    const toggleMatchEdit = () => {
+        setEditModal(!editModal)
+        setError(false)
     }
 
     return (
@@ -206,12 +209,22 @@ const MatchesAP = () => {
                         <span className=''>{<BsFillPlusCircleFill/>}</span>
                     </button>
                 </div>
-                {<DataTable columns={matchColumns} rows={matches}/>} 
+                {matches.length > 0 ?
+                    <DataTable columns={matchColumns} rows={matches}/>
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Past Matches</div>
+                }
             </div>
+
             <div className='m-4'>
                 <div className="text-white text-5xl lg:text-6xl r6-font my-2">Past Matches</div>
-                {<DataTable columns={pastMatchColumns} rows={pastMatches}/>} 
+                {pastMatches.length > 0 ?
+                    <DataTable columns={pastMatchColumns} rows={pastMatches}/>
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Past Matches</div>
+                }
             </div>
+
 
             {actionConfirmation && 
                 <Confirmation 
@@ -233,7 +246,7 @@ const MatchesAP = () => {
                 }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
                     <div className='grid grid-cols-3 my-2'>
                         <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
-                        <input className='col-span-2 rounded-md p-1' type='date' name='date' onChange={handleChange} required></input>
+                        <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
                     </div>
                     <div className='grid grid-cols-3 my-2'>
                         <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
@@ -242,6 +255,7 @@ const MatchesAP = () => {
                     <div className='grid grid-cols-3 my-2'>
                         <label className="text-white text-md font-bold px-2 col-span-1">Team *</label>
                         <select className="col-span-2 rounded-md p-1 w-full" name="team_id" value={formData.team_id} onChange={handleChange} required>
+                            <option value=''>Select Team</option>
                             {teams.map((team) => (
                                 <option key={team.id} value={team.id}>{team.name}</option>
                             ))}
@@ -261,7 +275,6 @@ const MatchesAP = () => {
                     </div>
                     <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Create</button>
                     {error && <ErrorMessage>Unable to Create Match</ErrorMessage>}
-                    {success && <SuccessMessage>Match Created</SuccessMessage>}
                 </form>
             </FormModal>
             }
@@ -275,7 +288,7 @@ const MatchesAP = () => {
                     }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
-                            <input className='col-span-2 rounded-md p-1' type='date' name='date' value={formData.date} onChange={handleChange} required></input>
+                            <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
                         </div>
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
@@ -314,15 +327,7 @@ const MatchesAP = () => {
                             <input className='col-span-2 rounded-md p-1' type='text' placeholder='Opponent Score' name='opponent_score' value={formData.opponent_score} onChange={handleChange} ></input>
                         </div>            
                         <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Update</button>
-                        {success && 
-                            <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4 float-right" onClick={e => {
-                                setEditModal(false),
-                                setSuccess(false),
-                                setError(false)                            
-                            }}>Close</button>
-                        }
                         {error && <ErrorMessage>Unable to Edit Match</ErrorMessage>}
-                        {success && <SuccessMessage>Match Edited</SuccessMessage>}
                     </form>
                 </FormModal>
             }

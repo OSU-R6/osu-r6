@@ -3,6 +3,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import Diversity3Icon from '@mui/icons-material/Diversity3'
 import StadiumIcon from '@mui/icons-material/Stadium'
 import EventIcon from '@mui/icons-material/Event'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import SettingsIcon from '@mui/icons-material/Settings'
 import Banner from './Banner'
 import { BsFillGearFill } from 'react-icons/bs';
@@ -16,7 +17,8 @@ const AdminNav = ({ activePanel, onStateChange }) => {
         { icon: <Diversity3Icon />, label: 'Teams' },
         { icon: <StadiumIcon />, label: 'Matches' },
         { icon: <EventIcon />, label: 'Events' },
-        { icon: <PeopleAltIcon />, label: 'Prospects' },
+        { icon: <PersonAddAltIcon />, label: 'Prospects' },
+        { icon: <NotificationsActiveIcon />, label: 'News' },
     ]
 
     const activeStyle = "active-nav-selection pl-3"
@@ -31,7 +33,7 @@ const AdminNav = ({ activePanel, onStateChange }) => {
         {navData.map((item, index) => (
             <button key={index} onClick={e => onStateChange(index)} className={`${activePanel == index && activeStyle} w-full text-left`}>
                 <div className='text-white text-2xl font-bold p-3 w-full flex items-center'>
-                    <span className='mr-2 mb-1'>{item.icon}</span>
+                    <span className='mr-3 mb-1 scale-150'>{item.icon}</span>
                     <span>{item.label}</span>
                 </div>
             </button>

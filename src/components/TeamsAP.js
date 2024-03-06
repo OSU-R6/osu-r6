@@ -131,6 +131,7 @@ const TeamsAP = () => {
                     'Content-type': 'application/json',
                 }
             })
+            setEditModal(false)
             getTeams()
         } catch {
             console.log('Error Editing Match')

@@ -12,6 +12,16 @@ const EventsAP = () => {
 
     const API = process.env.REACT_APP_API_URL
 
+    const initialFormData = {
+        date: null,
+        dateOnly: null,
+        time: null,
+        title: '',
+        type: '',
+        description: '',
+
+    }
+
     const [ upcomingEvents, setUpcomingEvents ] = useState([])
     const [ pastEvents, setPastEvents ] = useState([])
     const [ error, setError ] = useState(false)
@@ -19,6 +29,7 @@ const EventsAP = () => {
     const [ editModal, setEditModal ] = useState(false)
     const [ formData, setFormData] = useState({})
     const [ actionConfirmation, setActionConfirmation] = useState(null)
+    const [ viewAttendees, setViewAttendees ] = useState(null)
 
     useEffect(() => {
         getEvents()
@@ -29,9 +40,37 @@ const EventsAP = () => {
             const upcomingEvents = await fetch(API + '/events/upcoming')
             const upcomingEventsBody = await upcomingEvents.json()
             setUpcomingEvents(upcomingEventsBody)
+            if(upcomingEventsBody.length > 0){
+                upcomingEventsBody.map( async (event) => {
+                    const upcomingEventAttendees = await fetch(API + '/events/' + event.id + '/attendees', {
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    if(upcomingEventAttendees.status === 200){
+                        const upcomingEventAttendeesBody = await upcomingEventAttendees.json()
+                        event.attendees = upcomingEventAttendeesBody
+                    }
+                })
+            }
             const pastEvents = await fetch(API + '/events/past')
             const pastEventsBody = await pastEvents.json()
             setPastEvents(pastEventsBody)
+            if(pastEventsBody.length > 0){
+                pastEventsBody.map( async (event) => {
+                    const pastEventAttendees = await fetch(API + '/events/' + event.id + '/attendees', {
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    if(pastEventAttendees.status === 200){
+                        const pastEventAttendeesBody = await pastEventAttendees.json()
+                        event.attendees = pastEventAttendeesBody
+                    }
+                })
+            }
         } catch (err) {
             setUpcomingEvents([])
             setPastEvents([])
@@ -40,7 +79,7 @@ const EventsAP = () => {
 
     async function createEventHandler() {
         try{
-            const dateTime = new Date(formData.date + 'T' + formData.time)
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
             const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
             const response = await fetch(API + '/events/', {
                 method: 'POST',
@@ -64,7 +103,7 @@ const EventsAP = () => {
 
     async function editEventHandler() {
         try{
-            const dateTime = new Date(formData.date + 'T' + formData.time)
+            const dateTime = new Date(formData.dateOnly + 'T' + formData.time)
             const sqlDateTime = format(dateTime, "yyyy-MM-dd HH:mm:ss")
             formData.date = sqlDateTime
             const response = await fetch(API + '/events/' + formData.id, {
@@ -78,7 +117,7 @@ const EventsAP = () => {
             setEditModal(false)
             getEvents()
         } catch {
-            console.log('Error Editing Match')
+            console.log('Error Editing Event')
         }
     }
 
@@ -90,7 +129,7 @@ const EventsAP = () => {
             })
             getEvents()
         } catch {
-            console.log('Error Deleting Match')
+            console.log('Error Deleting Event')
         }
     }
 
@@ -100,22 +139,35 @@ const EventsAP = () => {
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'date', headerName: 'Date', flex: 1, valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy hh:mm a')},
         {
+            field: 'attendees',
+            headerName: 'Attendees',
+            flex: 1,
+            renderCell: (params) => (
+            <div style={{ display: 'flex', gap: '10px'}}>
+                <Button variant="contained" color="osu" size="small" onClick={() => {
+                    if(params.row.attendees && params.row.attendees.length > 0)
+                        setViewAttendees(params.row)
+                    }}>
+                    <div className='text-black'>{params.row.attendees ? params.row.attendees.length : 0}</div>
+                </Button>
+            </div>
+            ),
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             flex: 1,
             renderCell: (params) => (
             <div style={{ display: 'flex', gap: '10px'}}>
                 <Button variant="contained" color="osu" size="small" onClick={() => {
-                    setEditModal(true),
                     params.row.time = format(new Date(params.row.date), 'HH:mm'),
-                    params.row.date = format(new Date(params.row.date), 'yyyy-MM-dd'),
+                    params.row.dateOnly = format(new Date(params.row.date), 'yyyy-MM-dd'),
                     setFormData(params.row),
-                    console.log(params.row)
+                    setEditModal(true)
                     }}>
                     <div className='text-black scale-150 py-1.5'><BiEditAlt /></div>
                 </Button>,
                 <Button variant="contained" color="error" size="small" onClick={() => {
-                    console.log(params.row)
                     setActionConfirmation(params.row)
                     }}>
                     <div className='text-black scale-125'><BsTrash/></div>
@@ -123,6 +175,11 @@ const EventsAP = () => {
             </div>
             ),
         }
+    ]
+
+    const atendeesColumns=[
+        { field: 'ign', headerName: 'IGN', flex: 1, valueGetter: (params) => params.row.User.ign },
+        { field: 'createdAt', headerName: 'Sign Up Date', flex: 1, valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy hh:mm a')},
     ]
 
     const handleChange = (e) => {
@@ -138,15 +195,23 @@ const EventsAP = () => {
             <div className='m-4'>
                 <div className="text-white text-5xl lg:text-6xl r6-font my-2">
                     <span>Upcoming Events</span>
-                    <button onClick={() => setCreateModal(true)} className='flex text-white hover:text-osu float-right'>
+                    <button onClick={() =>  {setFormData(initialFormData), setCreateModal(true)}} className='flex text-white hover:text-osu float-right'>
                         <span className=''>{<BsFillPlusCircleFill/>}</span>
                     </button>
                 </div>
-                {<DataTable columns={eventColumns} rows={upcomingEvents} />} 
+                {upcomingEvents.length > 0 ?
+                    <DataTable columns={eventColumns} rows={upcomingEvents} /> 
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Upcoming Events</div>
+                }
             </div>
             <div className='m-4'>
                 <div className="text-white text-6xl r6-font my-2">Past Events</div>
-                {<DataTable columns={eventColumns} rows={pastEvents} />} 
+                {pastEvents.length > 0 ?
+                    <DataTable columns={eventColumns} rows={pastEvents} />
+                    :
+                    <div className='text-white text-2xl r6-font my-4'>No Past Events</div>
+                }
             </div>
             {actionConfirmation && 
                 <Confirmation 
@@ -167,7 +232,7 @@ const EventsAP = () => {
                     }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
-                            <input className='col-span-2 rounded-md p-1' type='date' name='date' value={formData.date} onChange={handleChange} required></input>
+                            <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
                         </div>
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
@@ -180,6 +245,7 @@ const EventsAP = () => {
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Type *</label>
                             <select className="col-span-2 rounded-md p-1 w-full" name="type" value={formData.type} onChange={handleChange} defaultValue="10-man" required>
+                                <option value=''>Select Event Type</option>
                                 <option value="10-man">10-Man</option>
                                 <option value="tryout">Tryouts</option>
                                 <option value="workshop">Workshop</option>
@@ -204,7 +270,7 @@ const EventsAP = () => {
                     }} className="my-4 col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-3">
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Date *</label>
-                            <input className='col-span-2 rounded-md p-1' type='date' name='date' value={formData.date} onChange={handleChange} required></input>
+                            <input className='col-span-2 rounded-md p-1' type='date' name='dateOnly' value={formData.dateOnly} onChange={handleChange} required></input>
                         </div>
                         <div className='grid grid-cols-3 my-2'>
                             <label className="text-white text-md font-bold px-2 col-span-1">Time *</label>
@@ -225,11 +291,17 @@ const EventsAP = () => {
                         </div>
                         <div className='grid grid-cols-3 my-2'>
                             <label className="col-span-1 text-white text-md font-bold px-2" >Description</label>
-                            <input className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name="description"  value={formData.description} onChange={handleChange} ></input>
+                            <textarea className='col-span-2 rounded-md p-1' type='text' placeholder='Description' name="description"  value={formData.description} onChange={handleChange} ></textarea>
                         </div>
                         <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-1.5 text-sm font-semibold text-white shadow-sm mt-4" type="submit">Save</button>
                         {error && <ErrorMessage>Unable to Edit Event</ErrorMessage>}
                     </form>
+                </FormModal>
+            }
+            { viewAttendees &&
+                <FormModal onClose={() => setViewAttendees(null)}>
+                    <div className='text-white text-4xl r6-font'>Attendees</div>
+                    {<DataTable columns={atendeesColumns} rows={viewAttendees.attendees} getRowId={(row) => row.user_id}/>} 
                 </FormModal>
             }
         </>
