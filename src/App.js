@@ -25,6 +25,7 @@ import Player from './pages/Player'
 import Register from './pages/Register'
 import Team from './pages/Team'
 import TryOut from './pages/TryOut'
+import Matches from './pages/Matches'
 import Announcements from './pages/Announcements'
 import Announcement from './pages/Announcement'
 
@@ -52,6 +53,7 @@ function App() {
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/alumni" element={<Alumni />} />
                         <Route path="/announcements" element={<Announcements />} />
+                        <Route path="/matches" element={<Matches />} />
                         <Route path="/announcement">
                             <Route path=":announcement" element={<Announcement />} />
                         </Route>

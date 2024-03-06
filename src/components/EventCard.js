@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux'
 import { isloggedIn} from '../redux/selectors'
 import { useState, useEffect } from 'react'
-import { BsCheck } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 
 const EventCard = ({ event }) => {
 
     const loggedIn = useSelector(isloggedIn)
     const [signedUp, setSignedUp] = useState(false)
+    const navigate = useNavigate()
     const API = process.env.REACT_APP_API_URL
 
     useEffect(() => {
@@ -71,7 +72,7 @@ const EventCard = ({ event }) => {
                 {event.description}
             </div>
             }
-            {loggedIn &&
+            {loggedIn ?
             <>
             {!signedUp ?
                 <form onSubmit={ async (e) => {
@@ -99,6 +100,10 @@ const EventCard = ({ event }) => {
                 </form>
             }
             </>
+            :
+            <div className='text-white text-3xl r6-font'>
+                <button onClick={async () => {navigate('/login')}}>Login to sign up</button>
+            </div>
             }
         </div>
     )

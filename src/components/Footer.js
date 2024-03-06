@@ -79,10 +79,12 @@ function Footer() {
                     <div className='text-white r6-font text-3xl pb-3'>OREGON STATE RAINBOW SIX</div>
                     <div className='text-lg font-semibold text-osu'>
                         <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/')}}>Home</button>
-                        {teams.length > 0 && teams.map((team) => (
-                            <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/team/' + team.id)}}>{team.name}</button>
+                        {teams.length > 0 && teams.map((team, i) => (
+                            <button className='py-1 hover:text-white shadow-sm block' key={i} onClick={async () => {navigate('/team/' + team.id)}}>{team.name}</button>
                         ))}
-                        <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/alumni')}}>Alumni</button>
+                        <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/about')}}>About</button>
+                        <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/matches')}}>Matches</button>
+                        <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/announcements')}}>Announcements</button>
                         <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/community')}}>Community</button>
                         <button className='py-1 hover:text-white shadow-sm block' onClick={async () => {navigate('/tryout')}}>Try Out</button>
                     </div>
