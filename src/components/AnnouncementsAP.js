@@ -125,7 +125,7 @@ const AnnouncementsAP = () => {
             setEditModal(false)
             getAnnouncements()
         } catch {
-            console.log('Error Editing Accouncement')
+            setError(true)
         }
     }
 
@@ -137,7 +137,7 @@ const AnnouncementsAP = () => {
             })
             getAnnouncements()
         } catch {
-            console.log('Error Deleting Announcement')
+            setError(true)
         }
     }
 

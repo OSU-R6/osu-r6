@@ -117,7 +117,7 @@ const MatchesAP = () => {
             toggleMatchEdit()
             getMatches()
         } catch {
-            console.log('Error Editing Match')
+            setError(true)
         }
     }
 
@@ -129,7 +129,7 @@ const MatchesAP = () => {
             })
             getMatches()
         } catch {
-            console.log('Error Deleting Match')
+            setError(true)
         }
     }
 

@@ -19,11 +19,11 @@ const PlayerCard = ({ player, igl, captain }) => {
                     <img className='player-card-image mt-4 m-auto oppacity-100' src={API + player.pfp} onError={(e) => {e.target.src = '/images/placeholder.png'}}/>
                 </div>
                 <div className='player-car-divider w-full h-1 bg-osu'></div>
-                <div className='player-ign text-white r6-font font-semibold w-full text-center text-7xl mb-2 mt-1'>{player.ign}</div>
+                <div className='player-ign text-white r6-font font-semibold w-full text-center text-6xl mb-2 mt-1'>{player.ign}</div>
                 {(player.isCoach || player.type === 'active') &&
                 <>
                 <div className='w-75 text-center mt-2 mb-1 h-px bg-osu'></div>
-                <div className='player-ign text-white r6-font font-semibold w-full text-center text-6xl mb-3'>{player.isSubstitute ? <>Substitute</> : player.isCoach ? <>Coach</> : player.role}</div>
+                <div className='player-ign text-white r6-font font-semibold w-full text-center text-5xl mb-3'>{player.isSubstitute ? <>Substitute</> : player.isCoach ? <>Coach</> : player.role}</div>
                 </>
                 }
             </div>

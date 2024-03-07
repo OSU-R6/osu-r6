@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BsDiscord, BsInstagram, BsTwitter } from 'react-icons/bs'
+import { BsDiscord, BsInstagram, BsTwitter, BsTiktok } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../redux/userReducer'
 
@@ -116,11 +116,11 @@ function Footer() {
                 
 
                 <div className='col-span-12 flex'>
-                    {/* <div className='text-white r6-font text-3xl pb-3'>CONNECT</div> */}
                     <div className='m-auto flex mt-2 mb-4'>
-                        <div className='icon mx-2'><a href='https://discord.gg/zYgcRtxsGv' target='_blank'><BsDiscord /></a></div>
-                        <div className='icon mx-2'><a href='#' target='_blank'><BsTwitter /></a></div>
-                        <div className='icon mx-2'><a href='#' target='_blank'><BsInstagram /></a></div>
+                        <div className='icon mx-2'><a href='https://discord.gg/osuesports' target='_blank'><BsDiscord /></a></div>
+                        <div className='icon mx-2'><a href='https://twitter.com/OSUesports' target='_blank'><BsTwitter /></a></div>
+                        <div className='icon mx-2'><a href='https://www.instagram.com/osu.esports/' target='_blank'><BsInstagram /></a></div>
+                        <div className='icon mx-2'><a href='https://www.tiktok.com/@osuesports' target='_blank'><BsTiktok /></a></div>
                     </div>
                 </div>
 
