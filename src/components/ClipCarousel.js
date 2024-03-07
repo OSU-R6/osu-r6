@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 
 const ClipGallery = (player) => {
 
     const [clips, setClips] = useState([])
     const [index, setIndex] = useState(0)
+    const videoRefs = useRef([]);
 
     const API = process.env.REACT_APP_API_URL
 
     useEffect(() => {
         getClips()
+        videoRefs.current = videoRefs.current.slice(0, clips.length);
     }, [])
 
     const getClips = async () => {
@@ -19,19 +21,25 @@ const ClipGallery = (player) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        setIndex(selectedIndex);
-    };
+        const currentVideoElement = videoRefs.current[index]
+        currentVideoElement.pause()
+        currentVideoElement.currentTime = 0
+        
+        setIndex(selectedIndex)
+
+        const nextVideoElement = videoRefs.current[selectedIndex]
+        nextVideoElement.play()
+    }
 
     const handleVideoEnd = () => {
         const nextIndex = index + 1 < clips.length ? index + 1 : 0
         setIndex(nextIndex)
         setTimeout(() => {
-            console.log('playing next video')
             const videos = document.querySelectorAll('.video-carousel');
             if (videos[nextIndex]) {
                 videos[nextIndex].play().catch(err => console.error("Video play failed:", err))
             }
-            }, 0)
+        }, 0)
     }
 
     return (
@@ -44,7 +52,7 @@ const ClipGallery = (player) => {
                     {clips.map((video, idx) => {
                         return (
                             <Carousel.Item key={idx}>
-                                <video autoPlay muted onEnded={handleVideoEnd} className='bg-osu-shine p-1 video-carousel mt-4'>
+                                <video ref={element => (videoRefs.current[idx] = element)} autoPlay={idx === index && idx === 0} muted onEnded={handleVideoEnd} className='bg-osu-shine p-1 video-carousel mt-4'>
                                     <source src={API + video.link} type='video/mp4' />
                                     Your browser does not support the video tag.
                                 </video>
