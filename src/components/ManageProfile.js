@@ -120,7 +120,7 @@ const ManageProfile = (props) => {
                         {imagePreview ? (  
                             <img src={imagePreview} alt='Resized preview' />
                         ) : (
-                            <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
+                            <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholder.png'}}/>
                         )}
                         </div>
                         <div className='flex justify-center'>

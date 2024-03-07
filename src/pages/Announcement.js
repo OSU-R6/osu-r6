@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import Banner from '../components/Banner'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import DOMPurify from 'dompurify'
 
 const API = process.env.REACT_APP_API_URL
 
@@ -16,10 +17,11 @@ function Announcement() {
 
     const getAnnouncement = async () => {
         try {
-            fetch(API + '/announcements/' + params.announcement)
+            await fetch(API + '/announcements/' + params.announcement)
                 .then(response => response.json())
                 .then(data => setAnnouncement(data))
                 .catch(err => console.log(err))
+            announcement.body = DOMPurify.sanitize(announcement.body)
         } catch (err) {
             setAnnouncement({})
         }
@@ -48,7 +50,7 @@ function Announcement() {
                         {announcement.User &&
                         <div className='text-osu text-4xl r6-font mb-4'><button onClick={ async () => {navigate('/player/' + announcement.User.ign)}}>{announcement.User.ign} ({announcement.User.firstName})</button> - {announcement.dateOnly}</div>
                         }
-                        <div className='text-white text-xl'>{announcement.body}</div>
+                        <div className='text-white text-xl whitespace-pre-line' dangerouslySetInnerHTML={{ __html: announcement.body }} />
                     </div>
                 </div>
             </div>
