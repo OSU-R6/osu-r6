@@ -161,9 +161,9 @@ function Login() {
                 </div>
                 :
                 <div>
-                    <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4">
-                        <h1 className="text-xl text-white font-semi-bold mb-6">Account Created!</h1>
-                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" onClick={async () => { navigate('/login') }}>Login</button>
+                    <div className="flex flex-col justify-center px-8 pt-6 pb-8 mb-4 text-center">
+                        <div className="text-white font-semi-bold mb-6 r6-font text-6xl">Account Created!</div>
+                        <div className="text-white font-semi-bold mb-6 r6-font text-4xl">Email verification required, check your email.</div>
                     </div>
                 </div>
             }
