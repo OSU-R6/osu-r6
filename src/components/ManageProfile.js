@@ -133,7 +133,7 @@ const ManageProfile = (props) => {
                 </div>
                 :
                 <>
-                <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholderSquish.png'}}/>
+                <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholder.png'}}/>
                 <div className='flex'>
                     <button className='rounded-md bg-transparent px-2.5 py-2.5 text-sm font-semibold shadow-sm scale-150 text-osu hover:text-white mx-auto my-2' onClick={ async (e) => {
                         setPfpUploadToggle(true)
