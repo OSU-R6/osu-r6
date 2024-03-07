@@ -10,9 +10,6 @@ function StreamEmbed({ match }) {
   };
 
   const channelName = match.stream_link.substring(match.stream_link.lastIndexOf('/') + 1)
-  console.log("match: ", match)
-  console.log("match.stream_link: ", match.stream_link)
-  console.log("channelName: ", channelName)
   
   return (
     <>
@@ -21,7 +18,6 @@ function StreamEmbed({ match }) {
             <TwitchPlayer channel={channelName} className="m-auto"  width="90%" autoplay muted onReady={handleReady} />
         </div>
     </div>
-    {/* <TwitchChat channel={channelName} darkMode /> */}
     </>
   );
 }

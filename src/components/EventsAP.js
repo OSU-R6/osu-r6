@@ -117,7 +117,7 @@ const EventsAP = () => {
             setEditModal(false)
             getEvents()
         } catch {
-            console.log('Error Editing Event')
+            setError(true)
         }
     }
 
@@ -129,7 +129,7 @@ const EventsAP = () => {
             })
             getEvents()
         } catch {
-            console.log('Error Deleting Event')
+            setError(true)
         }
     }
 

@@ -5,8 +5,6 @@ import MiniBanner from '../components/MiniBanner'
 import ErrorMessage from '../components/ErrorMessage'
 import SuccessMessage from '../components/SuccessMessage'
 import Confirmation from '../components/Confirmation'
-import { set } from 'date-fns'
-
 
 const ManageClips = (props) => {
 
@@ -79,6 +77,8 @@ const ManageClips = (props) => {
                     break
                 }
             }
+        } else {
+            setUploadError(true)
         }
     }
 
@@ -201,15 +201,18 @@ const ManageClips = (props) => {
                     </div>
                 )
             })}
-            <div className='w-full col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 flex'>
+            <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
                 {clipUploadToggle ?
                 <form className='w-full my-auto relative' onSubmit={ async (e) => {
                     e.preventDefault()
                     uploadHandler(e)
                 }}>
                     <div className='w-full bg-black p-4 text-white relative'>
-                        <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0' onClick={ async (e) => {
-                            setClipUploadToggle(false)
+                        <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={ async (e) => {
+                            setClipUploadToggle(false),
+                            setUploadError(false),
+                            setServerError(false),
+                            setCompressing(false)
                         }}><BsXLg /></button>
                         <div className='my-4'>
                             <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='uploadTitle'>Title</label>
@@ -218,10 +221,18 @@ const ManageClips = (props) => {
                         </div>
                         <div className='mb-6'>
                             <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload</label>
-                            <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {setUpload(e.target.files); setUploadError(false)}} id='upload' name='video' type='file'/>
-                            {uploadError && <ErrorMessage>Please select an MP4 file under 10MB</ErrorMessage>}
+                            <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {
+                                if(e.target.files[0] && (e.target.files[0].size > 50 * 1024 * 1024 || e.target.files[0].type != 'video/mp4')) {
+                                    setUploadError(true)
+                                } else {
+                                    setUpload(e.target.files) 
+                                    setUploadError(false)}
+                                }
+                                
+                                } id='upload' name='video' type='file'/>
+                            {uploadError && <ErrorMessage>Please select an MP4 file under 50MB</ErrorMessage>}
                             {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
-                            {compressing && <SuccessMessage>Compressing Video...</SuccessMessage>}
+                            {compressing && <SuccessMessage>Compressing Video... This may take a minute</SuccessMessage>}
                         </div>
                         <div className='flex justify-center'>
                             <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={compressing}>
@@ -232,7 +243,7 @@ const ManageClips = (props) => {
                     </div>
                 </form>                           
                 :
-                <div className='m-auto py-5'>
+                <div className='m-auto py-24'>
                     <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={ async (e) => {
                         setClipUploadToggle(true)
                         setUploadError(false)

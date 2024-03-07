@@ -28,6 +28,7 @@ import TryOut from './pages/TryOut'
 import Matches from './pages/Matches'
 import Announcements from './pages/Announcements'
 import Announcement from './pages/Announcement'
+import Verify from './pages/Verify'
 
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -67,6 +68,9 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/team">
                             <Route path=":team" element={<Team />} />
+                        </Route>
+                        <Route path="/verify">
+                            <Route path=":token" element={<Verify />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
