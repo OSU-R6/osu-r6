@@ -73,6 +73,7 @@ const ManageSocials = (props) => {
             {editModal &&
                 <FormModal onClose={() => setEditModal(false)}>
                     <div className='text-white text-5xl r6-font text-center'>Update Socials</div>
+                    <div className='text-white text-3xl r6-font text-center'>Simply set your username here. Do not add full links.</div>
                     <form className='grid grid-cols-12' onSubmit={ async (e) => {
                         e.preventDefault()
                         await socialsUpdateHandler()
@@ -81,7 +82,7 @@ const ManageSocials = (props) => {
                             <div className='icon mx-3'><BsTwitch /></div>
                             <label className='text-osu text-5xl r6-font'>twitch.tv/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold  w-full'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border'
                                 name='twitch'
                                 value={formData.twitch}
                                 onChange={handleChange}
@@ -91,7 +92,7 @@ const ManageSocials = (props) => {
                             <div className='icon mx-3'><BsYoutube /></div>
                             <label className='text-osu text-5xl r6-font'>youtube.com/@</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold w-full'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border'
                                 name='youtube'
                                 value={formData.youtube}
                                 onChange={handleChange}
@@ -101,7 +102,7 @@ const ManageSocials = (props) => {
                             <div className='icon mx-3'><BsTwitter /></div>
                             <label className='text-osu text-5xl r6-font'>twitter.com/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold  w-full'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border'
                                 name='twitter'
                                 value={formData.twitter}
                                 onChange={handleChange}
@@ -111,7 +112,7 @@ const ManageSocials = (props) => {
                             <div className='icon mx-3'><BsInstagram /></div>
                             <label className='text-osu text-5xl r6-font'>instagram.com/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold  w-full'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border'
                                 name='instagram'
                                 value={formData.instagram}
                                 onChange={handleChange}
