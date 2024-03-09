@@ -1,12 +1,11 @@
 import Banner from '../components/Banner'
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { isloggedIn, getUser } from '../redux/selectors'
 import ManageSocials from '../components/ManageSocials'
 import ManageProfile from '../components/ManageProfile'
 import MangeClips from '../components/ManageClips'
-import { set } from 'date-fns'
 
 const API = process.env.REACT_APP_API_URL
 
@@ -17,11 +16,10 @@ function Account() {
     
     const loggedIn = useSelector(isloggedIn)
     const user = useSelector(getUser)
-    const navigate = useNavigate()
 
     useEffect(() => {
         getProfile()
-    }, [])
+    }, [user])
 
     const getProfile = async () => {
         try{

@@ -20,6 +20,12 @@ const PlayerBio = ({ player }) => {
                         </div>
                     </div>
                     <Socials player={player}/>
+                    {player.uplay != null &&
+                    <div className='w-full text-center mt-2'>
+                        <a className='text-osu text-5xl r6-font ' href={'https://r6.tracker.network/profile/pc/' + player.uplay} target='_Blank'>STATS</a>
+                    </div>
+                    }
+                    <div></div>
                 </div>
             </div>
         </>
