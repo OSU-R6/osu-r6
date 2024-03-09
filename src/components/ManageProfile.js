@@ -128,69 +128,73 @@ const ManageProfile = (props) => {
 
     // Function to find the boundaries of the main content in an image
     function getContentBoundaries(img) {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
-        canvas.width = img.width
-        canvas.height = img.height
-        ctx.drawImage(img, 0, 0)
-    
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const data = imageData.data
-    
-        const width = imageData.width
-        const height = imageData.height
-    
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        const width = imageData.width;
+        const height = imageData.height;
+
         // Function to check if a pixel is part of the main content (not transparent)
         function isPixelFilled(x, y) {
-            return data[(y * width + x) * 4 + 3] > 0
+            return data[(y * width + x) * 4 + 3] > 0;
         }
-    
-        const visited = new Array(width * height).fill(false)
-    
+
+        // Array to keep track of visited pixels
+        const visited = new Array(width * height).fill(false);
+
         // Function to perform flood fill and return the size of the filled area and its boundaries
         function floodFill(x, y) {
             if (x < 0 || y < 0 || x >= width || y >= height || visited[y * width + x] || !isPixelFilled(x, y)) {
-                return { size: 0, boundaries: { minx: Infinity, maxx: -Infinity, miny: Infinity, maxy: -Infinity } }
+                return { size: 0, boundaries: { minx: Infinity, maxx: -Infinity, miny: Infinity, maxy: -Infinity } };
             }
-    
-            visited[y * width + x] = true
-    
-            const boundaries = { minx: x, maxx: x, miny: y, maxy: y }
-            const stack = [[x, y]]
-            let size = 1
-    
+
+            visited[y * width + x] = true;
+
+            const boundaries = { minx: x, maxx: x, miny: y, maxy: y };
+            const stack = [[x, y]];
+            let size = 1;
+
             while (stack.length) {
-                const [cx, cy] = stack.pop()
-    
+                const [cx, cy] = stack.pop();
+
                 [[cx - 1, cy], [cx + 1, cy], [cx, cy - 1], [cx, cy + 1]].forEach(([nx, ny]) => {
                     if (nx >= 0 && ny >= 0 && nx < width && ny < height && !visited[ny * width + nx] && isPixelFilled(nx, ny)) {
-                        visited[ny * width + nx] = true
-                        size++
-                        boundaries.minx = Math.min(boundaries.minx, nx)
-                        boundaries.maxx = Math.max(boundaries.maxx, nx)
-                        boundaries.miny = Math.min(boundaries.miny, ny)
-                        boundaries.maxy = Math.max(boundaries.maxy, ny)
+                        visited[ny * width + nx] = true;
+                        size++;
+                        boundaries.minx = Math.min(boundaries.minx, nx);
+                        boundaries.maxx = Math.max(boundaries.maxx, nx);
+                        boundaries.miny = Math.min(boundaries.miny, ny);
+                        boundaries.maxy = Math.max(boundaries.maxy, ny);
                         stack.push([nx, ny]);
                     }
                 });
             }
-            return { size, boundaries }
+
+            return { size, boundaries };
         }
-    
-        let largestComponent = { size: 0, boundaries: { minx: 0, maxx: 0, miny: 0, maxy: 0 } }
-    
+
+        let largestComponent = { size: 0, boundaries: { minx: 0, maxx: 0, miny: 0, maxy: 0 } };
+
         // Iterate through each pixel to find the largest connected component
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 if (!visited[y * width + x] && isPixelFilled(x, y)) {
-                    const result = floodFill(x, y)
+                    const result = floodFill(x, y);
                     if (result.size > largestComponent.size) {
-                        largestComponent = result
+                        largestComponent = result;
                     }
                 }
             }
         }
-        return largestComponent.boundaries
+
+        // Return the boundaries of the largest component
+        return largestComponent.boundaries;
     }
       
     // Utility function to read a file as a data URL

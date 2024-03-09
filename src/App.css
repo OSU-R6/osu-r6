@@ -327,6 +327,11 @@ body {
     grid-auto-rows: 1fr; /* Set the height of all rows to 1 fraction */
   }
 
+.r6-icon-small {
+    max-width: 4em;
+    max-width: 4em;
+}
+
 
 /* ################################################################# */
 /*                           Player Cards

@@ -1,23 +1,45 @@
 import MiniBanner from './MiniBanner'
 import { BsTwitch, BsYoutube, BsInstagram, BsTwitter } from 'react-icons/bs'
+import { FaUserAlt } from "react-icons/fa"
+import { SiUbisoft } from "react-icons/si"
 import { useState } from 'react'
 import FormModal from './FormModal'
-import { set } from 'date-fns'
-import { ca } from 'date-fns/locale'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/userReducer'
 
 const ManageSocials = (props) => {
 
     const API = process.env.REACT_APP_API_URL
 
-    const [ editData, setEditData] = useState(false)
     const [ editModal, setEditModal] = useState(false)
     const [ formData, setFormData] = useState({})
+
+    const dispatch = useDispatch()
+
+    const refreshUser = async () => {
+        dispatch(setUser(await getUserInfo()))
+    }
+
+    async function getUserInfo(){
+        try{
+        const response = await fetch(API + '/auth', {
+                method: 'GET',
+                credentials: 'include'
+            })
+        const responseBody = await response.json()
+        return responseBody
+        } catch {
+            navigate('/login')
+        }
+    }
 
     async function socialsUpdateHandler() {
         try {
             const response = await fetch(API + '/users/', {
                 method: 'PATCH',
                 body: JSON.stringify({
+                    ign: formData.ign,
+                    uplay: formData.uplay,
                     twitch: formData.twitch,
                     youtube: formData.youtube,
                     twitter: formData.twitter,
@@ -28,8 +50,8 @@ const ManageSocials = (props) => {
                     'Content-type': 'application/json',
                 }
             })
+            refreshUser()
             setEditModal(false)
-            props.getProfile()
         } catch (error) {
             console.error(error)
         }
@@ -46,9 +68,17 @@ const ManageSocials = (props) => {
 
     return (
     <>
-        <MiniBanner>Linked Socials</MiniBanner>
+        <MiniBanner>Account Details</MiniBanner>
         <div className='my-4 scale-75'>
             <div className='grid grid-cols-12 flex'>
+                <div className='my-4 col-span-12 lg:col-span-6 flex m-auto'>
+                    <div className='icon mx-3'><FaUserAlt/></div>
+                    <span className='text-osu text-5xl r6-font mt-1'>Display Name: <span className='text-white'>{props.player.ign}</span></span>
+                </div>
+                <div className='my-4 col-span-12 lg:col-span-6 flex m-auto'>
+                    <div className='icon mx-3'><SiUbisoft /></div>
+                    <span className='text-osu text-5xl r6-font'>Ubisoft: <span className='text-white'>{props.player.uplay ? props.player.uplay : "Not Set"}</span></span>
+                </div>
                 <div className='my-4 col-span-12 lg:col-span-6 flex m-auto'>
                     <div className='icon mx-3'><BsTwitch /></div>
                     <span className='text-osu text-5xl r6-font'>twitch.tv/<span className='text-white'>{props.player.twitch}</span></span>
@@ -70,49 +100,76 @@ const ManageSocials = (props) => {
                     setEditModal(true)
                 }} >Edit</button>
             </div>
-            {editModal &&
+            
+        </div>
+        {editModal &&
                 <FormModal onClose={() => setEditModal(false)}>
-                    <div className='text-white text-5xl r6-font text-center'>Update Socials</div>
-                    <div className='text-white text-3xl r6-font text-center'>Simply set your username here. Do not add full links.</div>
                     <form className='grid grid-cols-12' onSubmit={ async (e) => {
                         e.preventDefault()
                         await socialsUpdateHandler()
                     }}>
-                        <div className='my-4 col-span-12 lg:col-span-6 flex'>
+                        <div className='col-span-12'>
+                            <div className='text-white text-5xl r6-font text-center'>Update Account Details</div>
+                        </div>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
+                            <div className='icon mx-3'><FaUserAlt /></div>
+                            <label className='text-osu text-5xl r6-font whitespace-nowrap'>Display Name</label>
+                            <input 
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
+                                name='ign'
+                                value={formData.ign}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
+                            <div className='icon mx-3'><SiUbisoft /></div>
+                            <label className='text-osu text-5xl r6-font'>Ubisoft</label>
+                            <input 
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
+                                name='uplay'
+                                value={formData.uplay}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className='col-span-12 mt-4'>
+                        <div className='text-white text-5xl r6-font text-center'>Update Socials</div>
+                        <div className='text-white text-3xl r6-font text-center'>Simply set your username here. Do not add full links.</div>
+                        </div>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
                             <div className='icon mx-3'><BsTwitch /></div>
                             <label className='text-osu text-5xl r6-font'>twitch.tv/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold w-full border'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
                                 name='twitch'
                                 value={formData.twitch}
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className='my-4 col-span-12 lg:col-span-6 flex'>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
                             <div className='icon mx-3'><BsYoutube /></div>
                             <label className='text-osu text-5xl r6-font'>youtube.com/@</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold w-full border'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
                                 name='youtube'
                                 value={formData.youtube}
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className='my-4 col-span-12 lg:col-span-6 flex'>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
                             <div className='icon mx-3'><BsTwitter /></div>
                             <label className='text-osu text-5xl r6-font'>twitter.com/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold w-full border'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
                                 name='twitter'
                                 value={formData.twitter}
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className='my-4 col-span-12 lg:col-span-6 flex'>
+                        <div className='my-4 col-span-12 lg:col-span-6 flex px-2'>
                             <div className='icon mx-3'><BsInstagram /></div>
                             <label className='text-osu text-5xl r6-font'>instagram.com/</label>
                             <input 
-                                className='rounded text-4xl bg-black text-white font-bold w-full border'
+                                className='rounded text-4xl bg-black text-white font-bold w-full border pl-2 pb-2 ml-1 h-full'
                                 name='instagram'
                                 value={formData.instagram}
                                 onChange={handleChange}
@@ -122,7 +179,6 @@ const ManageSocials = (props) => {
                     </form>
                 </FormModal>
             }
-        </div>
     </>
     )
 }
