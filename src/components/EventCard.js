@@ -15,13 +15,15 @@ const EventCard = ({ event }) => {
     })
 
     const getSignUpStatus = async () => {
-        const active = await fetch(API + '/events/' + event.id + '/signup', {
-            credentials: 'include'
-        })
-        if(active.status == 200){
-            setSignedUp(true)
-        } else if (active.status == 404){    
-            setSignedUp(false)
+        if(loggedIn){
+            const active = await fetch(API + '/events/' + event.id + '/signup', {
+                credentials: 'include'
+            })
+            if(active.status == 200){
+                setSignedUp(true)
+            } else if (active.status == 404){    
+                setSignedUp(false)
+            }
         }
     }
 
@@ -78,7 +80,7 @@ const EventCard = ({ event }) => {
                 <form onSubmit={ async (e) => {
                     e.preventDefault()
                     await signUpHandler()
-                    getSignUpStatus()
+                    await getSignUpStatus()
                 }} className="mt-2 flex">
                     <div className='flex r6-font'>
                         <div className='text-3xl text-white mr-2'>Interested?</div>
@@ -89,7 +91,7 @@ const EventCard = ({ event }) => {
                 <form onSubmit={ async (e) => {
                     e.preventDefault()
                     await optOutHandler()
-                    getSignUpStatus()
+                    await getSignUpStatus()
                 }} className="mt-2 flex">
                     <div className='flex r6-font'>
                         <div className='text-3xl text-white mr-2'>Signed Up!</div>

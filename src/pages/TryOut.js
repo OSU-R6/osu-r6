@@ -164,7 +164,7 @@ function TryOut() {
                         </div>
                     </div>
                     <div className="flex justify-center col-span-12">
-                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" type="submit">Create</button>
+                        <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" type="submit">Submit</button>
                     </div>
                 </div>
             </form>

@@ -12,11 +12,9 @@ function Team() {
     const [team, setTeam] = useState({})
     const [coach, setCoach] = useState(null)
     const [roster, setRoster] = useState([])
-    const [substitutes, setSubstitutes] = useState([])
 
     useEffect(() => {
         setRoster([])
-        setSubstitutes([])
         setCoach(null)
         setTeam({})
         getTeamData()
@@ -35,11 +33,6 @@ function Team() {
                     return profile.json()
                 }))
                 setRoster(rosterBody)
-                rosterBody.map((player) => {
-                    if(player.isSubstitute === true){
-                        setSubstitutes(substitutes => [...substitutes, player])
-                    }
-                })
             }
             
             if(TeamsResponseBody.coach_id != null){
