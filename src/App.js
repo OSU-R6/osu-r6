@@ -21,8 +21,10 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Navigation from './components/Nav'
 import NotFound from './pages/NotFound'
+import PasswordRecovery from './pages/PasswordRecovery'
 import Player from './pages/Player'
 import Register from './pages/Register'
+import RequestPasswordReset from './pages/RequestPasswordReset'
 import Team from './pages/Team'
 import TryOut from './pages/TryOut'
 import Matches from './pages/Matches'
@@ -62,6 +64,10 @@ function App() {
                         <Route path="/community" element={<Community />} />
                         <Route path="/tryout" element={<TryOut />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/password-recovery/reset">
+                            <Route path=":token" element={<PasswordRecovery />} />
+                        </Route>
+                        <Route path="/password-recovery/request" element={<RequestPasswordReset />} />
                         <Route path="/player">
                             <Route path=":player" element={<Player />} />
                         </Route>
