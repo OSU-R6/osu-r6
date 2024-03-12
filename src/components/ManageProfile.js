@@ -4,6 +4,7 @@ import { RiImageEditFill } from 'react-icons/ri'
 import { useState } from 'react'
 import ErrorMessage from './ErrorMessage'
 import imglyRemoveBackground from "@imgly/background-removal"
+import Confirmation from './Confirmation'
 
 const ManageProfile = (props) => {
 
@@ -19,13 +20,14 @@ const ManageProfile = (props) => {
     const [ imagePreview, setImagePreview ] = useState('')
     const [ processedImage, setProcessedImage ] = useState(null);
     const [ imageProcessing, setImageProcessing ] = useState(false);
+    const [ actionConfirmation, setActionConfirmation ] = useState(false)
 
     const inputStyle = 'appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     const inputErrorStyle = 'appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     const bioInputStyle = 'rounded w-full py-2 text-gray-700 resize-none bg-black text-white h-80 focus:text-black focus:outline-none text-xl'
 
     async function pfpUploadHandler(e) {
-        if(pfpUpload == null) {
+        if(pfpUpload == null || pfpUploadError == true) {
             setPfpUploadError(true)
         } else {
             const formData = new FormData();
@@ -50,6 +52,9 @@ const ManageProfile = (props) => {
                     setServerError(false)
                     setPfpUploadError(false)
                     setPfpUploadToggle(false)
+                    setProcessedImage(null)
+                    setImagePreview(null)
+                    setPfpUpload(null)
                     props.getProfile()
                     break
                 }
@@ -61,7 +66,7 @@ const ManageProfile = (props) => {
     async function handleImageChange(e) {
         const file = e.target.files[0];
         if (!file) return
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
         if (validImageTypes.includes(file.type)) {
             try {
                 setImageProcessing(true)
@@ -231,21 +236,44 @@ const ManageProfile = (props) => {
                 'Content-type': 'application/json',
             }
         })
-        props.getProfile()
+        if(response.status === 204){
+            props.getProfile()
+        }
     }  
 
+    // Delete PFP Handler
+    async function deletePfpHandler() {
+        const response = await fetch(API + '/users/pfp', {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+        if(response.status === 204){
+            setPfpUploadToggle(false)
+            setProcessedImage(null)
+            setImagePreview(null)
+            setPfpUpload(null)
+            props.getProfile()
+        }
+    }
+
     return (
-        <>         
+        <>   
+        {actionConfirmation && 
+            <Confirmation 
+            content={`reset your profile image`}
+            onConfirm={() => {
+                deletePfpHandler(actionConfirmation) 
+                setActionConfirmation(null)}
+            }
+            onCancel={() => {setActionConfirmation(null)}}
+            />
+        }      
         <div className='grid grid-cols-3 gap-3 justify-center m-4 scale-100 lg:scale-75'>
             {/* Profile Image */}
             <div className='col-span-3 lg:col-span-1 justify-center relative my-auto'>
                 { pfpUploadToggle ?
-                <div className='flex justify-center w-full'>
-                    <form className='px-8 pt-6 pb-8 relative' onSubmit={ async (e) => {
-                        e.preventDefault()
-                        pfpUploadHandler(e)
-                    }}> 
-                        {imageProcessing ? 
+                <div className='justify-center w-full'>
+                    {imageProcessing ? 
                         <div className='text-center my-5'>
                             <div className='loader m-auto'/>
                             <div className='text-5xl text-osu r6-font my-3'>Processing Image</div>
@@ -253,34 +281,54 @@ const ManageProfile = (props) => {
                         </div>
                         :
                         <>
-                        <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0' onClick={ async (e) => {
-                            setPfpUploadToggle(false)
-                        }}><BsXLg /></button>
-                        <div className='mb-6'>
-                            <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload Profile Image</label>
-                            <input className={pfpUploadError ? inputErrorStyle : inputStyle} onChange={e => {setPfpUpload(e.target.files); setPfpUploadError(false); handleImageChange(e)}} id='upload' name='image' type='file'/>
-                            <p className='mt-1 text-sm text-gray-500' id='file_input_help'>PNG or JPG</p>
-                            {pfpUploadError && <ErrorMessage>Please select a PNG or JPG file</ErrorMessage>}
-                            {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                        <form className='px-8 pt-6 pb-8 relative' onSubmit={ async (e) => {
+                            e.preventDefault()
+                            pfpUploadHandler(e)
+                        }}> 
+                            <button className='inline rounded-md px-2.5 py-2.5 text-lg font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0' onClick={ async (e) => {
+                                setPfpUploadToggle(false)
+                            }}><BsXLg /></button>
+                            <div className='mb-6'>
+                                <label className='block text-gray-700 text-white text-xl font-bold mb-2' htmlFor='upload'>Upload Profile Image</label>
+                                <div className='flex'>
+                                    <input className={pfpUploadError ? inputErrorStyle : inputStyle} onChange={e => {setPfpUpload(e.target.files); setPfpUploadError(false); handleImageChange(e)}} id='upload' name='image' type='file'/>
+                                    <div className='flex justify-center ml-2'>
+                                        <button className='bg-osu bg-opacity-70 hover:bg-osu-dark hover:bg-opacity-70 font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center text-md xl:text-2xl ' type='submit'>
+                                            <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z'/></svg>
+                                            <span>Upload</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p className='mt-1 text-sm text-gray-500' id='file_input_help'>PNG or JPG</p>
+                                {pfpUploadError && <ErrorMessage>Please select a PNG or JPG file</ErrorMessage>}
+                                {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                            </div>
+                            
+                            <div className='my-5 text-center'>
+                            <div className='text-5xl text-white r6-font mb-3'>Preview</div>
+                            {imagePreview ? (  
+                                <div className='flex'>
+                                    <img className='m-auto' src={imagePreview} alt='Resized preview' />
+                                </div>
+                            ) : (
+                                <div className='flex'>
+                                <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholder.png'}}/>
+                                </div>
+                            )}
+                            </div>
+                        </form>
+                        {props.player.pfp &&
+                        <div className='flex'>
+                            <form className='m-auto' onSubmit={ async (e) => {
+                                e.preventDefault()
+                                setActionConfirmation(true)
+                            }}>
+                                <button className='bg-osu bg-opacity-70 hover:bg-osu-dark hover:bg-opacity-70 rounded-md px-10 py-2.5 text-lg font-semibold text-white shadow-sm mt-4' type='submit'>Remove Profile Image</button>
+                            </form>
                         </div>
-                        <div className='my-5'>
-                        {imagePreview ? (  
-                            <>
-                            <img className='' src={imagePreview} alt='Resized preview' />
-                            </>
-                        ) : (
-                            <img className='m-auto' src={API + props.player.pfp} onError={(e) => {e.target.src = './images/placeholder.png'}}/>
-                        )}
-                        </div>
-                        <div className='flex justify-center'>
-                            <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit'>
-                                <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z'/></svg>
-                                <span>Upload</span>
-                            </button>
-                        </div>
-                        </>
                         }
-                    </form>
+                    </>
+                    }
                 </div>
                 :
                 <>

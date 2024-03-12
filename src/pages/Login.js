@@ -125,15 +125,19 @@ function Login() {
                             }
                             {verificationSent && <SuccessMessage>Verification email sent</SuccessMessage>}
                         </div>
-                        <div className="flex justify-center mb-2 text-white r6-font text-2xl">
-                            Don't have an Account? &nbsp;
-                            <button className="" type="button" onClick={() => navigate('/register')}>
-                                Register
-                            </button>
-                        </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center my-4">
                             <button className="rounded-md bg-osu hover:bg-osu-dark px-10 py-2.5 text-sm font-semibold text-white shadow-sm" type="submit">
                                 Log in
+                            </button>
+                        </div>
+                        <div className="flex justify-center mb-2 text-white r6-font text-2xl">
+                            <button className="" type="button" onClick={() => navigate('/register')}>
+                                Don't have an Account? Register
+                            </button>
+                        </div>
+                        <div className="flex justify-center mb-2 text-white r6-font text-2xl">
+                            <button className="" type="button" onClick={() => navigate('/password-recovery/request')}>
+                                Forgot Password
                             </button>
                         </div>
                     </form>
