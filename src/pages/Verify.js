@@ -21,14 +21,8 @@ function Verify() {
 
     const verifyEmail = async () => {
         try {
-            const response = await fetch(API + '/users/verify/check/', {
-                method: 'POST',
-                    body: JSON.stringify({
-                        token: params.token
-                    }),
-                    headers: {
-                        'Content-type': 'application/json',
-                    }
+            const response = await fetch(API + '/users/verify/check/' + params.token, {
+                method: 'POST'
             })
         
             if(response.status === 200){
