@@ -59,10 +59,7 @@ const ClipGallery = (player) => {
                             </Carousel.Item>
                         )
                     })}
-                </Carousel>\
-                {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/mXBOjk90lkQ?si=qwbGPrd1XalO5v6s&amp;controls=0&modestbranding=1&rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/mXBOjk90lkQ?si=qwbGPrd1XalO5v6s?controls=0&modestbranding=1&rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                 */}
+                </Carousel>
             </div>
         </div>
         </>

@@ -36,7 +36,7 @@ const ManageClips = (props) => {
         setUploadError(false)
     }, [clipUploadToggle])
 
-    async function testuploadHandler(e) {
+    async function uploadHandler(e) {
         try {
             const formData = new FormData(e.target)
             if(formData.get("video").size > 50 * 1024 * 1024 || formData.get("video").type != 'video/mp4') {
@@ -97,52 +97,6 @@ const ManageClips = (props) => {
             setServerError(true)
         }
     }
-
-    /*async function uploadHandler(e) {
-        if (uploadTitle == '') {
-            setTitleMissingError(true)
-            return
-        } else {
-            setTitleMissingError(false)
-        }
-        if (upload == null) {
-            setUploadError(true)
-            return
-        } else {
-            setUploadError(false)
-        }
-        if (!uploadError && !titleMissingError) {
-            setUploadingStatus(true)
-            const formData = new FormData(e.target);
-            const response = await fetch(API + '/clips/', {
-                method: 'POST',
-                credentials: 'include',
-                body: formData
-            })
-            switch (response.status) {
-                case 500: {
-                    setServerError(true)
-                    setUploadingStatus(false)
-                    break
-                }
-                case 400: {
-                    setUploadError(true)
-                    setUploadingStatus(false)
-                    break
-                }
-                case 201: {
-                    setUploadError(false)
-                    setUploadingStatus(false)
-                    setClipUploadToggle(false)
-                    setUploadTitle('')
-                    props.getProfile()
-                    break
-                }
-            }
-        } else {
-            setUploadError(true)
-        }
-    }*/
 
     async function titleUpdateHandler(clip, e) {
         const formData = new FormData(e.target);
@@ -212,7 +166,7 @@ const ManageClips = (props) => {
                 />
             }
             <MiniBanner>Clips</MiniBanner>
-            <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips scale-100 lg:scale-75'>
+            <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips scale-100'>
                 {props.clips.map((clip, i) => {
                     return (
                         <div key={i} className='w-full col-span-12 lg:col-span-6 2xl:col-span-4'>
@@ -266,70 +220,12 @@ const ManageClips = (props) => {
                         </div>
                     )
                 })}
-                {/* <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
-                    {clipUploadToggle ?
-                        !uploadingStatus ?
-                            <form className='w-full my-auto relative' onSubmit={async (e) => {
-                                e.preventDefault()
-                                uploadHandler(e)
-                            }}>
-                                <div className='w-full bg-black p-4 text-white relative'>
-                                    <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={async (e) => {
-                                        setClipUploadToggle(false),
-                                            setUploadError(false),
-                                            setServerError(false),
-                                            setUploadingStatus(false)
-                                    }}><BsXLg /></button>
-                                    <div className='my-4'>
-                                        <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='uploadTitle'>Title</label>
-                                        <input className={serverError ? inputErrorStyle : inputStyle} value={uploadTitle} onChange={e => { setUploadTitle(e.target.value); setTitleMissingError(false) }} id='uploadTitle' name='title' type='text' placeholder='Title' />
-                                        {titleMissingError && <ErrorMessage>Please enter a clip title</ErrorMessage>}
-                                    </div>
-                                    <div className='mb-6'>
-                                        <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload</label>
-                                        <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {
-                                            if (e.target.files[0] && (e.target.files[0].size > 50 * 1024 * 1024 || e.target.files[0].type != 'video/mp4')) {
-                                                setUploadError(true)
-                                            } else {
-                                                setUpload(e.target.files)
-                                                setUploadError(false)
-                                            }
-                                        }
-
-                                        } id='upload' name='video' type='file' />
-                                        {uploadError && <ErrorMessage>Please select an MP4 file under 50MB</ErrorMessage>}
-                                        {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
-                                    </div>
-                                    <div className='flex justify-center'>
-                                        <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={uploadingStatus}>
-                                            <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z' /></svg>
-                                            <span>Upload</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            :
-                            <div className='text-center m-auto'>
-                                <div className='loader m-auto mt-5' />
-                                <div className='text-5xl text-osu r6-font my-3'>Uploading Video</div>
-                                <div className='text-4xl text-white r6-font mt-3'>This will take a moment.</div>
-                            </div>
-                        :
-                        <div className='m-auto py-24'>
-                            <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={async (e) => {
-                                setClipUploadToggle(true)
-                                setUploadError(false)
-                                setUploadingStatus(false)
-                            }} ><BsPlusCircle /></button>
-                        </div>
-                    }
-                </div> */}
                 <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
                     {clipUploadToggle ?
                         !uploadingStatus ?
                         <form className='w-full my-auto relative' onSubmit={async (e) => {
                             e.preventDefault()
-                            testuploadHandler(e)
+                            uploadHandler(e)
                         }}>
                             <div className='w-full bg-black p-4 text-white relative'>
                                 <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={async (e) => {
