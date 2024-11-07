@@ -53,7 +53,7 @@ const ClipGallery = (player) => {
                         return (
                             <Carousel.Item key={idx}>
                                 <video ref={element => (videoRefs.current[idx] = element)} autoPlay={idx === index && idx === 0} muted onEnded={handleVideoEnd} className='bg-osu-shine p-1 video-carousel mt-4'>
-                                    <source src={API + video.link} type='video/mp4' />
+                                    <source src={video.link} type='video/mp4' />
                                     Your browser does not support the video tag.
                                 </video>
                             </Carousel.Item>

@@ -2,8 +2,6 @@ import { useParams } from 'react-router-dom'
 import Banner from '../components/Banner'
 import PlayerCard from '../components/PlayerCard'
 import { useEffect, useState } from 'react'
-import MiniBanner from '../components/MiniBanner'
-import { set } from 'date-fns'
 
 const API = process.env.REACT_APP_API_URL
 
@@ -12,12 +10,18 @@ function Team() {
     const [team, setTeam] = useState({})
     const [coach, setCoach] = useState(null)
     const [roster, setRoster] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
+    useEffect( () => {
         setRoster([])
         setCoach(null)
         setTeam({})
-        getTeamData()
+        const loadData = async () => {
+            await getTeamData()
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+            setIsLoading(false)
+        }
+        loadData()
     }, [params])
 
     const getTeamData = async () => {
@@ -50,6 +54,12 @@ function Team() {
 
     return(
         <>
+            {isLoading ?
+            <div className='w-full flex'>
+                <div className='loader m-auto'/>
+            </div>
+             :
+             <>
             <Banner>{team.name}</Banner>
             <div className='grid grid-cols-12 gap-4 m-4 2xl:grid-cols-5'>
                 {roster.length > 0 && roster.map( (player, i) => {
@@ -70,6 +80,8 @@ function Team() {
                     <PlayerCard player={coach} />
                 }
             </div>
+            </>
+            }
         </>
     )
 } export default Team
