@@ -398,6 +398,16 @@ body {
     margin-bottom: 0 !important;
 }
 
+.data-table-long {
+    overflow: hidden;
+    text-wrap: wrap;
+    height: 80%;
+}
+
+.data-table-long:hover {
+    overflow: auto;
+}
+
 
 /* ################################################################# */
 /*                          Invite Page

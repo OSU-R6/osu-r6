@@ -56,8 +56,26 @@ const AnnouncementsAP = () => {
     }  
 
     const announcementColumns=[
-        { field: 'title', headerName: 'Title', flex: 1 },
-        { field: 'body', headerName: 'Content', flex: 1 },
+        {
+            field: 'title',
+            headerName: 'Title',
+            flex: 2,
+            renderCell: (cellValues) => (
+                <div className='data-table-long'>
+                    {cellValues.value}
+                </div>
+            )
+        },
+        { 
+            field: 'body',
+            headerName: 'Content',
+            flex: 3,
+            renderCell: (cellValues) => (
+                <div className='data-table-long'>
+                    {cellValues.value}
+                </div>
+            )
+        },
         { field: 'author', headerName: 'Author', flex: 1,
             renderCell: (params) => {return params.row.User.ign}
         },
