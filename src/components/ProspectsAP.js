@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import DataTable from './DataTable'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
+import FormModal from './FormModal'
 
 
 const ProspectsAP = () => {
@@ -9,6 +10,8 @@ const ProspectsAP = () => {
     const [pendingProspects, setPendingProspects] = useState([])
     const [acceptedProspects, setAcceptedProspects] = useState([])
     const [rejectedProspects, setRejectedProspects] = useState([])
+    const [ viewModal, setViewModal ] = useState(false)
+    const [ data, setData] = useState({})
 
     const API = process.env.REACT_APP_API_URL
 
@@ -51,13 +54,7 @@ const ProspectsAP = () => {
 
     const pendingColumns=[
         { field: 'firstName', headerName: 'First Name', flex: 0 },
-        { field: 'lastName', headerName: 'Last Name', flex: 0, hide: true },
-        { field: 'email', headerName: 'Email', flex: 1 },
-        { field: 'rank', headerName: 'Rank', flex: 1 },
-        { field: 'competitiveness', headerName: 'Competitiveness', flex: 1 },
-        { field: 'commitment', headerName: 'Weekly Time (hrs)', flex: 1, hide: true },
-        { field: 'role', headerName: 'Role', flex: 0 },
-        { field: 'uplay', headerName: 'UPlay', flex: 1, 
+        { field: 'uplay', headerName: 'UPlay', flex: 0, 
             renderCell: (cellValues) => {
                 const url = `https://r6.tracker.network/profile/pc/${cellValues.value}`;
                 return (
@@ -67,17 +64,19 @@ const ProspectsAP = () => {
                 );
             }
         },
-        { field: 'discord', headerName: 'Discord', flex: 1 },
-        { field: 'experience', headerName: 'Experience', flex: 2 },
-        { field: 'type', headerName: 'Status', flex: 0, hide: true },
-        { field: 'start', headerName: 'Start', flex: 0, hide: true },
-        { field: 'note', headerName: 'Note', flex: 1, hidden: true },  
+        { field: 'discord', headerName: 'Discord', flex: 0 },
         {
             field: 'actions',
             headerName: 'Actions',
             flex: 2,
             renderCell: (params) => (
             <div style={{ display: 'flex', gap: '10px' }}>
+                <Button variant="contained" color="osu" size="small" onClick={() => {
+                    setData(params.row),
+                    setViewModal(true)
+                    }}>
+                    <div className='text-black'>View</div>
+                </Button>
                 <Button variant="contained" color="success" size="small" onClick={() => handleButtonClick(params.id, 'accepted')}>
                     <div className='text-black'>Accept</div>
                 </Button>
@@ -86,16 +85,13 @@ const ProspectsAP = () => {
                 </Button>
             </div>
             ),
-        },
+        }
       ]
 
       const columns=[
-        { field: 'firstName', headerName: 'First Name', flex: 1 },
-        { field: 'lastName', headerName: 'Last Name', flex: 1 },
-        { field: 'email', headerName: 'Email', flex: 1},
-        { field: 'rank', headerName: 'Rank', flex: 1 },
-        { field: 'role', headerName: 'Role', flex: 1 },
-        { field: 'uplay', headerName: 'UPlay', flex: 1, 
+        { field: 'firstName', headerName: 'First Name', flex: 0 },
+        { field: 'lastName', headerName: 'Last Name', flex: 0 },
+        { field: 'uplay', headerName: 'UPlay', flex: 0, 
             renderCell: (cellValues) => {
                 return (
                 <Link to={`https://r6.tracker.network/profile/pc/${cellValues.id}`}>
@@ -104,18 +100,21 @@ const ProspectsAP = () => {
                 );
             }
         },
-        { field: 'discord', headerName: 'Discord', flex: 1 },
-        { field: 'experience', headerName: 'Experience', flex: 1 },
-        { field: 'start', headerName: 'Start', flex: 1},
-        { field: 'note', headerName: 'Note', flex: 1 },
+        { field: 'discord', headerName: 'Discord', flex: 0 },
         {
             field: 'actions',
             headerName: 'Actions',
-            flex: 1,
+            flex: 2,
             renderCell: (params) => (
             <div style={{ display: 'flex', gap: '10px' }}>
+                <Button variant="contained" color="osu" size="small" onClick={() => {
+                    setData(params.row),
+                    setViewModal(true)
+                    }}>
+                    <div className='text-black'>View</div>
+                </Button>
                 <Button variant="contained" color="osu" size="small" onClick={() => handleButtonClick(params.id, 'pending')}>
-                    <div className='text-black'>Pending</div>
+                    <div className='text-black'>Re-Open</div>
                 </Button>
             </div>
             ),
@@ -148,6 +147,58 @@ const ProspectsAP = () => {
             </>
         }
         </div>
+        {viewModal &&
+            <FormModal onClose={() => setViewModal(false)} >
+                <div className='text-white text-4xl r6-font'>Prospect Overview</div>
+                <div className='text-white text-lg'>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Name:</div>
+                        {data.firstName} {data.lastName}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Experience:</div>
+                        {data.experience}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Notes:</div>
+                        {data.notes}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Rank:</div>
+                        {data.rank}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Competitiveness:</div>
+                        {data.competitiveness}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Role:</div>
+                        {data.role}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Commitment:</div>
+                        {data.commitment}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Type:</div>
+                        {data.type}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Start:</div>
+                        {data.start}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Dsicord:</div>
+                        {data.discord}
+                    </div>
+                    <div className='flex'>
+                        <div className='font-bold mr-2 text-xl text-osu'>Email:</div>
+                        {data.email}
+                    </div>
+                </div>
+                
+            </FormModal>
+        }
         </>
     )
 } 

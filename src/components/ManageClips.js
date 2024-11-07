@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsPlusCircle, BsTrash, BsLock, BsUnlock, BsStar, BsStarFill, BsXLg} from 'react-icons/bs'
+import { BsPlusCircle, BsTrash, BsLock, BsUnlock, BsStar, BsStarFill, BsXLg } from 'react-icons/bs'
 import { BiEditAlt } from 'react-icons/bi'
 import MiniBanner from '../components/MiniBanner'
 import ErrorMessage from '../components/ErrorMessage'
@@ -10,18 +10,18 @@ const ManageClips = (props) => {
 
     const API = process.env.REACT_APP_API_URL
 
-    const [ serverError, setServerError ] = useState(false)
-    const [ titleMissingError, setTitleMissingError ] = useState(false)
-    const [ uploadError, setUploadError ] = useState(false)
-    
-    const [ clipUploadToggle, setClipUploadToggle ] = useState(false)
-    const [ compressing, setCompressing ] = useState(false)
+    const [serverError, setServerError] = useState(false)
+    const [titleMissingError, setTitleMissingError] = useState(false)
+    const [uploadError, setUploadError] = useState(false)
 
-    const [ uploadTitle, setUploadTitle ] = useState('')
-    const [ upload, setUpload ] = useState(null)
-    const [ updateTitle, setUpdateTitle ] = useState()
+    const [clipUploadToggle, setClipUploadToggle] = useState(false)
+    const [uploadingStatus, setUploadingStatus] = useState(false)
 
-    const [ actionConfirmation, setActionConfirmation ] = useState(null)
+    const [uploadTitle, setUploadTitle] = useState('')
+    const [upload, setUpload] = useState(null)
+    const [updateTitle, setUpdateTitle] = useState()
+
+    const [actionConfirmation, setActionConfirmation] = useState(null)
 
     const inputStyle = 'appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     const inputErrorStyle = 'appearance-none border-2 border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
@@ -36,41 +36,103 @@ const ManageClips = (props) => {
         setUploadError(false)
     }, [clipUploadToggle])
 
-    async function uploadHandler(e){
-        if(uploadTitle == '') {
+    async function testuploadHandler(e) {
+        try {
+            const formData = new FormData(e.target)
+            if(formData.get("video").size > 50 * 1024 * 1024 || formData.get("video").type != 'video/mp4') {
+                setUploadError(true)
+                return
+            }
+            if(formData.get("title") == '') {
+                formData.set("title", "Untitled Clip")
+            }
+            const uniqueFileName = `${Date.now()}-${formData.get("video").name.replace(/ /g, "_")}`;
+            const file = new File([formData.get("video")], uniqueFileName, { type: formData.get("video").type });
+            const preSignedUrlResponse = await fetch(API + '/clips/uploadURL/' + file.name, {
+                method: 'GET',
+                credentials: 'include'
+            })
+
+            if(preSignedUrlResponse.status == 200){
+                setUploadingStatus(true)
+                const url = await preSignedUrlResponse.json()
+                const response = await fetch(url.url, {
+                    method: 'PUT',
+                    body: file,
+                })
+                if(response.status == 200){
+                    const clip =  JSON.stringify({
+                        'title': formData.get("title"),
+                        'path': "https://osu-r6-video.s3.us-east-2.amazonaws.com/" + file.name
+                    })
+                    const response = await fetch(API + '/clips/', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: clip
+                    })
+                    if(response.status == 201){
+                        setUploadTitle(null)
+                        props.getProfile()
+                        setUploadingStatus(false)
+                    } else {
+                        // Error uploading clip to server
+                        setServerError(true)
+                        setUploadingStatus(false)
+                    }
+                } else {
+                    // Error uploading clip to S3
+                    setServerError(true)
+                    setUploadingStatus(true)
+                }
+            } else {
+                // Error getting pre-signed URL
+                setServerError(true)
+                setUploadingStatus(true)
+            }
+        } catch(err) {
+            // Error
+            setServerError(true)
+        }
+    }
+
+    /*async function uploadHandler(e) {
+        if (uploadTitle == '') {
             setTitleMissingError(true)
             return
         } else {
             setTitleMissingError(false)
         }
-        if(upload == null) {
+        if (upload == null) {
             setUploadError(true)
             return
         } else {
             setUploadError(false)
         }
-        if(!uploadError && !titleMissingError) {
-            setCompressing(true)
+        if (!uploadError && !titleMissingError) {
+            setUploadingStatus(true)
             const formData = new FormData(e.target);
             const response = await fetch(API + '/clips/', {
                 method: 'POST',
                 credentials: 'include',
                 body: formData
             })
-            switch(response.status){
+            switch (response.status) {
                 case 500: {
                     setServerError(true)
-                    setCompressing(false)
+                    setUploadingStatus(false)
                     break
                 }
                 case 400: {
                     setUploadError(true)
-                    setCompressing(false)
+                    setUploadingStatus(false)
                     break
                 }
                 case 201: {
                     setUploadError(false)
-                    setCompressing(false)
+                    setUploadingStatus(false)
                     setClipUploadToggle(false)
                     setUploadTitle('')
                     props.getProfile()
@@ -80,7 +142,7 @@ const ManageClips = (props) => {
         } else {
             setUploadError(true)
         }
-    }
+    }*/
 
     async function titleUpdateHandler(clip, e) {
         const formData = new FormData(e.target);
@@ -131,134 +193,196 @@ const ManageClips = (props) => {
             method: 'DELETE',
             credentials: 'include'
         })
-        props.getProfile()
+        if(response.status == 204){
+            props.getProfile()
+        }
     }
 
     return (
         <>
-        {actionConfirmation && 
-            <Confirmation 
-            content={`delete "${actionConfirmation.title}"`}
-            onConfirm={() => {
-                deleteHandler(actionConfirmation) 
-                setActionConfirmation(null)}
+            {actionConfirmation &&
+                <Confirmation
+                    content={`delete "${actionConfirmation.title}"`}
+                    onConfirm={() => {
+                        deleteHandler(actionConfirmation)
+                        setActionConfirmation(null)
+                    }
+                    }
+                    onCancel={() => { setActionConfirmation(null) }}
+                />
             }
-            onCancel={() => {setActionConfirmation(null)}}
-            />
-        }
-        <MiniBanner>Clips</MiniBanner>
-        <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips scale-100 lg:scale-75'>
-            {props.clips.map((clip, i) => {
-                return (
-                    <div key={i} className='w-full col-span-12 lg:col-span-6 2xl:col-span-4'>
-                        <div className='clip-title'>
-                            {updateTitle == i ?
-                            <form className='inline-block relative' onSubmit={ async (e) => {
+            <MiniBanner>Clips</MiniBanner>
+            <div className='grid grid-cols-12 gap-4 m-4 mx-5 clips scale-100 lg:scale-75'>
+                {props.clips.map((clip, i) => {
+                    return (
+                        <div key={i} className='w-full col-span-12 lg:col-span-6 2xl:col-span-4'>
+                            <div className='clip-title'>
+                                {updateTitle == i ?
+                                    <form className='inline-block relative' onSubmit={async (e) => {
+                                        e.preventDefault()
+                                        setUpdateTitle(null)
+                                        titleUpdateHandler(clip, e)
+                                    }}>
+                                        <input className='inline appearance-none border rounded px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' type='text' name='title' id='title' placeholder={clip.title} />
+                                        <button type='submit'></button>
+                                        {/* <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-green-500 hover:text-green-700 shadow-sm' id='privacyToggle' type='submit'><BsCheckLg /></button> */}
+                                        <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-2 right-0' id='privacyToggle' onClick={async (e) => {
+                                            setUpdateTitle(null)
+                                        }}><BsXLg /></button>
+                                    </form>
+                                    :
+                                    <>
+                                        {clip.title}
+                                        <button className='rounded-md bg-transparent px-2.5 py-2.5 font-semibold text-white shadow-sm text-xl' onClick={async (e) => {
+                                            setUpdateTitle(i)
+                                        }} ><BiEditAlt /></button>
+                                    </>
+                                }
+                            </div>
+                            <video muted loop controls className='bg-osu-shine p-1 rounded mx-auto mx-4 my-1 video-player'>
+                                <source src={clip.link} type='video/mp4' />
+                                Your browser does not support the video tag.
+                            </video>
+                            <div className='block text-xl'>
+                                <form className='inline float-right' onSubmit={async (e) => {
+                                    e.preventDefault()
+                                    setActionConfirmation(clip)
+                                }}>
+                                    <button className='rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm text-xl' id='privacyToggle' type='submit'><BsTrash /></button>
+                                </form>
+                                <form className='inline mr-2 float-right' onSubmit={async (e) => {
+                                    e.preventDefault()
+                                    privacyUpdateHandler(clip)
+                                }}>
+                                    <button className={clip.public ? publicStyle : privateStyle} id='privacyToggle' type='submit'>{clip.public ? <BsUnlock /> : <BsLock />}</button>
+                                </form>
+                                <form className='inline mr-2 float-right' onSubmit={async (e) => {
+                                    e.preventDefault()
+                                    spotlightUpdateHandler(clip)
+                                }}>
+                                    <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='spotlightToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
+                                </form>
+                            </div>
+                        </div>
+                    )
+                })}
+                {/* <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
+                    {clipUploadToggle ?
+                        !uploadingStatus ?
+                            <form className='w-full my-auto relative' onSubmit={async (e) => {
                                 e.preventDefault()
-                                setUpdateTitle(null)
-                                titleUpdateHandler(clip, e)
+                                uploadHandler(e)
                             }}>
-                                <input className='inline appearance-none border rounded px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' type='text' name='title' id='title' placeholder={clip.title}/>
-                                <button type='submit'></button>
-                                {/* <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-green-500 hover:text-green-700 shadow-sm' id='privacyToggle' type='submit'><BsCheckLg /></button> */}
-                                <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-2 right-0' id='privacyToggle' onClick={ async (e) => {
-                                    setUpdateTitle(null)
+                                <div className='w-full bg-black p-4 text-white relative'>
+                                    <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={async (e) => {
+                                        setClipUploadToggle(false),
+                                            setUploadError(false),
+                                            setServerError(false),
+                                            setUploadingStatus(false)
+                                    }}><BsXLg /></button>
+                                    <div className='my-4'>
+                                        <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='uploadTitle'>Title</label>
+                                        <input className={serverError ? inputErrorStyle : inputStyle} value={uploadTitle} onChange={e => { setUploadTitle(e.target.value); setTitleMissingError(false) }} id='uploadTitle' name='title' type='text' placeholder='Title' />
+                                        {titleMissingError && <ErrorMessage>Please enter a clip title</ErrorMessage>}
+                                    </div>
+                                    <div className='mb-6'>
+                                        <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload</label>
+                                        <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {
+                                            if (e.target.files[0] && (e.target.files[0].size > 50 * 1024 * 1024 || e.target.files[0].type != 'video/mp4')) {
+                                                setUploadError(true)
+                                            } else {
+                                                setUpload(e.target.files)
+                                                setUploadError(false)
+                                            }
+                                        }
+
+                                        } id='upload' name='video' type='file' />
+                                        {uploadError && <ErrorMessage>Please select an MP4 file under 50MB</ErrorMessage>}
+                                        {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                                    </div>
+                                    <div className='flex justify-center'>
+                                        <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={uploadingStatus}>
+                                            <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z' /></svg>
+                                            <span>Upload</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            :
+                            <div className='text-center m-auto'>
+                                <div className='loader m-auto mt-5' />
+                                <div className='text-5xl text-osu r6-font my-3'>Uploading Video</div>
+                                <div className='text-4xl text-white r6-font mt-3'>This will take a moment.</div>
+                            </div>
+                        :
+                        <div className='m-auto py-24'>
+                            <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={async (e) => {
+                                setClipUploadToggle(true)
+                                setUploadError(false)
+                                setUploadingStatus(false)
+                            }} ><BsPlusCircle /></button>
+                        </div>
+                    }
+                </div> */}
+                <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
+                    {clipUploadToggle ?
+                        !uploadingStatus ?
+                        <form className='w-full my-auto relative' onSubmit={async (e) => {
+                            e.preventDefault()
+                            testuploadHandler(e)
+                        }}>
+                            <div className='w-full bg-black p-4 text-white relative'>
+                                <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={async (e) => {
+                                    setClipUploadToggle(false),
+                                        setUploadError(false),
+                                        setServerError(false),
+                                        setUploadingStatus(false)
                                 }}><BsXLg /></button>
-                            </form>
-                            : 
-                            <>
-                            {clip.title}
-                            <button className='rounded-md bg-transparent px-2.5 py-2.5 font-semibold text-white shadow-sm text-xl' onClick={ async (e) => {
-                                setUpdateTitle(i)
-                            }} ><BiEditAlt /></button>
-                            </>
-                        }
-                        </div>
-                        <video muted loop controls className='bg-osu-shine p-1 rounded mx-auto mx-4 my-1 video-player'>
-                            <source src={API + clip.link} type='video/mp4' />
-                            Your browser does not support the video tag.
-                        </video>
-                        <div className='block text-xl'>
-                            <form className='inline float-right' onSubmit={ async (e) => {
-                                e.preventDefault()
-                                setActionConfirmation(clip)
-                            }}>
-                                <button className='rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm text-xl' id='privacyToggle' type='submit'><BsTrash /></button>
-                            </form>
-                            <form className='inline mr-2 float-right' onSubmit={ async (e) => {
-                                e.preventDefault()
-                                privacyUpdateHandler(clip)
-                            }}>
-                                <button className={clip.public ? publicStyle : privateStyle} id='privacyToggle' type='submit'>{clip.public ? <BsUnlock /> : <BsLock />}</button>
-                            </form>
-                            <form className='inline mr-2 float-right' onSubmit={ async (e) => {
-                                e.preventDefault()
-                                spotlightUpdateHandler(clip)
-                            }}>
-                                <button className={clip.spotlight ? spotlightStyle : notSpotlightStyle} id='spotlightToggle' type='submit'>{clip.spotlight ? <BsStarFill /> : <BsStar />}</button>
-                            </form>
-                        </div>
-                    </div>
-                )
-            })}
-            <div className='w-full col-span-12 lg:col-span-6 2xl:col-span-4 flex'>
-                {clipUploadToggle ?
-                    !compressing ?
-                    <form className='w-full my-auto relative' onSubmit={ async (e) => {
-                        e.preventDefault()
-                        uploadHandler(e)
-                    }}>
-                        <div className='w-full bg-black p-4 text-white relative'>
-                            <button className='inline rounded-md px-2.5 py-2.5 text-sm font-semibold text-red-500 hover:text-red-700 shadow-sm absolute top-0 right-0 scale-150' onClick={ async (e) => {
-                                setClipUploadToggle(false),
-                                setUploadError(false),
-                                setServerError(false),
-                                setCompressing(false)
-                            }}><BsXLg /></button>
-                            <div className='my-4'>
-                                <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='uploadTitle'>Title</label>
-                                <input className={serverError ? inputErrorStyle : inputStyle} value={uploadTitle} onChange={e => {setUploadTitle(e.target.value); setTitleMissingError(false)} } id='uploadTitle' name='title' type='text' placeholder='Title'/>
-                                {titleMissingError && <ErrorMessage>Please enter a clip title</ErrorMessage>}
-                            </div>
-                            <div className='mb-6'>
-                                <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload</label>
-                                <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {
-                                    if(e.target.files[0] && (e.target.files[0].size > 50 * 1024 * 1024 || e.target.files[0].type != 'video/mp4')) {
-                                        setUploadError(true)
-                                    } else {
-                                        setUpload(e.target.files) 
-                                        setUploadError(false)}
+                                <div className='my-4'>
+                                    <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='uploadTitle'>Title</label>
+                                    <input className={serverError ? inputErrorStyle : inputStyle} value={uploadTitle} onChange={e => { setUploadTitle(e.target.value); setTitleMissingError(false) }} id='uploadTitle' name='title' type='text' placeholder='Title' />
+                                    {titleMissingError && <ErrorMessage>Please enter a clip title</ErrorMessage>}
+                                </div>
+                                <div className='mb-6'>
+                                    <label className='block text-gray-700 text-white text-sm font-bold mb-2' htmlFor='upload'>Upload</label>
+                                    <input className={serverError ? inputErrorStyle : inputStyle} onChange={e => {
+                                        if (e.target.files[0] && (e.target.files[0].size > 50 * 1024 * 1024 || e.target.files[0].type != 'video/mp4')) {
+                                            setUploadError(true)
+                                        } else {
+                                            setUpload(e.target.files)
+                                            setUploadError(false)
+                                        }
                                     }
-                                    
-                                    } id='upload' name='video' type='file'/>
-                                {uploadError && <ErrorMessage>Please select an MP4 file under 50MB</ErrorMessage>}
-                                {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+
+                                    } id='upload' name='video' type='file' />
+                                    {uploadError && <ErrorMessage>Please select an MP4 file under 50MB</ErrorMessage>}
+                                    {serverError && <ErrorMessage>Unable to reach server</ErrorMessage>}
+                                </div>
+                                <div className='flex justify-center'>
+                                    <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={uploadingStatus}>
+                                        <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z' /></svg>
+                                        <span>Upload</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div className='flex justify-center'>
-                                <button className='bg-osu hover:bg-osu-dark font-semibold text-white shadow-sm py-2 px-4 rounded inline-flex items-center' type='submit' disabled={compressing}>
-                                    <svg className='fill-current w-4 h-4 mr-2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' transform='matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)'><path d='M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z'/></svg>
-                                    <span>Upload</span>
-                                </button>
-                            </div>
+                        </form>
+                        :
+                        <div className='text-center m-auto'>
+                            <div className='loader m-auto mt-5' />
+                            <div className='text-5xl text-osu r6-font my-3'>Uploading Video</div>
+                            <div className='text-4xl text-white r6-font mt-3'>This will take a moment.</div>
                         </div>
-                    </form> 
                     :
-                    <div className='text-center m-auto'>
-                        <div className='loader m-auto mt-5'/>
-                        <div className='text-5xl text-osu r6-font my-3'>Compressing Video</div>
-                        <div className='text-4xl text-white r6-font mt-3'>This will take a moment.</div>
+                    <div className='m-auto py-24'>
+                        <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={async (e) => {
+                            setClipUploadToggle(true)
+                            setUploadError(false)
+                            setUploadingStatus(false)
+                        }} ><BsPlusCircle /></button>
                     </div>
-                :
-                <div className='m-auto py-24'>
-                    <button className='rounded-md bg-transperent text-osu hover:text-white font-semibold shadow-sm add-clip-button' onClick={ async (e) => {
-                        setClipUploadToggle(true)
-                        setUploadError(false)
-                        setCompressing(false)
-                    }} ><BsPlusCircle /></button>
+                    }
                 </div>
-                }
             </div>
-        </div>
         </>
     )
 }
