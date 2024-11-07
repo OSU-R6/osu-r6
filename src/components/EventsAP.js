@@ -136,7 +136,16 @@ const EventsAP = () => {
     const eventColumns=[
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'type', headerName: 'Type', flex: 1 },
-        { field: 'description', headerName: 'Description', flex: 1 },
+        { 
+            field: 'description',
+            headerName: 'Description',
+            flex: 1, 
+            renderCell: (cellValues) => (
+                <div className='data-table-long'>
+                    {cellValues.value}
+                </div>
+            )
+        },
         { field: 'date', headerName: 'Date', flex: 1, valueFormatter: (params) => format(new Date(params.value), 'MM/dd/yyyy hh:mm a')},
         {
             field: 'attendees',
